@@ -1,3 +1,4 @@
 #ignore executable files
 *.o
 test/
+*.gch
