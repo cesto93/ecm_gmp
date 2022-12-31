@@ -14,20 +14,19 @@
 
 #define FACT_IS_CORRECT(p, q, f1, f2) ((mpz_equal(p, f1) && mpz_equal(q, f2)) || ((mpz_equal(q, f1) && mpz_equal(p, f2))))
 
-static void test_fact_times(char *tent_s, char *cifer_s, char *b_s,
-			    char *path_t, char *path_f);
-static void test_fact(FILE * log_t, FILE * log_f, unsigned int tent,
-		      unsigned long int cifer, unsigned long b1,
+static void test_fact_times(const char *tent_s, const char *cifer_s, const char *b_s, const char *path_t, const char *path_f);
+static void test_fact(FILE * log_t, FILE * log_f, unsigned int tent, unsigned long cifer, unsigned long b1,
 		      unsigned long b2, gmp_randstate_t state);
-void testpoint(char *n);
-void testdup(char *n);
-void testmul(char *n, char *k_s);
-void test_diff(char *n_s);
-void test_prime_diff(char *start_s, char *end_s);
+			  
+void testpoint(const char *n);
+void testdup(const char *n);
+void testmul(const char *n, const char *k_s);
+void test_diff(const char *n_s);
+void test_prime_diff(const char *start_s, const char *end_s);
 
-void test_mul_ui(char *n_s, char *k_s);
-void test_mmul(char *n_s, char *k_s);
-void test_mfase2(char *n_s, char *b1_s, char *b2_s);
+void test_mul_ui(const char *n_s, const char *k_s);
+void test_mmul(const char *n_s, const char *k_s);
+void test_mfase2(const char *n_s, const char *b1_s, const char *b2_s);
 
 int main(int argc, char *argv[])
 {
@@ -64,10 +63,9 @@ int main(int argc, char *argv[])
 	}
 }
 
-static void test_fact_times(char *tent_s, char *cifer_s, char *b_s,
-			    char *path_t, char *path_f)
+static void test_fact_times(const char *tent_s, const char *cifer_s, const char *b_s, const char *path_t, const char *path_f)
 {
-	unsigned long int b1_inc, b2_inc, b_start, b1, b2, cifer;
+	unsigned long b1_inc, b2_inc, b_start, b1, b2, cifer;
 	unsigned int b_size, tent;
 	FILE *log_t, *log_f;
 	gmp_randstate_t state;
@@ -96,10 +94,9 @@ static void test_fact_times(char *tent_s, char *cifer_s, char *b_s,
 	}
 	fclose(log_t);
 	fclose(log_f);
-#undef coeff
 }
 
-void testpoint(char *n)
+void testpoint(const char *n)
 {
 	m_ellc e;
 	m_ellp p;
@@ -116,7 +113,7 @@ void testpoint(char *n)
 	gmp_printf("c_2 = %Zd\t X = %Zd\t Z = %Zd\n", e.C2, p.X, p.Z);
 }
 
-void testdup(char *n)
+void testdup(const char *n)
 {
 	m_ellc e;
 	m_ellp p, p2, p3, p4d, p4a;
@@ -146,7 +143,7 @@ void testdup(char *n)
 	gmp_printf("X4D = %Zd\t Z4D = %Zd\n", p4d.X, p4d.Z);
 }
 
-void testmul(char *n, char *k_s)
+void testmul(const char *n, const char *k_s)
 {
 	mpz_t k;
 	m_ellc e;
@@ -236,7 +233,7 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned int tent,
 	mpz_clears(p, q, rnd_rng1, rnd_rng2, n, fact[0], fact[1], NULL);
 }
 
-void test_diff(char *n_s)
+void test_diff(const char *n_s)
 {
 #define rep_size 8
 	m_ellc e;
@@ -272,11 +269,11 @@ void test_diff(char *n_s)
 			   rep.p[i].X, rep.p[i].Z, beta.v[i]);
 }
 
-void test_prime_diff(char *start_s, char *end_s)
+void test_prime_diff(const char *start_s, const char *end_s)
 {
 #define bo 100000000
 	unsigned char *v;
-	unsigned long int start, end;
+	unsigned long start, end;
 	mpz_temp temp;
 
 	start = str2l(start_s);
@@ -295,7 +292,7 @@ void test_prime_diff(char *start_s, char *end_s)
 	printf("n_prime : %u\n", i);
 }
 
-void test_mul_ui(char *n_s, char *k_s)
+void test_mul_ui(const char *n_s, const char *k_s)
 {
 	unsigned long k;
 	mpz_t n;
@@ -325,7 +322,7 @@ void test_mul_ui(char *n_s, char *k_s)
 	mpz_clear(n);
 }
 
-void test_mmul(char *n_s, char *b_s)
+void test_mmul(const char *n_s, const char *b_s)
 {
 	unsigned long b;
 	mpz_t n, k;
@@ -371,7 +368,7 @@ void test_mmul(char *n_s, char *b_s)
 	mpz_clears(n, k, NULL);
 }
 
-void test_mfase2(char *n_s, char *b1_s, char *b2_s)
+void test_mfase2(const char *n_s, const char *b1_s, const char *b2_s)
 {
 	unsigned long b1, b2;
 	mpz_t n, g, g_r;
