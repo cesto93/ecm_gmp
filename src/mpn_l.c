@@ -89,7 +89,7 @@ void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 			if ((op1_s + 1 == n_s) && (mpn_cmp(rop_l, n_l, n_s) >= 0))	//we reduce to less than n              
 				mpn_sub_n(rop_l, rop_l, n_l, n_s);
 		}
-	} else if ((cy) || (mpn_cmp(rop_l, n_l, n_s) >= 0))	//case (carry with n_s) => a + b = cy * R + rop => we reduce to less than R number
+	} else if (cy || (mpn_cmp(rop_l, n_l, n_s) >= 0))	//case (carry with n_s) => a + b = cy * R + rop => we reduce to less than R number
 		cy -= mpn_sub_n(rop_l, rop_l, n_l, n_s);
 
 	assert(cy == 0);
@@ -101,7 +101,6 @@ void sub_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 		const size_t n_s)
 {
 	mp_limb_t cy;
-	//gmp_printf("op1 = %Nd\nop2 = %Nd\nn = %Nd\n", op1_l, op1_s, op2_l, op2_s, n_l, n_s);
 
 	if ((op1_s < op2_s) || ((op1_s == op2_s) && (mpn_cmp(op1_l, op2_l, op1_s) < 0)))	// op1_l < op2_l //MOD_OP
 	{
@@ -143,7 +142,7 @@ void add_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
 	mp_limb_t cy;
 	cy = mpn_add_n(rop_l, op1_l, op2_l, n_s);
 
-	if ((cy) || (mpn_cmp(rop_l, n_l, n_s) >= 0))	//case (carry with n_s) => a + b = cy * R + rop => we reduce to less than n
+	if (cy || (mpn_cmp(rop_l, n_l, n_s) >= 0))	//case (carry with n_s) => a + b = cy * R + rop => we reduce to less than n
 		cy -= mpn_sub_n(rop_l, rop_l, n_l, n_s);
 
 	assert(mpn_cmp(rop_l, n_l, n_s) < 0);
