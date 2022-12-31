@@ -64,12 +64,15 @@ void mred_destroy(mpz_t res, mpz_t op, const mp_limb_t * n_l, const mp_limb_t n_
 void msqr_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, const size_t op1_s,
 	    mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first,
 	    const size_t n_s);
+		
 void mmul_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 	    const mp_limb_t * op2_l, size_t op2_s, mp_limb_t * t_l,
 	    const mp_limb_t * n_l, mp_limb_t n_inv, const size_t n_s);
+
 void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 		const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l,
 		const size_t n_s);
+
 void sub_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 		const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l,
 		const size_t n_s);
