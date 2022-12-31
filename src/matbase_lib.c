@@ -96,7 +96,7 @@ void get_prime_diff(const unsigned long start, int sub_offs,
 	for (mpz_nextprime(*next, *prev); (mpz_cmp_ui(*next, end) <= 0);
 	     mpz_nextprime(*next, *next)) {
 		mpz_sub(*diff, *next, *prev);
-		v[i] = mpz_get_ui(*diff);
+		v[i] = (char)mpz_get_ui(*diff);
 		i++;
 		mpz_set(*prev, *next);
 	}

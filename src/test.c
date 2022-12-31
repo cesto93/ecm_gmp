@@ -10,12 +10,12 @@
 #include "mm_ellcurv_lib.h"
 
 #define DEFAULT_COEFF 100	// b2 = b1 * coeff
-#define MAX_ITER 2000
+#define MAX_ITER 2000ul
 
 #define FACT_IS_CORRECT(p, q, f1, f2) ((mpz_equal(p, f1) && mpz_equal(q, f2)) || ((mpz_equal(q, f1) && mpz_equal(p, f2))))
 
 static void test_fact_times(const char *tent_s, const char *cifer_s, const char *b_s, const char *path_t, const char *path_f);
-static void test_fact(FILE * log_t, FILE * log_f, unsigned int tent, unsigned long cifer, unsigned long b1,
+static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent, unsigned long cifer, unsigned long b1,
 		      unsigned long b2, gmp_randstate_t state);
 			  
 void testpoint(const char *n);
@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
 static void test_fact_times(const char *tent_s, const char *cifer_s, const char *b_s, const char *path_t, const char *path_f)
 {
 	unsigned long b1_inc, b2_inc, b_start, b1, b2, cifer;
-	unsigned int b_size, tent;
+	unsigned int b_size;
+	unsigned long tent;
 	FILE *log_t, *log_f;
 	gmp_randstate_t state;
 
@@ -79,7 +80,17 @@ static void test_fact_times(const char *tent_s, const char *cifer_s, const char 
 	b2_inc = b1_inc * DEFAULT_COEFF;
 
 	log_t = fopen(path_t, "a");
+	if (log_t == NULL) {
+		perror("error in fopen");
+		return;
+	}
+
 	log_f = fopen(path_f, "a");
+	if (log_f == NULL) {
+		fclose(log_t);
+		perror("error in fopen");
+		return;
+	}
 
 	b1 = b_start;
 	b2 = b1 * DEFAULT_COEFF;
@@ -182,21 +193,22 @@ void testmul(const char *n, const char *k_s)
 	printf("mul time: %lu[s]\t%lu[ns]\n", diff.tv_sec, diff.tv_nsec);
 }
 
-static void test_fact(FILE * log_t, FILE * log_f, unsigned int tent,
+static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 		      unsigned long cifer, unsigned long b1, unsigned long b2,
 		      gmp_randstate_t state)
 {
 	struct timespec start, end, diff, mean = {.tv_sec = 0,.tv_nsec = 0 };
 	mpz_t p, q, n, rnd_rng1, rnd_rng2, fact[2];
 	unsigned long tot_iter = 0;
-	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, fact[0], fact[1], NULL);
+	long res;
 
+	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, fact[0], fact[1], NULL);
 	mpz_ui_pow_ui(rnd_rng1, 10, cifer);
 	mpz_ui_pow_ui(rnd_rng2, 10, cifer + 10);
 	mpz_mul_ui(rnd_rng1, rnd_rng1, 4);	// rand_range = 4*10^c
 	mpz_mul_ui(rnd_rng2, rnd_rng2, 4);	// rand_range = 4*10^c
 
-	int res;
+	
 	for (unsigned int i = 0; i < tent; i++) {
 		get_randprime(p, rnd_rng1, rnd_rng1, state);
 		get_randprime(q, rnd_rng2, rnd_rng2, state);
