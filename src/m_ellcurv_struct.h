@@ -9,7 +9,6 @@
 
 typedef struct m_ellc		//y^2 = x^3 + C(σ)x^2 + x
 {
-	//mpz_t C;
 	mpz_t C2;		// (c+2) / 4
 	mpz_t n;		//the operation are made modn
 } m_ellc;
@@ -65,8 +64,8 @@ do { \
 	from_mform((rop)->Z, (op)->Z, mdata, temp); \
 } while (0)
 
-void m_ellp_temp_init(m_ellp_temp * temp, unsigned long int lenght);
-void m_ellp_temp_init2(m_ellp_temp * temp, unsigned long int lenght,
+void m_ellp_temp_init(m_ellp_temp * temp, unsigned long lenght);
+void m_ellp_temp_init2(m_ellp_temp * temp, unsigned long lenght,
 		       mp_bitcnt_t size);
 void m_ellp_temp_clear(m_ellp_temp * temp);
 
@@ -78,8 +77,8 @@ do { \
 	((temp)->index)++; \
 } while (0)
 
-void m_ellp_rep_init(m_ellp_rep * rep, unsigned long int lenght);
-void m_ellp_rep_init2(m_ellp_rep * rep, unsigned long int lenght,
+void m_ellp_rep_init(m_ellp_rep * rep, unsigned long lenght);
+void m_ellp_rep_init2(m_ellp_rep * rep, unsigned long lenght,
 		      mp_bitcnt_t size);
 void m_ellp_rep_clear(m_ellp_rep * rep);
 #endif //M_ELLCURV_STRUCT_H

@@ -66,9 +66,9 @@ static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p,
 	mpz_sub(*t1, *t3, *t1);	//t1 = (x1-z1)(x2+z2) - (x1+z1)(x2-z2)
 
 	mpz_mul(*t3, *t2, *t2);	//t3 = t2^2 
-	mpz_mul(*t3, *t3, diff->Z);	//t3 = ((x1-z1)(x2+z2) + (x1+z1)(x2-z2))^2 * z-
+	mpz_mul(*t3, *t3, diff->Z);	// t3 := ((x1-z1)(x2+z2) + (x1+z1)(x2-z2))^2 * z-
 	mpz_mul(*t2, *t1, *t1);	//t2 = t1^2
-	mpz_mul(*t2, *t2, diff->X);	//t2 = ((x1-z1)(x2+z2) - (x1+z1)(x2-z2))^2 * x-
+	mpz_mul(*t2, *t2, diff->X);	//t2 := ((x1-z1)(x2+z2) - (x1+z1)(x2-z2))^2 * x-
 
 	mpz_mod(r->X, *t3, n);	//rx = t3
 	mpz_mod(r->Z, *t2, n);	//rz = t3
@@ -109,12 +109,12 @@ void m_ell_mul(const mpz_t k, const mpz_t n, const mpz_t e_C2, m_ellp * r,
 
 	m_ellp_set(u, p);
 	m_ell_duph2(n, e_C2, t, p, temp);
-	unsigned long int i, high;
+	unsigned long high;
 	high = mpz_sizeinbase(k, 2) - 1;
 	DEBUG_STAMP("higher bit is in pos %lu\n", high);
 
 	if (mpz_cmp_ui(k, 2) > 0) {
-		for (i = high - 1; i > 0; i--)
+		for (unsigned long i = high - 1; i > 0; i--)
 			if (mpz_tstbit(k, i)) {
 				m_ell_addh2(n, u, t, u, p, temp);
 				m_ell_duph2(n, e_C2, t, t, temp);
@@ -148,12 +148,12 @@ static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2,
 
 	m_ellp_set(u, p);
 	m_ell_duph2(n, e_C2, t, p, temp);
-	unsigned long int i, high;
+	unsigned long high;
 	lazy_high_bit(high, k);
 	DEBUG_STAMP("higher bit is in pos %lu\n", high);
 
 	if (k > 2) {
-		for (i = high - 1; i > 0; i--)
+		for (unsigned long i = high - 1; i > 0; i--)
 			if (k & (1 << i))	//k[i] bit
 			{
 				m_ell_addh2(n, u, t, u, p, temp);
@@ -178,12 +178,11 @@ static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2,
 	mpz_temp_free(p_temp, 2);
 }
 
-void m_ell_fase1_ui(unsigned long k[], int size, const m_ellc * e, m_ellp * r,
+void m_ell_fase1_ui(const unsigned long k[], int size, const m_ellc * e, m_ellp * r,
 		    const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	m_ellp_set(r, p);
-	int i;
-	for (i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++) {
 		m_ell_mul_ui(k[i], e->n, e->C2, r, r, p_temp, temp);
 	}
 }
@@ -213,7 +212,6 @@ void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r,
 void m_ell_diff(m_ellp_rep * rep, mpz_rep * beta, const mpz_t n,
 		const mpz_t e_C2, const m_ellp * p, mpz_temp * temp)
 {
-	unsigned long int i;
 	mpz_t *t1;
 	mpz_temp_get(t1, temp);
 
@@ -224,7 +222,7 @@ void m_ell_diff(m_ellp_rep * rep, mpz_rep * beta, const mpz_t n,
 	mpz_mul(*t1, rep->p[1].X, rep->p[1].Z);
 	mpz_mod(beta->v[1], *t1, n);
 
-	for (i = 2; i < rep->lenght; i++) {
+	for (unsigned long i = 2; i < rep->lenght; i++) {
 		m_ell_addh2(n, &(rep->p[i]), &(rep->p[i - 1]), &(rep->p[0]),
 			    &(rep->p[i - 2]), temp);
 		mpz_mul(*t1, rep->p[i].X, rep->p[i].Z);	//beta[i] = rep[i].X * rep[i].Z
@@ -243,8 +241,8 @@ void m_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t n,
 	if (m_ellp_temp_space(p_temp) < n_p_temp_fase2)
 		error_msg("p_temp full in m_ell_fase2");
 
-	const unsigned long int max_diff = 2 * rep.lenght;	//max_diff = 2 * size
-	unsigned long int diff = 0, b = b1 - 1;
+	const unsigned long max_diff = 2 * rep.lenght;	//max_diff = 2 * size
+	unsigned long diff = 0, b = b1 - 1;
 	int i = 1;
 	mpz_t *alfa, *t1, *t2;
 	m_ellp *T, *R;

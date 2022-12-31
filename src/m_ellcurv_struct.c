@@ -51,59 +51,53 @@ void m_ellp_clear(m_ellp * p)
 	m_ellp_clear_base(p);
 }
 
-void m_ellp_temp_init(m_ellp_temp * temp, unsigned long int lenght)
+void m_ellp_temp_init(m_ellp_temp * temp, unsigned long lenght)
 {
 	temp->p = allocate(sizeof(m_ellp) * lenght);
 	temp->index = 0;
 	temp->lenght = lenght;
-	unsigned int i;
-	for (i = 0; i < temp->lenght; i++)
+	for (unsigned int i = 0; i < temp->lenght; i++)
 		m_ellp_init_base(&(temp->p[i]));
 }
 
-void m_ellp_temp_init2(m_ellp_temp * temp, unsigned long int lenght,
+void m_ellp_temp_init2(m_ellp_temp * temp, unsigned long lenght,
 		       mp_bitcnt_t size)
 {
 	temp->index = 0;
-	unsigned int i;
 	temp->p = allocate(sizeof(m_ellp) * lenght);
 	temp->lenght = lenght;
-	for (i = 0; i < temp->lenght; i++)
+	for (unsigned int i = 0; i < temp->lenght; i++)
 		m_ellp_init2_base(&(temp->p[i]), size);
 }
 
 void m_ellp_temp_clear(m_ellp_temp * temp)
 {
-	unsigned int i;
-	for (i = 0; i < temp->lenght; i++)
+	for (unsigned int i = 0; i < temp->lenght; i++)
 		m_ellp_clear_base(&(temp->p[i]));
 	temp->lenght = 0;
 	free(temp->p);
 }
 
-void m_ellp_rep_init(m_ellp_rep * rep, unsigned long int lenght)
+void m_ellp_rep_init(m_ellp_rep * rep, unsigned long lenght)
 {
-	unsigned int i;
 	rep->p = allocate(sizeof(m_ellp) * lenght);
 	rep->lenght = lenght;
-	for (i = 0; i < rep->lenght; i++)
+	for (unsigned int i = 0; i < rep->lenght; i++)
 		m_ellp_init_base(&(rep->p[i]));
 }
 
-void m_ellp_rep_init2(m_ellp_rep * rep, unsigned long int lenght,
+void m_ellp_rep_init2(m_ellp_rep * rep, unsigned long lenght,
 		      mp_bitcnt_t size)
 {
-	unsigned int i;
 	rep->p = allocate(sizeof(m_ellp) * lenght);
 	rep->lenght = lenght;
-	for (i = 0; i < rep->lenght; i++)
+	for (unsigned int i = 0; i < rep->lenght; i++)
 		m_ellp_init2_base(&(rep->p[i]), size);
 }
 
 void m_ellp_rep_clear(m_ellp_rep * rep)
 {
-	unsigned int i;
-	for (i = 0; i < rep->lenght; i++)
+	for (unsigned int i = 0; i < rep->lenght; i++)
 		m_ellp_clear_base(&(rep->p[i]));
 	rep->lenght = 0;
 	free(rep->p);
@@ -163,9 +157,6 @@ int m_ell_setrand2(const mpz_t n, mpz_t e_C2, m_ellp * p, gmp_randstate_t state,
 		return 1;
 	}
 	mpz_mul(*t3, *t3, *t2);	//t3 = c+2 = [(v − u)^3 * (3u + v)] * [1/(4u^3 * v)]
-	/*mpz_sub_ui(*t4, *t3, 2); //t4 = c
-	   mpz_mod(e->C, *t4, e->n); //C = [(v − u)^3 * (3u + v)/(4u^3 * v)] − 2 mod n */
-
 	mpz_mul(*t1, *t1, *t2);	//t1 = 1/4
 	mpz_mul(*t2, *t3, *t1);	//t2 = [c+2] *  [1/ 4]
 	mpz_mod(e_C2, *t2, n);	//c2 = t2

@@ -12,7 +12,7 @@ static void unlock(pthread_mutex_t * mtx)
 		error_msg("errore nella unlock");
 }
 
-static void td_data_init(fact_tddata * td, const unsigned long int n_size)
+static void td_data_init(fact_tddata * td, const unsigned long n_size)
 {
 	gmp_randinit_default(td->state);
 	mpz_init2(td->fact, n_size);
@@ -207,7 +207,7 @@ void *fact_tjob(void *arg)
 int factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
 	      unsigned long b2, unsigned long max_iter)
 {
-	const unsigned long int n_size = mpz_size(n) * mp_bits_per_limb;
+	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
 	int fase_found = -1;
 	unsigned int iter_done = 0;
 	fact_param param;
@@ -281,6 +281,6 @@ int factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
 	else			//FACT_FOUND
 	{
 		mpz_divexact(factors[1], n, factors[0]);
-		return (iter_done + max_iter * (fase_found));
+		return iter_done + max_iter * (fase_found);
 	}
 }
