@@ -55,7 +55,7 @@ typedef struct fact_tddata {
 	pthread_t *tids;
 	pthread_mutex_t *mtx;
 	mpz_t fact;
-	unsigned int iter_done;
+	unsigned long iter_done;
 	int fase_found;
 	gmp_randstate_t state;
 	mpz_t e_C2;
@@ -67,7 +67,7 @@ typedef struct fact_tddata {
 } fact_tddata;
 
 //return ELL_FACT_NOT_FOUND if fact not found
-int factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
+long factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
 	      unsigned long b2, unsigned long max_iter);
 
 #endif //M_ELLCURV_FACT_H

@@ -127,7 +127,7 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
 
 void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
 		 const mm_fact_param * param, m_ellp_rep * rep, mpz_rep * beta,
-		 mpz_temp * temp, m_ellp_temp * p_temp, unsigned int *iter,
+		 mpz_temp * temp, m_ellp_temp * p_temp, unsigned long *iter,
 		 int *fase_found)
 {
 #define n param->mdata.n
@@ -204,12 +204,12 @@ void *fact_tjob(void *arg)
 }
 
 //HIGH_LEVEL FUNCT
-int factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
+long factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
 	      unsigned long b2, unsigned long max_iter)
 {
 	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
 	int fase_found = -1;
-	unsigned int iter_done = 0;
+	unsigned long iter_done = 0;
 	fact_param param;
 	fact_tddata td[THREAD_NUM];
 	pthread_t tids[THREAD_NUM];
@@ -281,6 +281,6 @@ int factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
 	else			//FACT_FOUND
 	{
 		mpz_divexact(factors[1], n, factors[0]);
-		return iter_done + max_iter * (fase_found);
+		return iter_done + max_iter * fase_found;
 	}
 }

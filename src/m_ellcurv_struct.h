@@ -22,8 +22,8 @@ typedef struct m_ellp		// point must respect equation y^2 = x^3 + C(σ)x^2 + x
 typedef struct m_ellp_temp	//temp variable container
 {
 	m_ellp *p;
-	unsigned int lenght;
-	unsigned int index;
+	unsigned long lenght;
+	unsigned long index;
 } m_ellp_temp;
 
 typedef struct m_ellp_rep {
