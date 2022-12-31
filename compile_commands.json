@@ -1,0 +1,130 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/start.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/start.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/m_ellcurv_fact.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/m_ellcurv_fact.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/m_ellcurv_lib.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/m_ellcurv_lib.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/mm_ellcurv_lib.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/mm_ellcurv_lib.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/m_ellcurv_struct.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/m_ellcurv_struct.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/base_lib.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/base_lib.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/matbase_lib.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/matbase_lib.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-O3",
+      "-pthread",
+      "-o",
+      "start.o",
+      "src/mpn_l.c"
+    ],
+    "directory": "/home/pier/Desktop/repos/ecm_gmp",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/mpn_l.c",
+    "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
+  }
+]

@@ -25,3 +25,6 @@ prof_s: $(objects)
 	gcc -pg -Wall -Wextra -O2 -static src/start.c -o prof.o $(objects) -lgmp -pthread
 clean:
 	rm start.o
+
+build:
+	bear -- make
