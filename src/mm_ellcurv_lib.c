@@ -112,12 +112,12 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
 	mp_limb_t *rx_l, *rz_l, *ux_l, *uz_l, *tx_l, *tz_l;
 	mp_limb_t *px_l, *pz_l, *e_C2_l;	//CONST
 
-	rx_l = mpz_limbs_write((r)->X, (mdata->n_s) * mp_bits_per_limb);
-	rz_l = mpz_limbs_write((r)->Z, (mdata->n_s) * mp_bits_per_limb);
-	ux_l = mpz_limbs_write((u)->X, (mdata->n_s) * mp_bits_per_limb);
-	uz_l = mpz_limbs_write((u)->Z, (mdata->n_s) * mp_bits_per_limb);
-	tx_l = mpz_limbs_write((t)->X, (mdata->n_s) * mp_bits_per_limb);
-	tz_l = mpz_limbs_write((t)->Z, (mdata->n_s) * mp_bits_per_limb);
+	rx_l = mpz_limbs_write(r->X, (mdata->n_s) * mp_bits_per_limb);
+	rz_l = mpz_limbs_write(r->Z, (mdata->n_s) * mp_bits_per_limb);
+	ux_l = mpz_limbs_write(u->X, (mdata->n_s) * mp_bits_per_limb);
+	uz_l = mpz_limbs_write(u->Z, (mdata->n_s) * mp_bits_per_limb);
+	tx_l = mpz_limbs_write(t->X, (mdata->n_s) * mp_bits_per_limb);
+	tz_l = mpz_limbs_write(t->Z, (mdata->n_s) * mp_bits_per_limb);
 
 	MPZ_MODIFY_NSIZE(px_l, p->X, mdata->n_s);
 	MPZ_MODIFY_NSIZE(pz_l, p->Z, mdata->n_s);
@@ -130,7 +130,7 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
 			tmul_l);
 	///////////////////////////////////////////////////////////////////////////////////
 
-	unsigned long int high;
+	unsigned long high;
 	high = mpz_sizeinbase(k, 2) - 1;
 
 	if (mpz_cmp_ui(k, 2) > 0) {
@@ -240,7 +240,7 @@ static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r,
 }
 
 //USED ONCE FOR ITER / VERY LIGHT
-void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, mpz_t e_C2,
+void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t e_C2,
 		 const m_ellp * p, const mform_data * mdata, mpz_temp * temp)
 {
 	assert(mpz_temp_space(temp) >= n_temp_mdiff);
@@ -283,8 +283,8 @@ void mm_ell_fase2(mpz_t g, const unsigned long b1, const unsigned long b2,
 	assert(mpz_temp_space(temp) >= n_temp_mfase2);
 	assert(m_ellp_temp_space(p_temp) >= n_p_temp_mfase2);
 
-	const unsigned long int max_diff = 2 * d;	//max_diff = 2 * d
-	unsigned long int diff = 0, b = b1 - 1;
+	const unsigned long max_diff = 2 * d;	//max_diff = 2 * d
+	unsigned long diff = 0, b = b1 - 1;
 	m_ellp *T, *R;
 	mpz_t *alfa, *t1, *t2, *tmul_t, *t3_t;
 
@@ -374,19 +374,14 @@ static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
 		 mdata->n_s);
 
 	add_modR_l(t1_l, px_l, px_s, pz_l, pz_s, mdata->n_l, mdata->n_s);	//T1 = (x1+z1)(x2-z2)
-	//              T1              T2
 	sub_modR_l(t2_l, qx_l, qx_s, qz_l, qz_s, mdata->n_l, mdata->n_s);
 	mmul_l_n(t1_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv,
 		 mdata->n_s);
 
 	add_modR_l_n(t2_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T2 = (x1-z1)(x2+z2) + (x1+z1)(x2-z2)
-	//                      T3                              T1
 	sub_modR_l_n(t3_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2) - (x1+z1)(x2-z2)
-	//                      T3                              T1
 	msqr_l_n(t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T1 = [(x1-z1)(x2+z2) + (x1+z1)(x2-z2)]^2
-	//                                              T2
 	msqr_l_n(t2_l, t3_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T2 = [(x1-z1)(x2+z2) - (x1+z1)(x2-z2)]^2
-	//                                      T3
 	mmul_l(t1_l, t1_l, mdata->n_s, dz_l, dz_s, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T1 = [((x1-z1)(x2+z2) + (x1+z1)(x2-z2))^2] * Z- = RX
 
 	mmul_l(rz_l, t2_l, mdata->n_s, dx_l, dx_s, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//RZ = [((x1-z1)(x2+z2) - (x1+z1)(x2-z2))^2] * X-
@@ -441,13 +436,9 @@ static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
 		 mdata->n_s);
 
 	add_modR_l_n(t2_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T2 = (x1-z1)(x2+z2) + (x1+z1)(x2-z2)
-	//                      T3                              T1
 	sub_modR_l_n(t3_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2) - (x1+z1)(x2-z2)
-	//                      T3                              T1
 	msqr_l_n(t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T1 = [(x1-z1)(x2+z2) + (x1+z1)(x2-z2)]^2
-	//                                              T2
 	msqr_l_n(t2_l, t3_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T2 = [(x1-z1)(x2+z2) - (x1+z1)(x2-z2)]^2
-	//                                      T3
 	mmul_l_n(t1_l, t1_l, dz_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T1 = [((x1-z1)(x2+z2) + (x1+z1)(x2-z2))^2] * Z- = RX
 
 	mmul_l_n(rz_l, t2_l, dx_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//RZ = [((x1-z1)(x2+z2) - (x1+z1)(x2-z2))^2] * X-
@@ -503,98 +494,3 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
 	mpz_temp_clear(&temp);
 	m_ellp_temp_clear(&p_temp);
 }
-
-//when used first trasform to mform
-/*static inline void mm_ell_addh(m_ellp *r, const m_ellp *p, const m_ellp *q, const m_ellp *diff, const mform_data *m_data, mpz_temp *temp) 
-{
-	mpz_t *t1, *t2, *t3, *tmul;
-	mp_limb_t *tmul_l;
-	
-	mpz_temp_get(t1, temp);
-	mpz_temp_get(t2, temp);
-	mpz_temp_get(t3, temp);
-	mpz_temp_get(tmul, temp);
-	
-	tmul_l = mpz_limbs_write(*tmul, 2 * (m_data->n_s) * mp_bits_per_limb);
-	
-	mpz_sub(*t1, p->X, p->Z);		//sub
-	abs_modn(*t1, m_data->n);
-	//sub_modR(*t1, p->X, p->Z, m_data->n_l, m_data->n_s);
-	
-	mpz_add(*t2, q->X, q->Z);
-	//add_modR(*t2, q->X, q->Z, m_data->n_s);
-	
-	//t3 = (x1-z1)(x2+z2)
-	mmul(*t3, *t1, *t2, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	mpz_add(*t1, p->X, p->Z);
-	//add_modR(*t1, p->X, p->Z, m_data->n_s);
-	
-	mpz_sub(*t2, q->X, q->Z); //sub
-	abs_modn(*t2, m_data->n);
-	//sub_modR(*t2, q->X, q->Z, m_data->n_l, m_data->n_s);
-	
-	//t1 = (x1+z1)(x2-z2)
-	mmul(*t1, *t1, *t2, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	mpz_add(*t2, *t3, *t1); //t2 = (x1-z1)(x2+z2) + (x1+z1)(x2-z2)
-	//add_modR(*t2, *t3, *t1, m_data->n_s);
-	
-	mpz_sub(*t3, *t3, *t1); //t3 = (x1-z1)(x2+z2) - (x1+z1)(x2-z2) no abs_modn needed
-	//sub_modR(*t3, *t3, *t1, m_data->n_l, m_data->n_s);
-
-	//t1 = t2^2 = [(x1-z1)(x2+z2) + (x1+z1)(x2-z2)]^2
-	msqr(*t1, *t2, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	//t2 = t3^2 = [(x1-z1)(x2+z2) - (x1+z1)(x2-z2)]^2
-	msqr(*t2, *t3, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s); 
-	 
-	//t1 = [((x1-z1)(x2+z2) + (x1+z1)(x2-z2))^2] * z- = RX
-	mmul(*t1, *t1, diff->Z, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	 
-	//RZ = [((x1-z1)(x2+z2) - (x1+z1)(x2-z2))^2] * x-
-	mmul(r->Z, *t2, diff->X, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	mpz_set(r->X, *t1);  //rx = t1
-
-	mpz_temp_free(temp, 4);
-}
-
-//when used first transform to m_form
-static inline void mm_ell_duph(const mpz_t e_C2, m_ellp *r, const m_ellp *p, const mform_data *m_data, mpz_temp *temp)
-{
-	mpz_t *t1, *t2, *t3, *tmul;
-	mp_limb_t *tmul_l;
-	mpz_temp_get(t1, temp);
-	mpz_temp_get(t2, temp);
-	mpz_temp_get(t3, temp);
-	mpz_temp_get(tmul, temp);
-	
-	tmul_l = mpz_limbs_write(*tmul, 2 * (m_data->n_s) * mp_bits_per_limb);
-	
-	// t2 = (x1+z1)^2
-	mpz_add(*t1, p->X, p->Z);
-	
-	msqr(*t2, *t1, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	// t3 = (x1-z1)^2
-	mpz_sub(*t1, p->X, p->Z); //t1 no abs_modn needed square
-	
-	msqr(*t3, *t1, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	// rx = [(x1+z1)^2] * [(x1-z1)^2]
-	mmul(r->X, *t2, *t3, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	mpz_sub(*t1, *t2, *t3); //t1 = 4x1z1 = [(x1+z1)^2] - [(x1-z1)^2]
-	abs_modn(*t1, m_data->n);
-	
-	//t2 = [c+2/4] * [4x1z1]
-	mmul(*t2, e_C2, *t1, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	mpz_add(*t3, *t3, *t2); //t3 = [(x1-z1)^2] + [((c+2)/4) * 4x1z1]
-	
-	//rz = 4x1z1 * [(x1-z1)^2 + ((c+2)/4) * 4x1z1]
-	mmul(r->Z, *t3, *t1, tmul_l, m_data->n_l, m_data->n_first, m_data->n_s);
-	
-	mpz_temp_free(temp, 4);
-}*/
