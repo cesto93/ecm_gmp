@@ -33,7 +33,7 @@ typedef struct mpz_rep		//rep variable container
 
 void mpz_temp_init(mpz_temp * temp, unsigned int lenght);
 void mpz_temp_init2(mpz_temp * temp, unsigned int lenght,
-		    unsigned long int size);
+		    unsigned long size);
 void mpz_temp_clear(mpz_temp * temp);
 #define mpz_temp_free(temp,n) (temp)->index = ((temp)->index - n)
 #define mpz_temp_space(temp) (temp->lenght - (temp->index))
@@ -44,9 +44,9 @@ do {									\
 	((temp)->index)++;					\
 } while(0)
 
-void mpz_rep_init(mpz_rep * rep, unsigned long int lenght);
-void mpz_rep_init2(mpz_rep * rep, unsigned long int lenght,
-		   unsigned long int size);
+void mpz_rep_init(mpz_rep * rep, unsigned long lenght);
+void mpz_rep_init2(mpz_rep * rep, unsigned long lenght,
+		   unsigned long size);
 void mpz_rep_clear(mpz_rep * rep);
 
 void get_randprime(mpz_t prime, const mpz_t offset, const mpz_t range,
@@ -59,7 +59,15 @@ void get_prime_diff(const unsigned long start, int sub_offs,
 
 int get_vdiff_size(const unsigned long b2);
 
-unsigned long int str2l(char *s);
+static inline unsigned long str2l(const char *s)
+{
+	errno = 0;
+	char *endptr;
+	unsigned long n = strtol(s, &endptr, 10);
+	if (*endptr != '\0' || errno != 0)
+		error_msg("error in str2l conversion\n");
+	return n;
+}
 
 #define abs_modn(op, n)			\
 do {							\

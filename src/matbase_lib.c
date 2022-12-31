@@ -10,7 +10,7 @@ void mpz_temp_init(mpz_temp * temp, unsigned int lenght)
 }
 
 void mpz_temp_init2(mpz_temp * temp, unsigned int lenght,
-		    unsigned long int size)
+		    unsigned long size)
 {
 	temp->index = 0;
 	temp->lenght = lenght;
@@ -83,7 +83,7 @@ void create_bigk(mpz_t k, const unsigned long b, mpz_temp * temp)
 void get_prime_diff(const unsigned long start, int sub_offs,
 		    const unsigned long end, unsigned char v[], mpz_temp * temp)
 {
-	unsigned long int i = 0;
+	unsigned long i = 0;
 	mpz_t *prev, *next, *diff;	// iterator of primes
 	if (mpz_temp_space(temp) < n_temp_get_prime_diff)
 		error_msg("error in temp_get at ell_curv_delta\n");
@@ -118,12 +118,3 @@ int get_vdiff_size(const unsigned long b2)
 	return -1;
 }
 
-unsigned long int str2l(char *s)
-{
-	errno = 0;
-	char *endptr;
-	unsigned long int n = strtol(s, &endptr, 10);
-	if (*endptr != '\0' || errno != 0)
-		error_msg("error in str2l conversion\n");
-	return n;
-}
