@@ -28,3 +28,6 @@ clean:
 
 build:
 	bear -- make
+format:
+	./Lindent src/*.c
+	./Lindent src/*.h
