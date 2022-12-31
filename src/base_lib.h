@@ -9,11 +9,24 @@
 #define MINIMAL
 #define TIME_PRECISION 1000000000
 
-void error_msg(const char *msg);
-void *allocate(int size);
+static inline void error_msg(const char *msg)
+{
+	perror(msg);
+	exit(EXIT_FAILURE);
+}
 
-void get_arg(const char *coded, unsigned long *start, unsigned long *inc,
-	     unsigned int *size);
+static inline void *allocate(size_t size)
+{
+	void *p = malloc(size);
+	if (p == NULL) {
+		perror("error in malloc at ell_point_fact");
+		return NULL;
+	}
+	memset(p, 0, size);
+	return p;
+}
+
+void get_arg(const char *coded, unsigned long *start, unsigned long *inc, unsigned int *size);
 
 void get_current_time(struct timespec *curr_t);
 
