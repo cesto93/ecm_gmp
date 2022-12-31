@@ -7,7 +7,7 @@ void ell_c_init(ell_c * e)
 	mpz_init(e->n);
 }
 
-void ell_c_init2(ell_c * e, unsigned long int size)
+void ell_c_init2(ell_c * e, unsigned long size)
 {
 	mpz_init2(e->A, size);
 	mpz_init2(e->B, size);
@@ -28,7 +28,7 @@ void ell_p_init(ell_p * p)
 	p->is_inf = 0;
 }
 
-void ell_p_init2(ell_p * p, unsigned long int size)
+void ell_p_init2(ell_p * p, unsigned long size)
 {
 	mpz_init2(p->x, size);
 	mpz_init2(p->y, size);
@@ -37,8 +37,7 @@ void ell_p_init2(ell_p * p, unsigned long int size)
 
 void ell_p_inits(ell_p * p, unsigned int size)
 {
-	unsigned int i;
-	for (i = 0; i < size; i++) {
+	for (unsigned int i = 0; i < size; i++) {
 		mpz_init(p[i].x);
 		mpz_init(p[i].y);
 		p->is_inf = 0;
@@ -53,8 +52,7 @@ void ell_p_clear(ell_p * p)
 
 void ell_p_clears(ell_p * p, unsigned int size)
 {
-	unsigned int i;
-	for (i = 0; i < size; i++) {
+	for (unsigned int i = 0; i < size; i++) {
 		mpz_clear(p[i].x);
 		mpz_clear(p[i].y);
 	}
@@ -62,10 +60,9 @@ void ell_p_clears(ell_p * p, unsigned int size)
 
 void ell_rep_init(ell_rep * rep, unsigned int size)
 {
-	unsigned int i;
 	rep->p = allocate(sizeof(ell_p) * size);
 	rep->size = size;
-	for (i = 0; i < size; i++) {
+	for (unsigned int i = 0; i < size; i++) {
 		mpz_init(rep->p[i].x);
 		mpz_init(rep->p[i].y);
 		rep->p[i].is_inf = 0;
@@ -74,8 +71,7 @@ void ell_rep_init(ell_rep * rep, unsigned int size)
 
 void ell_rep_clear(ell_rep * rep)
 {
-	unsigned int i;
-	for (i = 0; i < rep->size; i++) {
+	for (unsigned int i = 0; i < rep->size; i++) {
 		mpz_clear(rep->p[i].x);
 		mpz_clear(rep->p[i].y);
 	}

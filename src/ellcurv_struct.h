@@ -33,11 +33,11 @@ typedef struct ell_rep		// p = n * r
 } ell_rep;
 
 void ell_c_init(ell_c * e);
-void ell_c_init2(ell_c * e, unsigned long int size);
+void ell_c_init2(ell_c * e, unsigned long size);
 void ell_c_clear(ell_c * e);
 
 void ell_p_init(ell_p * p);
-void ell_p_init2(ell_p * p, unsigned long int size);
+void ell_p_init2(ell_p * p, unsigned long size);
 void ell_p_inits(ell_p * p, unsigned int size);
 void ell_p_clear(ell_p * p);
 void ell_p_clears(ell_p * p, unsigned int size);

@@ -135,7 +135,6 @@ static int ell_dup(const ell_c e, ell_p * r, const ell_p p, mpz_temp * temp)
 	mpz_mul_ui(*t1, *t1, 3);	//t1 = 3xp^2
 	mpz_add(*t1, *t1, e.A);	//t1 = 3xp^2 + A
 	mpz_mul_ui(*t2, p.y, 2);	//t2 = 2yp
-	//mpz_mul_2exp(*t2, p.y, 1); 
 	mpz_mod(*t2, *t2, e.n);
 
 	if (mpz_invert(*t2, *t2, e.n) == 0)	// t2 = 1/ 2yp
@@ -168,7 +167,7 @@ int ell_c_fact(mpz_t factors[], const mpz_t n, const mpz_t b1, const mpz_t b2,
 {
 #define p_temp_size 2
 #define temp_size 6
-	unsigned long int b2_size, n_size;
+	unsigned long b2_size, n_size;
 	int rep_size;
 
 	mpz_t k, delta;
@@ -248,7 +247,7 @@ int ell_p_mul(mpz_t factor, const ell_c e, ell_p * r, const ell_p p,
 	      const mpz_t k, mpz_temp * temp, ell_rep * p_temp)
 {
 	ell_p *pow = (p_temp->p);
-	unsigned long int exp = 0, bit_count = 0, bit_k;
+	unsigned long exp = 0, bit_count = 0, bit_k;
 	mpz_set_ui(factor, 0);
 	bit_k = mpz_popcount(k);
 	ell_p_set(pow, p);
@@ -263,7 +262,6 @@ int ell_p_mul(mpz_t factor, const ell_c e, ell_p * r, const ell_p p,
 	}			//when we exit we have p = p0 * 2 ^ exp   where exp is the lowest bit of k
 	ell_p_set(r, *pow);	// r = p0 * 2 ^ exp
 	bit_count++;
-	//DEBUG_STAMP("k = 2^%lu ", exp);
 
 	while (bit_count < bit_k) {
 		exp++;
@@ -279,11 +277,9 @@ int ell_p_mul(mpz_t factor, const ell_c e, ell_p * r, const ell_p p,
 				goto end;
 			}
 			bit_count++;
-			//DEBUG_STAMP("+ 2^%lu ", exp);
 		}
 	}
 end:
-	//DEBUG_STAMP("%s","\n");
 	if (!mpz_is_zero(factor) && (mpz_cmp(factor, e.n) != 0)) {
 		mpz_gcd(factor, factor, e.n);
 		return 1;
@@ -292,10 +288,10 @@ end:
 }
 
 int create_r_difference(ell_rep * rep, mpz_t factor, const ell_c e,
-			const ell_p p, unsigned long int start,
-			unsigned long int end, mpz_temp * temp)
+			const ell_p p, unsigned long start,
+			unsigned long end, mpz_temp * temp)
 {
-	unsigned long int empty_i;
+	unsigned long empty_i;
 	if (start <= 4) {
 		if (ell_dup(e, &(rep->p[0]), p, temp)) {
 			mpz_set(factor, rep->p[0].x);
@@ -318,7 +314,6 @@ int create_r_difference(ell_rep * rep, mpz_t factor, const ell_c e,
 			goto end;
 		}
 	}
-	//DEBUG_STAMP("empty_i %lu\n", empty_i);
 end:
 	if (!mpz_is_zero(factor) && (mpz_cmp(factor, e.n) != 0)) {
 		mpz_gcd(factor, factor, e.n);
@@ -333,7 +328,7 @@ int ell_p_fact_fase_2(mpz_t factor, const ell_c e, const ell_p r,
 {
 	ell_p *q = &p_temp->p[1];	// q = qi * r 
 	mpz_t *prime, *old, *diff;
-	unsigned long int diff_ui, max_diff = 0;
+	unsigned long diff_ui, max_diff = 0;
 
 	if (mpz_temp_space(temp) < 3)
 		error_msg("error in temp_get at ell_point_fact2\n");
@@ -359,7 +354,7 @@ int ell_p_fact_fase_2(mpz_t factor, const ell_c e, const ell_p r,
 					goto end;
 				max_diff = diff_ui + 4;
 			}
-			//GMP_DEBUG_STAMP("diff = %lu p = (%Zd, %Zd)\n", diff_ui, rep->p[(diff_ui / 2) -1].x, rep->p[(diff_ui / 2) -1].y);
+
 			if (ell_add(e, q, rep->p[(diff_ui / 2) - 1], *q, temp))	// q = r * q1
 			{
 				mpz_set(factor, q->x);
@@ -378,8 +373,7 @@ end:
 
 int get_rep_size(const mpz_t b2)
 {
-	unsigned int size = mpz_sizeinbase(b2, 10);
-	size = size - 3;
+	size_t size = mpz_sizeinbase(b2, 10) - 3;
 	const unsigned int array_size[] = { 10, 18, 36, 57, 77, 111 };
 	DEBUG_STAMP("rep_size = %d\n", array_size[size]);
 	if (size < 6)

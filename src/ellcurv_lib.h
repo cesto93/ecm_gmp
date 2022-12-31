@@ -34,8 +34,8 @@ int ell_p_fact_fase_2(mpz_t factor, const ell_c e, const ell_p r,
 		      const mpz_t b1, const mpz_t b2, mpz_temp * temp,
 		      ell_rep * p_temp, ell_rep * rep);
 int create_r_difference(ell_rep * rep, mpz_t factor, const ell_c e,
-			const ell_p p, unsigned long int start,
-			unsigned long int end, mpz_temp * temp);
+			const ell_p p, unsigned long start,
+			unsigned long end, mpz_temp * temp);
 
 int get_rep_size(const mpz_t b2);
 #endif //ELLCURV_LIB_H
