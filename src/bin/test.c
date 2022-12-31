@@ -3,11 +3,11 @@
 #include <gmp.h>
 #include <time.h>
 
-#include "base_lib.h"
-#include "m_ellcurv_struct.h"
-#include "m_ellcurv_fact.h"
-#include "m_ellcurv_lib.h"
-#include "mm_ellcurv_lib.h"
+#include "../base_lib.h"
+#include "../m_ellcurv_struct.h"
+#include "../m_ellcurv_fact.h"
+#include "../m_ellcurv_lib.h"
+#include "../mm_ellcurv_lib.h"
 
 #define DEFAULT_COEFF 100	// b2 = b1 * coeff
 #define MAX_ITER 2000ul
@@ -201,6 +201,9 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 	mpz_t p, q, n, rnd_rng1, rnd_rng2, fact[2];
 	unsigned long tot_iter = 0;
 	long res;
+
+	if (tent == 0)
+		return;
 
 	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, fact[0], fact[1], NULL);
 	mpz_ui_pow_ui(rnd_rng1, 10, cifer);

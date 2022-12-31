@@ -9,10 +9,10 @@
       "-pthread",
       "-o",
       "start.o",
-      "src/start.c"
+      "src/bin/start.c"
     ],
     "directory": "/home/pier/Desktop/repos/ecm_gmp",
-    "file": "/home/pier/Desktop/repos/ecm_gmp/src/start.c",
+    "file": "/home/pier/Desktop/repos/ecm_gmp/src/bin/start.c",
     "output": "/home/pier/Desktop/repos/ecm_gmp/start.o"
   },
   {

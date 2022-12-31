@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <gmp.h>
 
-#include "base_lib.h"
-#include "m_ellcurv_fact.h"
+#include "../base_lib.h"
+#include "../m_ellcurv_fact.h"
 
 #define DEFAULT_COEFF 100	// b2 = b1 * coeff
 #define DEFAULT_MAX_ITER 2000
