@@ -1,9 +1,30 @@
 #include "m_ellcurv_fact.h"
 
-static void td_data_init(fact_tddata * td, const unsigned long n_size)
+typedef struct fact_tddata {
+	unsigned int index;
+	pthread_t *tids;
+	pthread_mutex_t *mtx;
+	mpz_t fact;
+	unsigned long iter_done;
+	int fase_found;
+	gmp_randstate_t state;
+	const fact_param *const_param;
+} fact_tddata;
+
+static void td_data_init(fact_tddata *td, const unsigned long n_size, const unsigned long seed, pthread_mutex_t *mtx, unsigned int index)
 {
 	gmp_randinit_default(td->state);
 	mpz_init2(td->fact, n_size);
+
+	gmp_randseed_ui(td->state, seed);
+	
+	td->index = index;
+	td->fase_found = -1;
+	td->mtx = mtx;
+
+	td->tids = malloc(sizeof(pthread_t));
+	if (td->tids == NULL)
+		error_msg("error in td_data_init()");
 }
 
 static void td_data_clear(fact_tddata * td)
@@ -52,7 +73,6 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 	unsigned long iter_done = 0;
 	fact_param param;
 	fact_tddata td[THREAD_NUM];
-	pthread_t tids[THREAD_NUM];
 	unsigned long seeds[THREAD_NUM];
 	pthread_mutex_t td_mutex;
 
@@ -63,12 +83,7 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 		error_msg("error in getrandom at m_ell_fact\n");
 
 	for (int i = 0; i < THREAD_NUM; i++) {
-		td_data_init(td + i, n_size);
-		gmp_randseed_ui(td[i].state, seeds[i]);
-		td[i].tids = tids;
-		td[i].index = i;
-		td[i].fase_found = -1;
-		td[i].mtx = &td_mutex;
+		td_data_init(td + i, n_size, seeds[i], &td_mutex, i);
 	}
 
 	//PRECALCULATE PARAM
@@ -85,12 +100,12 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 
 	for (int i = 0; i < THREAD_NUM; i++) {
 		td[i].const_param = &param;
-		if (pthread_create(&tids[i], NULL, fact_tjob, (void *)&td[i]))	//THE JOB
+		if (pthread_create(td[i].tids, NULL, fact_tjob, (void *)&td[i]))	//THE JOB
 			error_msg("error in pthread_create");
 	}
 
 	for (int i = 0; i < THREAD_NUM; i++) {
-		if (pthread_join(tids[i], NULL))
+		if (pthread_join(*(td[i].tids), NULL))
 			error_msg("error in pthread_join");
 		iter_done += td[i].iter_done;
 		if (td[i].fase_found != -1) {
@@ -117,42 +132,33 @@ long factorize_no_thread(mpz_t factors[], const mpz_t n, unsigned long b1, unsig
 	int fase_found = -1;
 	unsigned long iter_done = 0;
 	fact_param param;
-	fact_tddata td[THREAD_NUM];
-	pthread_t tids[THREAD_NUM];
-	unsigned long seeds[THREAD_NUM];
+	fact_tddata td;
+	unsigned long seed;
 	pthread_mutex_t td_mutex;
 
 	if (pthread_mutex_init(&td_mutex, NULL))
 		error_msg("error in mutex init\n");
 
-	if (syscall(SYS_getrandom, seeds, sizeof(unsigned long) * THREAD_NUM, 0) == -1)
+	if (syscall(SYS_getrandom, &seed, sizeof(unsigned long), 0) == -1)
 		error_msg("error in getrandom at m_ell_fact\n");
 
-	for (int i = 0; i < THREAD_NUM; i++) {
-		td_data_init(td + i, n_size);
-		gmp_randseed_ui(td[i].state, seeds[i]);
-		td[i].tids = tids;
-		td[i].index = i;
-		td[i].fase_found = -1;
-		td[i].mtx = &td_mutex;
-	}
+	td_data_init(&td, n_size, seed, &td_mutex, 0);
 
 	//PRECALCULATE PARAM
 #ifdef MM_ENABLE
-	if (fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM))	//FOUND IN INVERTION OF R
+	if (fact_param_init(&param, n, b1, b2, max_iter))	//FOUND IN INVERTION OF R
 	{
 		mpz_set(factors[0], param.mdata.R2);
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done;	//FASE 0
 	}
 #else
-	fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM);
+	fact_param_init(&param, n, b1, b2, max_iter);
 #endif
 
-	ell_fact(factors[0], td[0].state, &param, &iter_done, &fase_found);
+	ell_fact(factors[0], td.state, &param, &iter_done, &fase_found);
 
-	for (int i = 0; i < THREAD_NUM; i++)
-		td_data_clear(&td[i]);
+	td_data_clear(&td);
 	fact_param_clear(&param);
 
 	if (iter_done == max_iter) {

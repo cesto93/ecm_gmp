@@ -18,11 +18,6 @@
 
 #define FACT_REP_SIZE 950
 
-#ifdef NO_THREAD
-#undef THREAD_NUM
-#define THREAD_NUM 1
-#endif
-
 #define ELL_FACT_NOT_FOUND -1
 #define ell_fact_FASE(n, max_iter) (n / max_iter)
 #define ell_fact_ITER(n, max_iter) (n % max_iter)
@@ -36,17 +31,6 @@
 	#define ell_fact(fact, state, param, res, fase_found) m_ell_fact(fact, state, param, res, fase_found)
 	#define fact_param_init(param, n, b1, b2, max_iter) m_ell_fact_param_init(param, n, b1, b2, max_iter)
 #endif
-
-typedef struct fact_tddata {
-	unsigned int index;
-	pthread_t *tids;
-	pthread_mutex_t *mtx;
-	mpz_t fact;
-	unsigned long iter_done;
-	int fase_found;
-	gmp_randstate_t state;
-	const fact_param *const_param;
-} fact_tddata;
 
 //return ELL_FACT_NOT_FOUND if fact not found
 long factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
