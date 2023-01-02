@@ -9,14 +9,12 @@ objects := $(addprefix $(objdir)/,m_ellcurv_fact.c m_ellcurv_lib.c mm_ellcurv_li
 
 build: $(objects)
 	 gcc -Wall -Wextra -O3 $(bindir)/start.c -o start.o $(objects) -lgmp -pthread
-test: $(objects)
-	gcc -Wall -Wextra -O3 -static $(bindir)/test.c -o test.o $(objects) -lgmp -pthread
+	 gcc -Wall -Wextra -O3 -static $(bindir)/test.c -o test.o $(objects) -lgmp -pthread
 prof: $(objects)
 	gcc -pg -Wall -Wextra -O2 $(bindir)/start.c -o prof.o $(objects) -lgmp -pthread
-prof_t: $(objects)
 	gcc -pg -Wall -Wextra -O2 $(bindir)/test.c -o prof_t.o $(objects) -lgmp -pthread
 clean:
-	rm start.o
+	rm -f start.o test.o
 lint:
 	bear -- make
 format:
