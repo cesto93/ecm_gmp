@@ -33,7 +33,8 @@
 #endif
 
 //return ELL_FACT_NOT_FOUND if fact not found
-long factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
-	      unsigned long b2, unsigned long max_iter);
+long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
+
+long factorize_no_thread(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
 
 #endif //M_ELLCURV_FACT_H

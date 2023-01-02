@@ -218,7 +218,7 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 		mpz_mul(n, p, q);
 
 		get_current_time(&start);
-		res = factorize(fact, n, b1, b2, MAX_ITER);
+		res = factorize_no_thread(fact, n, b1, b2, MAX_ITER);
 		get_current_time(&end);
 		timespec_diff(&start, &end, &diff);
 		timespec_sum(&mean, &mean, &diff);
