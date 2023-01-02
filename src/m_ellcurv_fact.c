@@ -88,8 +88,7 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 
 	//PRECALCULATE PARAM
 #ifdef MM_ENABLE
-	if (fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM))	//FOUND IN INVERTION OF R
-	{
+	if (fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM)) { //FOUND IN INVERTION OF R
 		mpz_set(factors[0], param.mdata.R2);
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done;	//FASE 0
@@ -146,8 +145,7 @@ long factorize_no_thread(mpz_t factors[], const mpz_t n, unsigned long b1, unsig
 
 	//PRECALCULATE PARAM
 #ifdef MM_ENABLE
-	if (fact_param_init(&param, n, b1, b2, max_iter))	//FOUND IN INVERTION OF R
-	{
+	if (fact_param_init(&param, n, b1, b2, max_iter)) { // FOUND IN INVERTION OF R
 		mpz_set(factors[0], param.mdata.R2);
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done;	//FASE 0
