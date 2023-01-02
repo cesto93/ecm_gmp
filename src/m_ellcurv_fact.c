@@ -1,17 +1,5 @@
 #include "m_ellcurv_fact.h"
 
-static void lock(pthread_mutex_t * mtx)
-{
-	if (pthread_mutex_lock(mtx))
-		error_msg("errore nella lock");
-}
-
-static void unlock(pthread_mutex_t * mtx)
-{
-	if (pthread_mutex_unlock(mtx))
-		error_msg("errore nella unlock");
-}
-
 static void td_data_init(fact_tddata * td, const unsigned long n_size)
 {
 	gmp_randinit_default(td->state);
@@ -40,14 +28,20 @@ void *fact_tjob(void *arg)
 	fact_tddata *const td = (fact_tddata *) arg;
 
 	ell_fact(td->fact, td->state, td->const_param, &(td->iter_done), &(td->fase_found));
-	lock(td->mtx);
+
+	if (pthread_mutex_lock(td->mtx))
+		error_msg("errore nella lock");
+
 	if (td->fase_found != -1) {
 		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
 		for (unsigned int i = 0; i < THREAD_NUM; i++)
 			if (i != td->index)
 				pthread_cancel(td->tids[i]);
 	}
-	unlock(td->mtx);
+
+	if (pthread_mutex_unlock(td->mtx))
+		error_msg("errore nella unlock");
+	
 	pthread_exit(0);
 }
 
@@ -87,14 +81,14 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 
 	//PRECALCULATE PARAM
 #ifdef MM_ENABLE
-	if (fact_param_init(&param, n, b1, b2, max_iter))	//FOUND IN INVERTION OF R
+	if (fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM))	//FOUND IN INVERTION OF R
 	{
 		mpz_set(factors[0], param.mdata.R2);
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done;	//FASE 0
 	}
 #else
-	fact_param_init(&param, n, b1, b2, max_iter);
+	fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM);
 #endif
 
 #ifndef NO_THREAD
