@@ -45,7 +45,6 @@ void *fact_tjob(void *arg)
 	pthread_exit(0);
 }
 
-//HIGH_LEVEL FUNCT
 long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
@@ -84,7 +83,6 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 	fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM);
 #endif
 
-#ifndef NO_THREAD
 	for (int i = 0; i < THREAD_NUM; i++) {
 		td[i].const_param = &param;
 		if (pthread_create(&tids[i], NULL, fact_tjob, (void *)&td[i]))	//THE JOB
@@ -100,9 +98,58 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 			fase_found = td[i].fase_found;
 		}
 	}
+
+	for (int i = 0; i < THREAD_NUM; i++)
+		td_data_clear(&td[i]);
+	fact_param_clear(&param);
+
+	if (iter_done == max_iter) {
+		return ELL_FACT_NOT_FOUND;
+	} else { //FACT FOUND
+		mpz_divexact(factors[1], n, factors[0]);
+		return iter_done + max_iter * fase_found;
+	}
+}
+
+long factorize_no_thread(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+{
+	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
+	int fase_found = -1;
+	unsigned long iter_done = 0;
+	fact_param param;
+	fact_tddata td[THREAD_NUM];
+	pthread_t tids[THREAD_NUM];
+	unsigned long seeds[THREAD_NUM];
+	pthread_mutex_t td_mutex;
+
+	if (pthread_mutex_init(&td_mutex, NULL))
+		error_msg("error in mutex init\n");
+
+	if (syscall(SYS_getrandom, seeds, sizeof(unsigned long) * THREAD_NUM, 0) == -1)
+		error_msg("error in getrandom at m_ell_fact\n");
+
+	for (int i = 0; i < THREAD_NUM; i++) {
+		td_data_init(td + i, n_size);
+		gmp_randseed_ui(td[i].state, seeds[i]);
+		td[i].tids = tids;
+		td[i].index = i;
+		td[i].fase_found = -1;
+		td[i].mtx = &td_mutex;
+	}
+
+	//PRECALCULATE PARAM
+#ifdef MM_ENABLE
+	if (fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM))	//FOUND IN INVERTION OF R
+	{
+		mpz_set(factors[0], param.mdata.R2);
+		mpz_divexact(factors[1], n, factors[0]);
+		return iter_done;	//FASE 0
+	}
 #else
-	ell_fact(factors[0], td[0].state, &param, &iter_done, &fase_found);
+	fact_param_init(&param, n, b1, b2, max_iter / THREAD_NUM);
 #endif
+
+	ell_fact(factors[0], td[0].state, &param, &iter_done, &fase_found);
 
 	for (int i = 0; i < THREAD_NUM; i++)
 		td_data_clear(&td[i]);

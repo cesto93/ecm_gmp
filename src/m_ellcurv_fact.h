@@ -1,9 +1,7 @@
 #ifndef M_ELLCURV_FACT_H_	/* Include guard */
 #define M_ELLCURV_FACT_H_
 
-#define NO_LINUX
 #define MM_ENABLE
-#define NO_THREAD
 #define THREAD_NUM 4
 #define NDEBUG
 
