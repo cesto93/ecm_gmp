@@ -15,8 +15,7 @@ static inline void m_ell_setrand_uv(gmp_randstate_t state, mpz_t sigma, mpz_t u,
 	GMP_DEBUG_STAMP("sigma = %Zd\nu = %Zd\nv = %Zd\n", sigma, u, v);
 }
 
-int m_ell_setrand2(const mpz_t n, mpz_t e_C2, m_ellp * p, gmp_randstate_t state,
-		   mpz_temp * temp)
+int m_ell_setrand2(const mpz_t n, mpz_t e_C2, m_ellp * p, gmp_randstate_t state, mpz_temp * temp)
 {
 	mpz_t *t1, *t2, *t3, *t4;
 	mpz_temp_get(t1, temp);

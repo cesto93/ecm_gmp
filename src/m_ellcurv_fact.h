@@ -40,8 +40,6 @@ typedef mm_fact_param fact_param;
 			mm_ell_fact(fact, state, e_C2, param, rep, beta, temp, p_temp, res, fase_found)
 #else
 typedef m_fact_param fact_param;
-#define N_TEMP_FACT_JOB n_temp_fact
-#define N_P_TEMP_FACT_JOB n_p_temp_fact
 
 #define ell_fact(fact, state, e_C2, param, rep, beta, temp, p_temp, res, fase_found) \
 			m_ell_fact(fact, state, e_C2, param, rep, beta, temp, p_temp, res, fase_found)

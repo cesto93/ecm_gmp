@@ -19,8 +19,6 @@ static void td_data_init(fact_tddata * td, const unsigned long n_size)
 	mpz_init2(td->e_C2, n_size);
 	m_ellp_rep_init2(&(td->rep), FACT_REP_SIZE, n_size);
 	mpz_rep_init2(&(td->beta), FACT_REP_SIZE, n_size);
-	mpz_temp_init2(&(td->temp), N_TEMP_FACT_JOB, n_size);
-	m_ellp_temp_init2(&(td->p_temp), N_P_TEMP_FACT_JOB, n_size);
 }
 
 static void td_data_clear(fact_tddata * td)
@@ -33,9 +31,7 @@ static void td_data_clear(fact_tddata * td)
 	m_ellp_temp_clear(&(td->p_temp));
 }
 
-static int fact_param_init(fact_param * param, const mpz_t n, unsigned long b1,
-			   unsigned long b2, unsigned long max_iter,
-			   mpz_temp * temp)
+static int fact_param_init(fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, mpz_temp * temp)
 {
 	int vdiff_size = get_vdiff_size(b2);
 	if (vdiff_size == -1)
@@ -93,8 +89,7 @@ void *fact_tjob(void *arg)
 }
 
 //HIGH_LEVEL FUNCT
-long factorize(mpz_t factors[], const mpz_t n, unsigned long b1,
-	      unsigned long b2, unsigned long max_iter)
+long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
 	int fase_found = -1;
