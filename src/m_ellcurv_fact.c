@@ -60,15 +60,8 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 	if (pthread_mutex_init(&td_mutex, NULL))
 		error_msg("error in mutex init\n");
 
-#ifndef NO_LINUX
-	if (syscall(SYS_getrandom, seeds, sizeof(unsigned long) * THREAD_NUM, 0)
-	    == -1)
+	if (syscall(SYS_getrandom, seeds, sizeof(unsigned long) * THREAD_NUM, 0) == -1)
 		error_msg("error in getrandom at m_ell_fact\n");
-#else
-	seeds[0] = time(NULL);
-	for (int i = 1; i < THREAD_NUM; i++)
-		seeds[i] = seeds[0] + i;
-#endif
 
 	for (int i = 0; i < THREAD_NUM; i++) {
 		td_data_init(td + i, n_size);

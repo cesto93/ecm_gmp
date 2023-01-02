@@ -286,7 +286,7 @@ end:
 	m_ellp_temp_free(p_temp, 2);
 }
 
-void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param * param, unsigned int *iter, int *fase_found)
+void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param *param, unsigned int *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *gcd;

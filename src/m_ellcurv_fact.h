@@ -9,10 +9,8 @@
 
 #include <pthread.h>
 #include <unistd.h>
-#ifndef NO_LINUX
 #include <sys/syscall.h>
 #include <linux/random.h>
-#endif
 
 #include "m_ellcurv_struct.h"
 #include "m_ellcurv_lib.h"
