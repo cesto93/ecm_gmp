@@ -32,14 +32,13 @@
 #define ell_fact_ITER(n, max_iter) (n % max_iter)
 
 #ifdef MM_ENABLE
-typedef mm_fact_param fact_param;
-#define ell_fact(fact, state, param, res, fase_found) \
-			mm_ell_fact(fact, state, param, res, fase_found)
+	typedef mm_fact_param fact_param;
+	#define ell_fact(fact, state, param, res, fase_found) mm_ell_fact(fact, state, param, res, fase_found)
+	#define fact_param_init(param, n, b1, b2, max_iter) mm_ell_fact_param_init(param, n, b1, b2, max_iter)
 #else
-typedef m_fact_param fact_param;
-
-#define ell_fact(fact, state, param, res, fase_found) \
-			m_ell_fact(fact, state, param, res, fase_found)
+	typedef m_fact_param fact_param;
+	#define ell_fact(fact, state, param, res, fase_found) m_ell_fact(fact, state, param, res, fase_found)
+	#define fact_param_init(param, n, b1, b2, max_iter) m_ell_fact_param_init(param, n, b1, b2, max_iter)
 #endif
 
 typedef struct fact_tddata {

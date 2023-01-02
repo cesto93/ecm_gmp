@@ -334,3 +334,29 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param * param, u
 	mpz_temp_free(&temp, 1);
 	m_ellp_temp_free(&p_temp, 2);
 }
+
+int m_ell_fact_param_init(m_fact_param *param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+{
+	mpz_temp temp;
+	int vdiff_size = get_vdiff_size(b2);
+
+	mpz_temp_init2(&temp, n_temp_fact, mpz_size(n) * mp_bits_per_limb);
+
+	if (vdiff_size == -1)
+		error_msg("b2 to big\n");
+	if ((param->vdiff = malloc(vdiff_size)) == NULL)
+		error_msg("error in malloc at m_ell_fact\n");
+	mpz_init2(param->k, bigk_size_bits(b1));
+
+	create_bigk(param->k, b1, &temp);
+	get_prime_diff(b1, 1, b2, param->vdiff, &temp);
+	mpz_realloc2(param->k, mpz_size(param->k) * mp_bits_per_limb);
+	param->b1 = b1;
+	param->b2 = b2;
+	param->max_iter = max_iter;
+
+
+	mpz_init(param->n);
+	mpz_set(param->n, n);
+	return 0;
+}

@@ -24,7 +24,7 @@
 typedef struct m_fact_param {
 	unsigned long b1;
 	unsigned long b2;
-	unsigned int max_iter;
+	unsigned long max_iter;
 	mpz_t n;
 	mpz_t k;
 	unsigned char *vdiff;
