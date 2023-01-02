@@ -7,11 +7,12 @@ fn1_t=$path$n1$ext_t
 fn1_f=$path$n1$ext_f
 echo "c,b1,b2,iter,time" > $fn1_t
 echo -e "n\tf1\tf2\tfase\titer" > $fn1_f
-./test.o fact 8 16 3000:1000:9 $fn1_t $fn1_f
-./test.o fact 8 17 4000:1000:9 $fn1_t $fn1_f
-./test.o fact 8 18 5000:1000:8 $fn1_t $fn1_f
-./test.o fact 8 19 6000:1000:8 $fn1_t $fn1_f
-./test.o fact 8 20 7000:1000:7 $fn1_t $fn1_f
+./test.o fact 8 12 3000:1000:9 $fn1_t $fn1_f
+#./test.o fact 8 16 3000:1000:9 $fn1_t $fn1_f
+#./test.o fact 8 17 4000:1000:9 $fn1_t $fn1_f
+#./test.o fact 8 18 5000:1000:8 $fn1_t $fn1_f
+#./test.o fact 8 19 6000:1000:8 $fn1_t $fn1_f
+#./test.o fact 8 20 7000:1000:7 $fn1_t $fn1_f
 #./test.o fact 8 21 15000:5000:8 $fn1_t $fn1_f
 #./test.o fact 8 22 20000:5000:8 $fn1_t $fn1_f
 #./test.o fact 8 23 30000:5000:7 $fn1_t $fn1_f
