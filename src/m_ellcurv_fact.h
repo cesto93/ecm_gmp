@@ -33,16 +33,13 @@
 
 #ifdef MM_ENABLE
 typedef mm_fact_param fact_param;
-#define N_TEMP_FACT_JOB n_temp_mfact
-#define N_P_TEMP_FACT_JOB n_p_temp_mfact
-
-#define ell_fact(fact, state, e_C2, param, rep, beta, temp, p_temp, res, fase_found) \
-			mm_ell_fact(fact, state, e_C2, param, rep, beta, temp, p_temp, res, fase_found)
+#define ell_fact(fact, state, e_C2, param, res, fase_found) \
+			mm_ell_fact(fact, state, e_C2, param, res, fase_found)
 #else
 typedef m_fact_param fact_param;
 
-#define ell_fact(fact, state, e_C2, param, rep, beta, temp, p_temp, res, fase_found) \
-			m_ell_fact(fact, state, e_C2, param, rep, beta, temp, p_temp, res, fase_found)
+#define ell_fact(fact, state, e_C2, param, res, fase_found) \
+			m_ell_fact(fact, state, e_C2, param, res, fase_found)
 #endif
 
 typedef struct fact_tddata {
@@ -54,10 +51,6 @@ typedef struct fact_tddata {
 	int fase_found;
 	gmp_randstate_t state;
 	mpz_t e_C2;
-	m_ellp_rep rep;
-	mpz_rep beta;
-	mpz_temp temp;
-	m_ellp_temp p_temp;
 	const fact_param *const_param;
 } fact_tddata;
 

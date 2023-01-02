@@ -17,38 +17,36 @@ static void td_data_init(fact_tddata * td, const unsigned long n_size)
 	gmp_randinit_default(td->state);
 	mpz_init2(td->fact, n_size);
 	mpz_init2(td->e_C2, n_size);
-	m_ellp_rep_init2(&(td->rep), FACT_REP_SIZE, n_size);
-	mpz_rep_init2(&(td->beta), FACT_REP_SIZE, n_size);
 }
 
 static void td_data_clear(fact_tddata * td)
 {
 	gmp_randclear(td->state);
 	mpz_clears(td->fact, td->e_C2, NULL);
-	m_ellp_rep_clear(&(td->rep));
-	mpz_rep_clear(&(td->beta));
-	mpz_temp_clear(&(td->temp));
-	m_ellp_temp_clear(&(td->p_temp));
 }
 
-static int fact_param_init(fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, mpz_temp * temp)
+static int fact_param_init(fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
+	mpz_temp temp;
 	int vdiff_size = get_vdiff_size(b2);
+
+	mpz_temp_init2(&temp, n_temp_mfact, mpz_size(param->mdata.n) * mp_bits_per_limb);
+
 	if (vdiff_size == -1)
 		error_msg("b2 to big\n");
 	if ((param->vdiff = malloc(vdiff_size)) == NULL)
 		error_msg("error in malloc at m_ell_fact\n");
 	mpz_init2(param->k, bigk_size_bits(b1));
 
-	create_bigk(param->k, b1, temp);
-	get_prime_diff(b1, 1, b2, param->vdiff, temp);
+	create_bigk(param->k, b1, &temp);
+	get_prime_diff(b1, 1, b2, param->vdiff, &temp);
 	mpz_realloc2(param->k, mpz_size(param->k) * mp_bits_per_limb);
 	param->b1 = b1;
 	param->b2 = b2;
 	param->max_iter = max_iter / THREAD_NUM;
 
 #ifdef MM_ENABLE
-	if (mform_data_init(&(param->mdata), n, temp))	//CAN'T INVERT R TO MOD N
+	if (mform_data_init(&(param->mdata), n, &temp))	//CAN'T INVERT R TO MOD N
 		return 1;
 #else
 	mpz_init(param->n);
@@ -74,9 +72,7 @@ void *fact_tjob(void *arg)
 {
 	fact_tddata *const td = (fact_tddata *) arg;
 
-	ell_fact(td->fact, td->state, td->e_C2, td->const_param, &(td->rep),
-		 &(td->beta), &(td->temp), &(td->p_temp), &(td->iter_done),
-		 &(td->fase_found));
+	ell_fact(td->fact, td->state, td->e_C2, td->const_param, &(td->iter_done), &(td->fase_found));
 	lock(td->mtx);
 	if (td->fase_found != -1) {
 		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
@@ -124,14 +120,14 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 
 	//PRECALCULATE PARAM
 #ifdef MM_ENABLE
-	if (fact_param_init(&param, n, b1, b2, max_iter, &(td[0].temp)))	//FOUND IN INVERTION OF R
+	if (fact_param_init(&param, n, b1, b2, max_iter))	//FOUND IN INVERTION OF R
 	{
 		mpz_set(factors[0], param.mdata.R2);
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done;	//FASE 0
 	}
 #else
-	fact_param_init(&param, n, b1, b2, max_iter, &(td[0].temp));
+	fact_param_init(&param, n, b1, b2, max_iter);
 #endif
 
 #ifndef NO_THREAD
@@ -151,9 +147,7 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 		}
 	}
 #else
-	ell_fact(factors[0], td[0].state, td[0].e_C2, &param, &(td[0].rep),
-		 &(td[0].beta), &(td[0].temp), &(td[0].p_temp), &iter_done,
-		 &fase_found);
+	ell_fact(factors[0], td[0].state, td[0].e_C2, &param, &iter_done, &fase_found);
 #endif
 
 	for (int i = 0; i < THREAD_NUM; i++)

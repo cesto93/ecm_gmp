@@ -497,24 +497,35 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
 	m_ellp_temp_clear(&p_temp);
 }
 
-void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
-		 const mm_fact_param * param, m_ellp_rep * rep, mpz_rep * beta,
-		 mpz_temp * temp, m_ellp_temp * p_temp, unsigned long *iter,
-		 int *fase_found)
+
+void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_param * param, unsigned long *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *g, *g_r;
+	mpz_temp temp;
+	m_ellp_temp p_temp;
+	m_ellp_rep rep;
+	mpz_rep beta;
 
-	mpz_temp_get(g, temp);
-	mpz_temp_get(g_r, temp);
-	m_ellp_temp_get(p, p_temp);
-	m_ellp_temp_get(r, p_temp);
+	const int FACT_REP_SIZE = 950;
+	const unsigned long n_size = mpz_size(param->mdata.n) * mp_bits_per_limb;
+
+	mpz_temp_init2(&temp, n_temp_mfact, n_size);
+	m_ellp_temp_init2(&p_temp, n_p_temp_mfact, n_size);
+
+	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
+	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
+
+	mpz_temp_get(g, &temp);
+	mpz_temp_get(g_r, &temp);
+	m_ellp_temp_get(p, &p_temp);
+	m_ellp_temp_get(r, &p_temp);
 
 	mpz_set_ui(*g, 1);
-	to_mform(*g_r, *g, &(param->mdata), temp);
+	to_mform(*g_r, *g, &(param->mdata), &temp);
 
 	for (*iter = 0; *iter < param->max_iter; (*iter)++)
-		if (m_ell_setrand2(param->mdata.n, e_C2, p, state, temp))	//TODO invertion can be avoited
+		if (m_ell_setrand2(param->mdata.n, e_C2, p, state, &temp))	//TODO invertion can be avoited
 		{
 			if (find_div_by_gcd(*g, p->X, param->mdata.n)) {
 				mpz_set(fact, *g);
@@ -522,13 +533,13 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
 				break;
 			}
 		} else {
-			m_ellp_to_mform(p, p, &(param->mdata), temp);
-			to_mform(e_C2, e_C2, &(param->mdata), temp);
+			m_ellp_to_mform(p, p, &(param->mdata), &temp);
+			to_mform(e_C2, e_C2, &(param->mdata), &temp);
 
-			mm_ell_mul(param->k, e_C2, r, p, &(param->mdata), p_temp, temp);	//FASE1
+			mm_ell_mul(param->k, e_C2, r, p, &(param->mdata), &p_temp, &temp);	//FASE1
 			pthread_testcancel();
 
-			m_ellp_from_mform(p, r, &(param->mdata), temp);	// p = r from_mfrom
+			m_ellp_from_mform(p, r, &(param->mdata), &temp);	// p = r from_mfrom
 			if (find_div_by_gcd(*g, p->Z, param->mdata.n))	//check on p
 			{
 				mpz_set(fact, *g);
@@ -536,14 +547,12 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
 				break;
 			}
 			mpz_set(*g, *g_r);
-			mm_ell_diff(rep->p, beta->v, rep->lenght, e_C2, r,
-				    &(param->mdata), temp);
-			mm_ell_fase2(*g, param->b1, param->b2, e_C2, r, rep->p,
-				     beta->v, rep->lenght, param->vdiff,
-				     &(param->mdata), p_temp, temp);
+			mm_ell_diff(rep.p, beta.v, rep.lenght, e_C2, r, &(param->mdata), &temp);
+			mm_ell_fase2(*g, param->b1, param->b2, e_C2, r, rep.p, beta.v, rep.lenght, param->vdiff,
+				     &(param->mdata), &p_temp, &temp);
 			pthread_testcancel();
 
-			from_mform(*g, *g, &(param->mdata), temp);
+			from_mform(*g, *g, &(param->mdata), &temp);
 			if (find_div_by_gcd(*g, *g, param->mdata.n)) {
 				mpz_set(fact, *g);
 				*fase_found = 2;
@@ -551,6 +560,6 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
 			}
 		}
 
-	mpz_temp_free(temp, 2);
-	m_ellp_temp_free(p_temp, 2);
+	mpz_temp_free(&temp, 2);
+	m_ellp_temp_free(&p_temp, 2);
 }
