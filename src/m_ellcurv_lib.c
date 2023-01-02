@@ -283,3 +283,44 @@ end:
 	mpz_temp_free(temp, 3);
 	m_ellp_temp_free(p_temp, 2);
 }
+
+void m_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
+		const m_fact_param * param, m_ellp_rep * rep, mpz_rep * beta,
+		mpz_temp * temp, m_ellp_temp * p_temp, unsigned int *iter,
+		int *fase_found)
+{
+	m_ellp *p, *r;
+	mpz_t *gcd;
+
+	mpz_temp_get(gcd, temp);
+	m_ellp_temp_get(p, p_temp);
+	m_ellp_temp_get(r, p_temp);
+
+	for (*iter = 0; *iter < param->max_iter; (*iter)++)
+		if (m_ell_setrand2(param->n, e_C2, p, state, temp))	//TODO invertion can be avoited
+		{
+			if (find_div_by_gcd(*gcd, p->X, param->n)) {
+				mpz_set(fact, *gcd);
+				*fase_found = 0;
+				break;
+			}
+		} else {
+			m_ell_mul(param->k, param->n, e_C2, r, p, p_temp, temp);	//FASE1
+			if (find_div_by_gcd(*gcd, r->Z, param->n)) {
+				mpz_set(fact, *gcd);
+				*fase_found = 1;
+				break;
+			}
+			mpz_set_ui(*gcd, 1);
+			m_ell_diff(rep, beta, param->n, e_C2, r, temp);
+			m_ell_fase2(*gcd, param->b1, param->b2, param->n, e_C2, r,
+				    *rep, *beta, param->vdiff, p_temp, temp);
+			if (find_div_by_gcd(*gcd, *gcd, param->n)) {
+				mpz_set(fact, *gcd);
+				*fase_found = 2;
+				break;
+			}
+		}
+	mpz_temp_free(temp, 1);
+	m_ellp_temp_free(p_temp, 2);
+}

@@ -69,6 +69,14 @@ static inline unsigned long str2l(const char *s)
 	return n;
 }
 
+static inline int find_div_by_gcd(mpz_t res, const mpz_t op, const mpz_t n)
+{
+	if (mpz_is_zero(op))
+		return 0;
+	mpz_gcd(res, op, n);
+	return ((mpz_cmp_ui(res, 1) > 0) && (mpz_cmp(res, n) != 0));
+}
+
 #define abs_modn(op, n)			\
 do {							\
 	while (mpz_sgn(op) == -1)	\

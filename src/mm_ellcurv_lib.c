@@ -1,5 +1,7 @@
 #include "mm_ellcurv_lib.h"
 
+#include <pthread.h>
+
 static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
 				 const mp_limb_t * px_l, size_t px_s,
 				 const mp_limb_t * pz_l, size_t pz_s,
@@ -493,4 +495,62 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
 	mform_data_clear(&mdata);
 	mpz_temp_clear(&temp);
 	m_ellp_temp_clear(&p_temp);
+}
+
+void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
+		 const mm_fact_param * param, m_ellp_rep * rep, mpz_rep * beta,
+		 mpz_temp * temp, m_ellp_temp * p_temp, unsigned long *iter,
+		 int *fase_found)
+{
+	m_ellp *p, *r;
+	mpz_t *g, *g_r;
+
+	mpz_temp_get(g, temp);
+	mpz_temp_get(g_r, temp);
+	m_ellp_temp_get(p, p_temp);
+	m_ellp_temp_get(r, p_temp);
+
+	mpz_set_ui(*g, 1);
+	to_mform(*g_r, *g, &(param->mdata), temp);
+
+	for (*iter = 0; *iter < param->max_iter; (*iter)++)
+		if (m_ell_setrand2(param->mdata.n, e_C2, p, state, temp))	//TODO invertion can be avoited
+		{
+			if (find_div_by_gcd(*g, p->X, param->mdata.n)) {
+				mpz_set(fact, *g);
+				*fase_found = 0;
+				break;
+			}
+		} else {
+			m_ellp_to_mform(p, p, &(param->mdata), temp);
+			to_mform(e_C2, e_C2, &(param->mdata), temp);
+
+			mm_ell_mul(param->k, e_C2, r, p, &(param->mdata), p_temp, temp);	//FASE1
+			pthread_testcancel();
+
+			m_ellp_from_mform(p, r, &(param->mdata), temp);	// p = r from_mfrom
+			if (find_div_by_gcd(*g, p->Z, param->mdata.n))	//check on p
+			{
+				mpz_set(fact, *g);
+				*fase_found = 1;
+				break;
+			}
+			mpz_set(*g, *g_r);
+			mm_ell_diff(rep->p, beta->v, rep->lenght, e_C2, r,
+				    &(param->mdata), temp);
+			mm_ell_fase2(*g, param->b1, param->b2, e_C2, r, rep->p,
+				     beta->v, rep->lenght, param->vdiff,
+				     &(param->mdata), p_temp, temp);
+			pthread_testcancel();
+
+			from_mform(*g, *g, &(param->mdata), temp);
+			if (find_div_by_gcd(*g, *g, param->mdata.n)) {
+				mpz_set(fact, *g);
+				*fase_found = 2;
+				break;
+			}
+		}
+
+	mpz_temp_free(temp, 2);
+	m_ellp_temp_free(p_temp, 2);
 }

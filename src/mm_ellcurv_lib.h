@@ -37,12 +37,19 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
 void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
 		const mform_data * mdata, m_ellp_temp * p_temp,
 		mpz_temp * temp);
+
 void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t e_C2,
 		 const m_ellp * p, const mform_data * mdata, mpz_temp * temp);
+
 void mm_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t e_C2,
 		  const m_ellp * p, m_ellp * rep, mpz_t * beta,
 		  const unsigned long d, const unsigned char vdiff[],
 		  const mform_data * mdata, m_ellp_temp * p_temp,
 		  mpz_temp * temp);
+
+void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
+		 const mm_fact_param * param, m_ellp_rep * rep, mpz_rep * beta,
+		 mpz_temp * temp, m_ellp_temp * p_temp, unsigned long *iter,
+		 int *fase_found);
 
 #endif //MM_ELLCURV_LIB_H

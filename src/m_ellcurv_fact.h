@@ -25,9 +25,6 @@
 #ifdef NO_THREAD
 #undef THREAD_NUM
 #define THREAD_NUM 1
-#define THREAD_CANCEL_POINT() ((void)(0))
-#else //THREAD_USED
-#define THREAD_CANCEL_POINT() pthread_testcancel()
 #endif
 
 #define ELL_FACT_NOT_FOUND -1

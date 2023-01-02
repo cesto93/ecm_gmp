@@ -47,4 +47,10 @@ void m_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t n,
 
 void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r,
 		  const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp);
+
+void m_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2,
+		const m_fact_param * param, m_ellp_rep * rep, mpz_rep * beta,
+		mpz_temp * temp, m_ellp_temp * p_temp, unsigned int *iter,
+		int *fase_found);
+
 #endif //M_ELLCURV_LIB_H
