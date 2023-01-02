@@ -97,7 +97,6 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p, const mform_d
 	t3_l = mpz_limbs_write(*t3, (mdata->n_s) * mp_bits_per_limb);
 	tmul_l = mpz_limbs_write(*tmul, 2 * (mdata->n_s) * mp_bits_per_limb);
 
-	////////////////////////////////////////////////////////////////////////// LOW LEVEL
 	mp_limb_t *rx_l, *rz_l, *ux_l, *uz_l, *tx_l, *tz_l;
 	mp_limb_t *px_l, *pz_l, *e_C2_l;	//CONST
 
@@ -116,7 +115,6 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p, const mform_d
 	mpn_copyi(uz_l, pz_l, mdata->n_s);
 
 	mm_ell_duph_l_n(e_C2_l, tx_l, tz_l, px_l, pz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
-	///////////////////////////////////////////////////////////////////////////////////
 
 	unsigned long high;
 	high = mpz_sizeinbase(k, 2) - 1;
@@ -262,7 +260,6 @@ void mm_ell_fase2(mpz_t g, const unsigned long b1, const unsigned long b2,
 	mpz_temp_get(t3_t, temp);
 	mpz_temp_get(tmul_t, temp);
 
-	/////////////////////////////////////////////// LOW LEVEL
 	mp_limb_t *t1_l, *t2_l, *t3_l, *tmul_l, *alfa_l, *g_l, *Rx_l, *Rz_l, *Tx_l, *Tz_l;
 	mp_limb_t *Sx_l[d], *Sz_l[d], *beta_l[d];
 
@@ -284,7 +281,6 @@ void mm_ell_fase2(mpz_t g, const unsigned long b1, const unsigned long b2,
 		MPZ_MODIFY_NSIZE(Sz_l[j], S[j].Z, mdata->n_s);
 		MPZ_MODIFY_NSIZE(beta_l[j], beta[j], mdata->n_s);
 	}
-	//////////////////////////////////////////////////////////////////////////////////
 
 	diff = vdiff[0];
 	int i = 1;
