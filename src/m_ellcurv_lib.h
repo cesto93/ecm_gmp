@@ -43,7 +43,7 @@ void m_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t n,
 
 void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp);
 
-void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param * param, unsigned int *iter, int *fase_found);
+void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param * param, unsigned long *iter, int *fase_found);
 int m_ell_fact_param_init(m_fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
 void m_ell_fact_param_clear(m_fact_param * param);
 

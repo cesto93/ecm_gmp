@@ -22,20 +22,9 @@
 #define ell_fact_FASE(n, max_iter) (n / max_iter)
 #define ell_fact_ITER(n, max_iter) (n % max_iter)
 
-#ifdef MM_ENABLE
-typedef mm_fact_param fact_param;
-#define ell_fact(fact, state, param, res, fase_found) mm_ell_fact(fact, state, param, res, fase_found)
-#define fact_param_init(param, n, b1, b2, max_iter) mm_ell_fact_param_init(param, n, b1, b2, max_iter)
-#define fact_param_clear(param) mm_ell_fact_param_clear(param)
-#else
-typedef m_fact_param fact_param;
-#define ell_fact(fact, state, param, res, fase_found) m_ell_fact(fact, state, param, res, fase_found)
-#define fact_param_init(param, n, b1, b2, max_iter) m_ell_fact_param_init(param, n, b1, b2, max_iter)
-#endif
-
 //return ELL_FACT_NOT_FOUND if fact not found
 long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
 
-long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
+long mfactorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
 
 #endif //M_ELLCURV_FACT_H
