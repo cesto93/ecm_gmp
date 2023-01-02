@@ -15,6 +15,8 @@ prof: $(objects)
 	gcc -pg -Wall -Wextra -O2 $(bindir)/test.c -o prof_t.o $(objects) -lgmp -pthread
 test:
 	./test.sh
+bench:
+	./bench.sh
 clean:
 	rm -f start.o test.o
 lint:
