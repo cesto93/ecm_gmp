@@ -3,14 +3,9 @@
 #define FACT_REP_SIZE 950
 
 //when used first check temp space
-static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p,
-			       const m_ellp * q, const m_ellp * diff,
-			       mpz_temp * temp);
-static inline void m_ell_duph2(const mpz_t n, const mpz_t e_C2, m_ellp * r,
-			       const m_ellp * p, mpz_temp * temp);
-static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2,
-			 m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp,
-			 mpz_temp * temp);
+static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff, mpz_temp * temp);
+static inline void m_ell_duph2(const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, mpz_temp * temp);
+static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp);
 
 void m_ell_addh_t(const m_ellc * e, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff)	// calculate p + q
 {
@@ -39,8 +34,7 @@ void m_ell_mul_t(const mpz_t k, const m_ellc * e, m_ellp * r, const m_ellp * p)
 	m_ellp_temp_clear(&p_temp);
 }
 
-void m_ell_diff_t(m_ellp_rep * rep, mpz_rep * beta, const m_ellc * e,
-		  const m_ellp * p)
+void m_ell_diff_t(m_ellp_rep * rep, mpz_rep * beta, const m_ellc * e, const m_ellp * p)
 {
 	mpz_temp temp;
 	mpz_temp_init(&temp, n_temp_diff);	//max(n_temp_addh, n_temp_duph)
@@ -48,9 +42,7 @@ void m_ell_diff_t(m_ellp_rep * rep, mpz_rep * beta, const m_ellc * e,
 	mpz_temp_clear(&temp);
 }
 
-static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p,
-			       const m_ellp * q, const m_ellp * diff,
-			       mpz_temp * temp)
+static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff, mpz_temp * temp)
 {
 	mpz_t *t1, *t2, *t3;
 	mpz_temp_get(t1, temp);
@@ -78,8 +70,7 @@ static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p,
 	mpz_temp_free(temp, n_temp_addh2);
 }
 
-static inline void m_ell_duph2(const mpz_t n, const mpz_t e_C2, m_ellp * r,
-			       const m_ellp * p, mpz_temp * temp)
+static inline void m_ell_duph2(const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, mpz_temp * temp)
 {
 	mpz_t *t1, *t2, *t3;
 	mpz_temp_get(t1, temp);
@@ -102,8 +93,7 @@ static inline void m_ell_duph2(const mpz_t n, const mpz_t e_C2, m_ellp * r,
 	mpz_temp_free(temp, n_temp_duph2);
 }
 
-void m_ell_mul(const mpz_t k, const mpz_t n, const mpz_t e_C2, m_ellp * r,
-	       const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
+void m_ell_mul(const mpz_t k, const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	m_ellp *u, *t;
 	m_ellp_temp_get(u, p_temp);
@@ -140,9 +130,7 @@ void m_ell_mul(const mpz_t k, const mpz_t n, const mpz_t e_C2, m_ellp * r,
 	mpz_temp_free(p_temp, 2);
 }
 
-static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2,
-			 m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp,
-			 mpz_temp * temp)
+static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	m_ellp *u, *t;
 	m_ellp_temp_get(u, p_temp);
@@ -180,8 +168,7 @@ static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2,
 	mpz_temp_free(p_temp, 2);
 }
 
-void m_ell_fase1_ui(const unsigned long k[], int size, const m_ellc * e, m_ellp * r,
-		    const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
+void m_ell_fase1_ui(const unsigned long k[], int size, const m_ellc * e, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	m_ellp_set(r, p);
 	for (int i = 0; i < size; i++) {
@@ -189,8 +176,7 @@ void m_ell_fase1_ui(const unsigned long k[], int size, const m_ellc * e, m_ellp 
 	}
 }
 
-void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r,
-		  const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
+void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	struct timespec start, end, diff;
 	mpz_t *t;
@@ -211,8 +197,7 @@ void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r,
 	gmp_printf("X %Zd Z %Zd\n", r->X, r->Z);
 }
 
-void m_ell_diff(m_ellp_rep * rep, mpz_rep * beta, const mpz_t n,
-		const mpz_t e_C2, const m_ellp * p, mpz_temp * temp)
+void m_ell_diff(m_ellp_rep * rep, mpz_rep * beta, const mpz_t n, const mpz_t e_C2, const m_ellp * p, mpz_temp * temp)
 {
 	mpz_t *t1;
 	mpz_temp_get(t1, temp);
@@ -225,8 +210,7 @@ void m_ell_diff(m_ellp_rep * rep, mpz_rep * beta, const mpz_t n,
 	mpz_mod(beta->v[1], *t1, n);
 
 	for (unsigned long i = 2; i < rep->lenght; i++) {
-		m_ell_addh2(n, &(rep->p[i]), &(rep->p[i - 1]), &(rep->p[0]),
-			    &(rep->p[i - 2]), temp);
+		m_ell_addh2(n, &(rep->p[i]), &(rep->p[i - 1]), &(rep->p[0]), &(rep->p[i - 2]), temp);
 		mpz_mul(*t1, rep->p[i].X, rep->p[i].Z);	//beta[i] = rep[i].X * rep[i].Z
 		mpz_mod(beta->v[i], *t1, n);
 	}
@@ -235,8 +219,7 @@ void m_ell_diff(m_ellp_rep * rep, mpz_rep * beta, const mpz_t n,
 
 void m_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t n,
 		 const mpz_t e_C2, const m_ellp * p, const m_ellp_rep rep,
-		 const mpz_rep beta, const unsigned char vdiff[],
-		 m_ellp_temp * p_temp, mpz_temp * temp)
+		 const mpz_rep beta, const unsigned char vdiff[], m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	if (mpz_temp_space(temp) < n_temp_fase2)
 		error_msg("error in m_ell_fase2 temp full\n");
@@ -286,7 +269,7 @@ end:
 	m_ellp_temp_free(p_temp, 2);
 }
 
-void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param *param, unsigned int *iter, int *fase_found)
+void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param * param, unsigned int *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *gcd;
@@ -309,7 +292,7 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param *param, un
 	m_ellp_temp_get(r, &p_temp);
 
 	for (*iter = 0; *iter < param->max_iter; (*iter)++) {
-		if (m_ell_setrand2(param->n, e_C2, p, state, &temp)) { //TODO inversion can be avoided
+		if (m_ell_setrand2(param->n, e_C2, p, state, &temp)) {	//TODO inversion can be avoided
 			if (find_div_by_gcd(*gcd, p->X, param->n)) {
 				mpz_set(fact, *gcd);
 				*fase_found = 0;
@@ -336,7 +319,7 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param *param, un
 	m_ellp_temp_free(&p_temp, 2);
 }
 
-int m_ell_fact_param_init(m_fact_param *param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+int m_ell_fact_param_init(m_fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	mpz_temp temp;
 	int vdiff_size = get_vdiff_size(b2);
@@ -356,7 +339,6 @@ int m_ell_fact_param_init(m_fact_param *param, const mpz_t n, unsigned long b1, 
 	param->b2 = b2;
 	param->max_iter = max_iter;
 
-
 	mpz_init(param->n);
 	mpz_set(param->n, n);
 	mpz_temp_clear(&temp);
@@ -364,7 +346,7 @@ int m_ell_fact_param_init(m_fact_param *param, const mpz_t n, unsigned long b1, 
 	return 0;
 }
 
-void m_ell_fact_param_clear(m_fact_param *param)
+void m_ell_fact_param_clear(m_fact_param * param)
 {
 	mpz_clears(param->k, NULL);
 	free(param->vdiff);

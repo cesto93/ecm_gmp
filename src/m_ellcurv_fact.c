@@ -13,14 +13,13 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 	if (syscall(SYS_getrandom, &seed, sizeof(unsigned long), 0) == -1)
 		error_msg("error in getrandom at m_ell_fact\n");
 
-	
 	mpz_init2(fact, n_size);
 	gmp_randinit_default(state);
 	gmp_randseed_ui(state, seed);
 
 	//PRECALCULATE PARAM
 #ifdef MM_ENABLE
-	if (fact_param_init(&param, n, b1, b2, max_iter)) { // FOUND IN INVERTION OF R
+	if (fact_param_init(&param, n, b1, b2, max_iter)) {	// FOUND IN INVERTION OF R
 		mpz_set(factors[0], param.mdata.R2);
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done;	//FASE 0
@@ -36,7 +35,7 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 
 	if (iter_done == max_iter) {
 		return ELL_FACT_NOT_FOUND;
-	} else { //FACT FOUND
+	} else {		//FACT FOUND
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done + max_iter * fase_found;
 	}

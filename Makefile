@@ -22,5 +22,5 @@ clean:
 lint:
 	bear -- make
 format:
-	./Lindent src/*.c
-	./Lindent src/*.h
+	./Cindent src/*.c
+	./Cindent src/*.h

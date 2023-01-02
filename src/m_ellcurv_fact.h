@@ -23,14 +23,14 @@
 #define ell_fact_ITER(n, max_iter) (n % max_iter)
 
 #ifdef MM_ENABLE
-	typedef mm_fact_param fact_param;
-	#define ell_fact(fact, state, param, res, fase_found) mm_ell_fact(fact, state, param, res, fase_found)
-	#define fact_param_init(param, n, b1, b2, max_iter) mm_ell_fact_param_init(param, n, b1, b2, max_iter)
-	#define fact_param_clear(param) mm_ell_fact_param_clear(param)
+typedef mm_fact_param fact_param;
+#define ell_fact(fact, state, param, res, fase_found) mm_ell_fact(fact, state, param, res, fase_found)
+#define fact_param_init(param, n, b1, b2, max_iter) mm_ell_fact_param_init(param, n, b1, b2, max_iter)
+#define fact_param_clear(param) mm_ell_fact_param_clear(param)
 #else
-	typedef m_fact_param fact_param;
-	#define ell_fact(fact, state, param, res, fase_found) m_ell_fact(fact, state, param, res, fase_found)
-	#define fact_param_init(param, n, b1, b2, max_iter) m_ell_fact_param_init(param, n, b1, b2, max_iter)
+typedef m_fact_param fact_param;
+#define ell_fact(fact, state, param, res, fase_found) m_ell_fact(fact, state, param, res, fase_found)
+#define fact_param_init(param, n, b1, b2, max_iter) m_ell_fact_param_init(param, n, b1, b2, max_iter)
 #endif
 
 //return ELL_FACT_NOT_FOUND if fact not found

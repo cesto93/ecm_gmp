@@ -32,8 +32,7 @@ void get_current_time(struct timespec *curr_t);
 
 static inline void timespec_div(struct timespec *rop, const struct timespec *op, unsigned long div)
 {
-	rop->tv_nsec =
-	    ((op->tv_sec % div) * TIME_PRECISION / div) + (op->tv_nsec / div);
+	rop->tv_nsec = ((op->tv_sec % div) * TIME_PRECISION / div) + (op->tv_nsec / div);
 	rop->tv_sec = op->tv_sec / div;
 }
 
@@ -52,8 +51,7 @@ static inline void timespec_diff(const struct timespec *start, const struct time
 {
 	if ((stop->tv_nsec - start->tv_nsec) < 0) {
 		result->tv_sec = stop->tv_sec - start->tv_sec - 1;
-		result->tv_nsec =
-		    stop->tv_nsec - start->tv_nsec + TIME_PRECISION;
+		result->tv_nsec = stop->tv_nsec - start->tv_nsec + TIME_PRECISION;
 	} else {
 		result->tv_sec = stop->tv_sec - start->tv_sec;
 		result->tv_nsec = stop->tv_nsec - start->tv_nsec;

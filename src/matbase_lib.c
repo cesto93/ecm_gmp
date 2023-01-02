@@ -9,8 +9,7 @@ void mpz_temp_init(mpz_temp * temp, unsigned int lenght)
 		mpz_init(temp->t[i]);
 }
 
-void mpz_temp_init2(mpz_temp * temp, unsigned int lenght,
-		    unsigned long size)
+void mpz_temp_init2(mpz_temp * temp, unsigned int lenght, unsigned long size)
 {
 	temp->index = 0;
 	temp->lenght = lenght;
@@ -49,8 +48,7 @@ void mpz_rep_clear(mpz_rep * rep)
 	free(rep->v);
 }
 
-void get_randprime(mpz_t prime, const mpz_t offset, const mpz_t range,
-		   gmp_randstate_t state)
+void get_randprime(mpz_t prime, const mpz_t offset, const mpz_t range, gmp_randstate_t state)
 {
 	mpz_urandomm(prime, state, range);
 	mpz_add(prime, prime, offset);
@@ -80,8 +78,7 @@ void create_bigk(mpz_t k, const unsigned long b, mpz_temp * temp)
 	mpz_temp_free(temp, n_temp_create_bigk);
 }
 
-void get_prime_diff(const unsigned long start, int sub_offs,
-		    const unsigned long end, unsigned char v[], mpz_temp * temp)
+void get_prime_diff(const unsigned long start, int sub_offs, const unsigned long end, unsigned char v[], mpz_temp * temp)
 {
 	unsigned long i = 0;
 	mpz_t *prev, *next, *diff;	// iterator of primes
@@ -93,8 +90,7 @@ void get_prime_diff(const unsigned long start, int sub_offs,
 
 	mpz_set_ui(*prev, start - sub_offs);
 
-	for (mpz_nextprime(*next, *prev); (mpz_cmp_ui(*next, end) <= 0);
-	     mpz_nextprime(*next, *next)) {
+	for (mpz_nextprime(*next, *prev); (mpz_cmp_ui(*next, end) <= 0); mpz_nextprime(*next, *next)) {
 		mpz_sub(*diff, *next, *prev);
 		v[i] = (char)mpz_get_ui(*diff);
 		i++;
@@ -106,8 +102,7 @@ void get_prime_diff(const unsigned long start, int sub_offs,
 
 int get_vdiff_size(const unsigned long b2)
 {
-	const unsigned int v_size[] =
-	    { 164, 1204, 9424, 77269, 654987, 5682957 };
+	const unsigned int v_size[] = { 164, 1204, 9424, 77269, 654987, 5682957 };
 	unsigned int size;
 	stupid_log10_inf(size, b2);
 	size++;
@@ -117,4 +112,3 @@ int get_vdiff_size(const unsigned long b2)
 		return v_size[size];
 	return -1;
 }
-

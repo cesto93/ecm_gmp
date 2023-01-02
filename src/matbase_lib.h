@@ -32,8 +32,7 @@ typedef struct mpz_rep		//rep variable container
 } mpz_rep;
 
 void mpz_temp_init(mpz_temp * temp, unsigned int lenght);
-void mpz_temp_init2(mpz_temp * temp, unsigned int lenght,
-		    unsigned long size);
+void mpz_temp_init2(mpz_temp * temp, unsigned int lenght, unsigned long size);
 void mpz_temp_clear(mpz_temp * temp);
 #define mpz_temp_free(temp,n) (temp)->index = ((temp)->index - n)
 #define mpz_temp_space(temp) (temp->lenght - (temp->index))
@@ -45,17 +44,13 @@ do {									\
 } while(0)
 
 void mpz_rep_init(mpz_rep * rep, unsigned long lenght);
-void mpz_rep_init2(mpz_rep * rep, unsigned long lenght,
-		   unsigned long size);
+void mpz_rep_init2(mpz_rep * rep, unsigned long lenght, unsigned long size);
 void mpz_rep_clear(mpz_rep * rep);
 
-void get_randprime(mpz_t prime, const mpz_t offset, const mpz_t range,
-		   gmp_randstate_t state);
+void get_randprime(mpz_t prime, const mpz_t offset, const mpz_t range, gmp_randstate_t state);
 
 void create_bigk(mpz_t k, const unsigned long b, mpz_temp * temp);	//create k the number product of all b-smooth numbers
-void get_prime_diff(const unsigned long start, int sub_offs,
-		    const unsigned long end, unsigned char v[],
-		    mpz_temp * temp);
+void get_prime_diff(const unsigned long start, int sub_offs, const unsigned long end, unsigned char v[], mpz_temp * temp);
 
 int get_vdiff_size(const unsigned long b2);
 

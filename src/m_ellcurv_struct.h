@@ -33,10 +33,8 @@ typedef struct m_ellp_rep {
 
 #define n_temp_setrand2 4
 //return 1 on error and not invertible in p->X
-int m_ell_setrand2_t(const mpz_t n, mpz_t e_C2, m_ellp * p,
-		     gmp_randstate_t state);
-int m_ell_setrand2(const mpz_t n, mpz_t e_C2, m_ellp * p, gmp_randstate_t state,
-		   mpz_temp * temp);
+int m_ell_setrand2_t(const mpz_t n, mpz_t e_C2, m_ellp * p, gmp_randstate_t state);
+int m_ell_setrand2(const mpz_t n, mpz_t e_C2, m_ellp * p, gmp_randstate_t state, mpz_temp * temp);
 
 static inline void m_ellc_init(m_ellc * e)
 {
@@ -104,8 +102,7 @@ static inline void m_ellp_temp_init(m_ellp_temp * temp, unsigned long lenght)
 		m_ellp_init(&(temp->p[i]));
 }
 
-static inline void m_ellp_temp_init2(m_ellp_temp * temp, unsigned long lenght,
-		       mp_bitcnt_t size)
+static inline void m_ellp_temp_init2(m_ellp_temp * temp, unsigned long lenght, mp_bitcnt_t size)
 {
 	temp->index = 0;
 	temp->p = allocate(sizeof(m_ellp) * lenght);
@@ -140,8 +137,7 @@ static inline void m_ellp_rep_init(m_ellp_rep * rep, unsigned long lenght)
 		m_ellp_init(&(rep->p[i]));
 }
 
-static inline void m_ellp_rep_init2(m_ellp_rep * rep, unsigned long lenght,
-		      mp_bitcnt_t size)
+static inline void m_ellp_rep_init2(m_ellp_rep * rep, unsigned long lenght, mp_bitcnt_t size)
 {
 	rep->p = allocate(sizeof(m_ellp) * lenght);
 	rep->lenght = lenght;

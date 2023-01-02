@@ -31,23 +31,19 @@ typedef struct mm_fact_param {
 	unsigned char *vdiff;
 } mm_fact_param;
 
-void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
-		  m_ellp * p);
+void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r, m_ellp * p);
 
-void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
-		const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp);
+void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p, const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp);
 
-void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t e_C2,
-		 const m_ellp * p, const mform_data * mdata, mpz_temp * temp);
+void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t e_C2, const m_ellp * p, const mform_data * mdata, mpz_temp * temp);
 
 void mm_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t e_C2,
 		  const m_ellp * p, m_ellp * rep, mpz_t * beta,
-		  const unsigned long d, const unsigned char vdiff[],
-		  const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp);
+		  const unsigned long d, const unsigned char vdiff[], const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp);
 
-void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param *param, unsigned long *iter, int *fase_found);
+void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param * param, unsigned long *iter, int *fase_found);
 
-int mm_ell_fact_param_init(mm_fact_param *param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
-void mm_ell_fact_param_clear(mm_fact_param *param);
+int mm_ell_fact_param_init(mm_fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
+void mm_ell_fact_param_clear(mm_fact_param * param);
 
 #endif //MM_ELLCURV_LIB_H

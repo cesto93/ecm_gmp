@@ -57,37 +57,22 @@ typedef struct mform_data {
 int mform_data_init(mform_data * m_data, const mpz_t n, mpz_temp * temp);	//return 1 if can't invert R mod n
 #define mform_data_clear(m_data) mpz_clears((m_data)->n, (m_data)->R2, NULL)
 
-void mred(mpz_t res, const mpz_t op, const mp_limb_t * n_l,
-	  const mp_limb_t n_inv, const size_t n_s, mpz_temp * temp);
+void mred(mpz_t res, const mpz_t op, const mp_limb_t * n_l, const mp_limb_t n_inv, const size_t n_s, mpz_temp * temp);
 void mred_destroy(mpz_t res, mpz_t op, const mp_limb_t * n_l, const mp_limb_t n_inv, const size_t n_s);	//op != res destroy op
 
-void msqr_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, const size_t op1_s,
-	    mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first,
-	    const size_t n_s);
-		
+void msqr_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, const size_t op1_s, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s);
+
 void mmul_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
-	    const mp_limb_t * op2_l, size_t op2_s, mp_limb_t * t_l,
-	    const mp_limb_t * n_l, mp_limb_t n_inv, const size_t n_s);
+	    const mp_limb_t * op2_l, size_t op2_s, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_inv, const size_t n_s);
 
-void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
-		const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l,
-		const size_t n_s);
+void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s, const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l, const size_t n_s);
 
-void sub_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
-		const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l,
-		const size_t n_s);
+void sub_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s, const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l, const size_t n_s);
 
-void msqr_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, mp_limb_t * t_l,
-	      const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s);
-void mmul_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
-	      const mp_limb_t * op2_l, mp_limb_t * t_l, const mp_limb_t * n_l,
-	      mp_limb_t n_first, const size_t n_s);
-void add_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
-		  const mp_limb_t * op2_l, const mp_limb_t * n_l,
-		  const size_t n_s);
-void sub_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
-		  const mp_limb_t * op2_l, const mp_limb_t * n_l,
-		  const size_t n_s);
+void msqr_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s);
+void mmul_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, const mp_limb_t * op2_l, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s);
+void add_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, const mp_limb_t * op2_l, const mp_limb_t * n_l, const size_t n_s);
+void sub_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, const mp_limb_t * op2_l, const mp_limb_t * n_l, const size_t n_s);
 
 #define from_mform(rop, op, m_data, temp) mred(rop, op, (m_data)->n_l, (m_data)->n_inv, (m_data)->n_s, temp)
 #define from_mform_d(rop, op, m_data) mred_destroy(rop, op, (m_data)->n_l, (m_data)->n_inv, (m_data)->n_s)

@@ -9,17 +9,13 @@ static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
 				 const mp_limb_t * qz_l, size_t qz_s,
 				 const mp_limb_t * dx_l, size_t dx_s,
 				 const mp_limb_t * dz_l, size_t dz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l,
-				 mp_limb_t * t2_l, mp_limb_t * t3_l,
-				 mp_limb_t * tmul_l);
+				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
 
 static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s,
 				 mp_limb_t * rx_l, mp_limb_t * rz_l,
 				 const mp_limb_t * px_l, size_t px_s,
 				 const mp_limb_t * pz_l, size_t pz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l,
-				 mp_limb_t * t2_l, mp_limb_t * t3_l,
-				 mp_limb_t * tmul_l);
+				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
 
 static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
 				   const mp_limb_t * px_l,
@@ -27,21 +23,13 @@ static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
 				   const mp_limb_t * qx_l,
 				   const mp_limb_t * qz_l,
 				   const mp_limb_t * dx_l,
-				   const mp_limb_t * dz_l,
-				   const mform_data * mdata, mp_limb_t * t1_l,
-				   mp_limb_t * t2_l, mp_limb_t * t3_l,
-				   mp_limb_t * tmul_l);
+				   const mp_limb_t * dz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
 
 static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l,
 				   mp_limb_t * rz_l, const mp_limb_t * px_l,
-				   const mp_limb_t * pz_l,
-				   const mform_data * mdata, mp_limb_t * t1_l,
-				   mp_limb_t * t2_l, mp_limb_t * t3_l,
-				   mp_limb_t * tmul_l);
+				   const mp_limb_t * pz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
 
-static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r,
-			  const m_ellp * p, const mform_data * mdata,
-			  m_ellp_temp * p_temp, mpz_temp * temp);
+static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r, const m_ellp * p, const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp);
 
 //LOW_LEVEL_MACRO
 
@@ -90,8 +78,7 @@ do {																									\
 //HIGH LEVEL FUNCTION
 
 //USED ONCE FOR ITER
-void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
-		const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp)
+void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p, const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	m_ellp *u, *t;
 	mpz_t *t1, *t2, *t3, *tmul;
@@ -128,8 +115,7 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
 	mpn_copyi(ux_l, px_l, mdata->n_s);	//SET_ELLP(u,p)
 	mpn_copyi(uz_l, pz_l, mdata->n_s);
 
-	mm_ell_duph_l_n(e_C2_l, tx_l, tz_l, px_l, pz_l, mdata, t1_l, t2_l, t3_l,
-			tmul_l);
+	mm_ell_duph_l_n(e_C2_l, tx_l, tz_l, px_l, pz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
 	///////////////////////////////////////////////////////////////////////////////////
 
 	unsigned long high;
@@ -138,27 +124,16 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
 	if (mpz_cmp_ui(k, 2) > 0) {
 		for (unsigned long i = high - 1; i > 0; i--)
 			if (mpz_tstbit(k, i)) {
-				mm_ell_addh_l_n(ux_l, uz_l, tx_l, tz_l, ux_l,
-						uz_l, px_l, pz_l, mdata, t1_l,
-						t2_l, t3_l, tmul_l);
-				mm_ell_duph_l_n(e_C2_l, tx_l, tz_l, tx_l, tz_l,
-						mdata, t1_l, t2_l, t3_l,
-						tmul_l);
+				mm_ell_addh_l_n(ux_l, uz_l, tx_l, tz_l, ux_l, uz_l, px_l, pz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
+				mm_ell_duph_l_n(e_C2_l, tx_l, tz_l, tx_l, tz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
 			} else {
-				mm_ell_addh_l_n(tx_l, tz_l, ux_l, uz_l, tx_l,
-						tz_l, px_l, pz_l, mdata, t1_l,
-						t2_l, t3_l, tmul_l);
-				mm_ell_duph_l_n(e_C2_l, ux_l, uz_l, ux_l, uz_l,
-						mdata, t1_l, t2_l, t3_l,
-						tmul_l);
+				mm_ell_addh_l_n(tx_l, tz_l, ux_l, uz_l, tx_l, tz_l, px_l, pz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
+				mm_ell_duph_l_n(e_C2_l, ux_l, uz_l, ux_l, uz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
 			}
 		if (mpz_tstbit(k, 0))
-			mm_ell_addh_l_n(rx_l, rz_l, ux_l, uz_l, tx_l, tz_l,
-					px_l, pz_l, mdata, t1_l, t2_l, t3_l,
-					tmul_l);
+			mm_ell_addh_l_n(rx_l, rz_l, ux_l, uz_l, tx_l, tz_l, px_l, pz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
 		else
-			mm_ell_duph_l_n(e_C2_l, rx_l, rz_l, ux_l, uz_l, mdata,
-					t1_l, t2_l, t3_l, tmul_l);
+			mm_ell_duph_l_n(e_C2_l, rx_l, rz_l, ux_l, uz_l, mdata, t1_l, t2_l, t3_l, tmul_l);
 
 		mpz_limbs_finish(r->X, mdata->n_s);
 		mpz_limbs_finish(r->Z, mdata->n_s);
@@ -167,8 +142,7 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
 		if (mpz_sgn(k) != 1)
 			error_msg("error in ell_mul k = 0");
 		if (mpz_cmp_ui(k, 2) == 0)
-			mm_ell_duph_t(e_C2, r, p, mdata, t1_l, t2_l, t3_l,
-				      tmul_l);
+			mm_ell_duph_t(e_C2, r, p, mdata, t1_l, t2_l, t3_l, tmul_l);
 		else if (mpz_cmp_ui(k, 1) == 0)
 			m_ellp_set(r, p);
 	}
@@ -178,9 +152,7 @@ void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p,
 }
 
 //USED TWICE FOR ITER
-static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r,
-			  const m_ellp * p, const mform_data * mdata,
-			  m_ellp_temp * p_temp, mpz_temp * temp)
+static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r, const m_ellp * p, const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	m_ellp *u, *t;
 	mpz_t *t1, *t2, *t3, *tmul;
@@ -210,29 +182,22 @@ static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r,
 		for (unsigned long i = high - 1; i > 0; i--)
 			if (k & (1 << i))	//k[i] bit
 			{
-				mm_ell_addh_t(u, t, u, p, mdata, t1_l, t2_l,
-					      t3_l, tmul_l);
-				mm_ell_duph_t(e_C2, t, t, mdata, t1_l, t2_l,
-					      t3_l, tmul_l);
+				mm_ell_addh_t(u, t, u, p, mdata, t1_l, t2_l, t3_l, tmul_l);
+				mm_ell_duph_t(e_C2, t, t, mdata, t1_l, t2_l, t3_l, tmul_l);
 			} else {
-				mm_ell_addh_t(t, u, t, p, mdata, t1_l, t2_l,
-					      t3_l, tmul_l);
-				mm_ell_duph_t(e_C2, u, u, mdata, t1_l, t2_l,
-					      t3_l, tmul_l);
+				mm_ell_addh_t(t, u, t, p, mdata, t1_l, t2_l, t3_l, tmul_l);
+				mm_ell_duph_t(e_C2, u, u, mdata, t1_l, t2_l, t3_l, tmul_l);
 			}
 		if (k & 1)	//k[0]
-			mm_ell_addh_t(r, u, t, p, mdata, t1_l, t2_l, t3_l,
-				      tmul_l);
+			mm_ell_addh_t(r, u, t, p, mdata, t1_l, t2_l, t3_l, tmul_l);
 		else
-			mm_ell_duph_t(e_C2, r, u, mdata, t1_l, t2_l, t3_l,
-				      tmul_l);
+			mm_ell_duph_t(e_C2, r, u, mdata, t1_l, t2_l, t3_l, tmul_l);
 	} else {
 		printf("k %lu\n", k);
 		if (k <= 0)
 			error_msg("error in ell_mul k = 0");
 		if (k == 2)
-			mm_ell_duph_t(e_C2, r, p, mdata, t1_l, t2_l, t3_l,
-				      tmul_l);
+			mm_ell_duph_t(e_C2, r, p, mdata, t1_l, t2_l, t3_l, tmul_l);
 		else if (k == 1)
 			m_ellp_set(r, p);
 	}
@@ -242,8 +207,7 @@ static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r,
 }
 
 //USED ONCE FOR ITER / VERY LIGHT
-void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t e_C2,
-		 const m_ellp * p, const mform_data * mdata, mpz_temp * temp)
+void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t e_C2, const m_ellp * p, const mform_data * mdata, mpz_temp * temp)
 {
 	assert(mpz_temp_space(temp) >= n_temp_mdiff);
 
@@ -263,13 +227,11 @@ void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t 
 
 	mm_ell_duph_t(e_C2, &(rep[0]), p, mdata, t1_l, t2_l, t3_l, tmul_l);
 	mmul(beta[0], rep[0].X, rep[0].Z, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	// beta[0] = X0 * Z0
-	mm_ell_duph_t(e_C2, &(rep[1]), &(rep[0]), mdata, t1_l, t2_l, t3_l,
-		      tmul_l);
+	mm_ell_duph_t(e_C2, &(rep[1]), &(rep[0]), mdata, t1_l, t2_l, t3_l, tmul_l);
 	mmul(beta[1], rep[1].X, rep[1].Z, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	// beta[1] = X1 * Z1
 
 	for (unsigned long i = 2; i < d; i++) {
-		mm_ell_addh_t(&(rep[i]), &(rep[i - 1]), &(rep[0]),
-			      &(rep[i - 2]), mdata, t1_l, t2_l, t3_l, tmul_l);
+		mm_ell_addh_t(&(rep[i]), &(rep[i - 1]), &(rep[0]), &(rep[i - 2]), mdata, t1_l, t2_l, t3_l, tmul_l);
 		mmul(beta[i], rep[i].X, rep[i].Z, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//beta[i] = rep[i].X * rep[i].Z
 	}
 
@@ -278,9 +240,7 @@ void mm_ell_diff(m_ellp * rep, mpz_t * beta, const unsigned long d, const mpz_t 
 
 void mm_ell_fase2(mpz_t g, const unsigned long b1, const unsigned long b2,
 		  const mpz_t e_C2, const m_ellp * p, m_ellp * S, mpz_t * beta,
-		  const unsigned long d, const unsigned char vdiff[],
-		  const mform_data * mdata, m_ellp_temp * p_temp,
-		  mpz_temp * temp)
+		  const unsigned long d, const unsigned char vdiff[], const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp)
 {
 	assert(mpz_temp_space(temp) >= n_temp_mfase2);
 	assert(m_ellp_temp_space(p_temp) >= n_p_temp_mfase2);
@@ -303,8 +263,7 @@ void mm_ell_fase2(mpz_t g, const unsigned long b1, const unsigned long b2,
 	mpz_temp_get(tmul_t, temp);
 
 	/////////////////////////////////////////////// LOW LEVEL
-	mp_limb_t *t1_l, *t2_l, *t3_l, *tmul_l, *alfa_l, *g_l, *Rx_l, *Rz_l,
-	    *Tx_l, *Tz_l;
+	mp_limb_t *t1_l, *t2_l, *t3_l, *tmul_l, *alfa_l, *g_l, *Rx_l, *Rz_l, *Tx_l, *Tz_l;
 	mp_limb_t *Sx_l[d], *Sz_l[d], *beta_l[d];
 
 	t1_l = mpz_limbs_write(*t1, (mdata->n_s) * mp_bits_per_limb);
@@ -366,19 +325,15 @@ static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
 				 const mp_limb_t * qz_l, size_t qz_s,
 				 const mp_limb_t * dx_l, size_t dx_s,
 				 const mp_limb_t * dz_l, size_t dz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l,
-				 mp_limb_t * t2_l, mp_limb_t * t3_l,
-				 mp_limb_t * tmul_l)
+				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
 {
 	sub_modR_l(t1_l, px_l, px_s, pz_l, pz_s, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2)                                                                                                                                                                   
 	add_modR_l(t2_l, qx_l, qx_s, qz_l, qz_s, mdata->n_l, mdata->n_s);	//              T1              T2
-	mmul_l_n(t3_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv,
-		 mdata->n_s);
+	mmul_l_n(t3_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);
 
 	add_modR_l(t1_l, px_l, px_s, pz_l, pz_s, mdata->n_l, mdata->n_s);	//T1 = (x1+z1)(x2-z2)
 	sub_modR_l(t2_l, qx_l, qx_s, qz_l, qz_s, mdata->n_l, mdata->n_s);
-	mmul_l_n(t1_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv,
-		 mdata->n_s);
+	mmul_l_n(t1_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);
 
 	add_modR_l_n(t2_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T2 = (x1-z1)(x2+z2) + (x1+z1)(x2-z2)
 	sub_modR_l_n(t3_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2) - (x1+z1)(x2-z2)
@@ -395,9 +350,7 @@ static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s,
 				 mp_limb_t * rx_l, mp_limb_t * rz_l,
 				 const mp_limb_t * px_l, size_t px_s,
 				 const mp_limb_t * pz_l, size_t pz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l,
-				 mp_limb_t * t2_l, mp_limb_t * t3_l,
-				 mp_limb_t * tmul_l)
+				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
 {
 	add_modR_l(t1_l, px_l, px_s, pz_l, pz_s, mdata->n_l, mdata->n_s);	// T2 = (x1+z1)^2                                                                                                                                                               
 	msqr_l_n(t2_l, t1_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//                      T1
@@ -419,20 +372,15 @@ static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
 				   const mp_limb_t * qx_l,
 				   const mp_limb_t * qz_l,
 				   const mp_limb_t * dx_l,
-				   const mp_limb_t * dz_l,
-				   const mform_data * mdata, mp_limb_t * t1_l,
-				   mp_limb_t * t2_l, mp_limb_t * t3_l,
-				   mp_limb_t * tmul_l)
+				   const mp_limb_t * dz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
 {
 	sub_modR_l_n(t1_l, px_l, pz_l, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2)                                                                                                                                                                   
 	add_modR_l_n(t2_l, qx_l, qz_l, mdata->n_l, mdata->n_s);	//              T1              T2
-	mmul_l_n(t3_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv,
-		 mdata->n_s);
+	mmul_l_n(t3_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);
 
 	add_modR_l_n(t1_l, px_l, pz_l, mdata->n_l, mdata->n_s);	//T1 = (x1+z1)(x2-z2)                                                                                                                                                           
 	sub_modR_l_n(t2_l, qx_l, qz_l, mdata->n_l, mdata->n_s);	//              T1              T2
-	mmul_l_n(t1_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv,
-		 mdata->n_s);
+	mmul_l_n(t1_l, t1_l, t2_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);
 
 	add_modR_l_n(t2_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T2 = (x1-z1)(x2+z2) + (x1+z1)(x2-z2)
 	sub_modR_l_n(t3_l, t3_l, t1_l, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2) - (x1+z1)(x2-z2)
@@ -447,10 +395,7 @@ static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
 
 static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l,
 				   mp_limb_t * rz_l, const mp_limb_t * px_l,
-				   const mp_limb_t * pz_l,
-				   const mform_data * mdata, mp_limb_t * t1_l,
-				   mp_limb_t * t2_l, mp_limb_t * t3_l,
-				   mp_limb_t * tmul_l)
+				   const mp_limb_t * pz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
 {
 	add_modR_l_n(t1_l, px_l, pz_l, mdata->n_l, mdata->n_s);	// T2 = (x1+z1)^2                                                                                                                                                               
 	msqr_l_n(t2_l, t1_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//                      T1
@@ -471,8 +416,7 @@ static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l,
 
 //WRAPPER FUNCTION FOR TESTING / DON'T USE TEMP
 
-void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
-		  m_ellp * p)
+void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r, m_ellp * p)
 {
 	mform_data mdata;
 	mpz_temp temp;
@@ -494,8 +438,7 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
 	m_ellp_temp_clear(&p_temp);
 }
 
-
-void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param *param, unsigned long *iter, int *fase_found)
+void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param * param, unsigned long *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *g, *g_r;
@@ -548,8 +491,7 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param *param, 
 			}
 			mpz_set(*g, *g_r);
 			mm_ell_diff(rep.p, beta.v, rep.lenght, e_C2, r, &(param->mdata), &temp);
-			mm_ell_fase2(*g, param->b1, param->b2, e_C2, r, rep.p, beta.v, rep.lenght, param->vdiff,
-				     &(param->mdata), &p_temp, &temp);
+			mm_ell_fase2(*g, param->b1, param->b2, e_C2, r, rep.p, beta.v, rep.lenght, param->vdiff, &(param->mdata), &p_temp, &temp);
 			pthread_testcancel();
 
 			from_mform(*g, *g, &(param->mdata), &temp);
@@ -565,7 +507,7 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param *param, 
 	m_ellp_temp_free(&p_temp, 2);
 }
 
-int mm_ell_fact_param_init(mm_fact_param *param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+int mm_ell_fact_param_init(mm_fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	mpz_temp temp;
 	int vdiff_size = get_vdiff_size(b2);
@@ -590,7 +532,7 @@ int mm_ell_fact_param_init(mm_fact_param *param, const mpz_t n, unsigned long b1
 	return 0;
 }
 
-void mm_ell_fact_param_clear(mm_fact_param *param)
+void mm_ell_fact_param_clear(mm_fact_param * param)
 {
 	mpz_clears(param->k, NULL);
 	free(param->vdiff);

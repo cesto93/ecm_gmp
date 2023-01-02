@@ -1,8 +1,6 @@
 #include "mpn_l.h"
 
-static inline void mred_l(mp_limb_t * res_l, mp_limb_t * t_l,
-			  const mp_limb_t * n_l, mp_limb_t n_first,
-			  const size_t R_s);
+static inline void mred_l(mp_limb_t * res_l, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t R_s);
 
 int mform_data_init(mform_data * m_data, const mpz_t n, mpz_temp * temp)	//return 1 if can't invert R mod n
 {
@@ -36,9 +34,7 @@ int mform_data_init(mform_data * m_data, const mpz_t n, mpz_temp * temp)	//retur
 	return 0;
 }
 
-void msqr_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, const size_t op1_s,
-	    mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first,
-	    const size_t n_s)
+void msqr_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, const size_t op1_s, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
 {
 	assert(op1_s <= n_s);
 	mpn_sqr(t_l, op1_l, op1_s);
@@ -50,8 +46,7 @@ void msqr_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, const size_t op1_s,
 }
 
 void mmul_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
-	    const mp_limb_t * op2_l, size_t op2_s, mp_limb_t * t_l,
-	    const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
+	    const mp_limb_t * op2_l, size_t op2_s, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
 {
 	//FIX_ME crash if tested on fase2 with prime n becouse we do mul g * 0
 	if (op1_s < op2_s) {
@@ -67,9 +62,7 @@ void mmul_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 	mred_l(rop_l, t_l, n_l, n_first, n_s);
 }
 
-void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
-		const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l,
-		const size_t n_s)
+void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s, const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l, const size_t n_s)
 {
 	mp_limb_t cy;
 	if (op1_s < op2_s)	//mpn_add want 1st addend size >= 2nd addend size
@@ -83,8 +76,7 @@ void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 	if (op1_s != n_s) {
 		mpn_zero(rop_l + op1_s, n_s - op1_s);
 		if (cy) {
-			mpn_add_1(rop_l + op1_s, rop_l + op1_s, n_s - op1_s,
-				  cy);
+			mpn_add_1(rop_l + op1_s, rop_l + op1_s, n_s - op1_s, cy);
 			cy = 0;
 			if ((op1_s + 1 == n_s) && (mpn_cmp(rop_l, n_l, n_s) >= 0))	//we reduce to less than n              
 				mpn_sub_n(rop_l, rop_l, n_l, n_s);
@@ -96,9 +88,7 @@ void add_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 	assert(mpn_cmp(rop_l, n_l, n_s) < 0);
 }
 
-void sub_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
-		const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l,
-		const size_t n_s)
+void sub_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s, const mp_limb_t * op2_l, size_t op2_s, const mp_limb_t * n_l, const size_t n_s)
 {
 	mp_limb_t cy;
 
@@ -120,24 +110,19 @@ void sub_modR_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
 	assert(cy == 0);
 }
 
-void msqr_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, mp_limb_t * t_l,
-	      const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
+void msqr_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
 {
 	mpn_sqr(t_l, op1_l, n_s);
 	mred_l(rop_l, t_l, n_l, n_first, n_s);
 }
 
-void mmul_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
-	      const mp_limb_t * op2_l, mp_limb_t * t_l, const mp_limb_t * n_l,
-	      mp_limb_t n_first, const size_t n_s)
+void mmul_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, const mp_limb_t * op2_l, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
 {
 	mpn_mul_n(t_l, op1_l, op2_l, n_s);
 	mred_l(rop_l, t_l, n_l, n_first, n_s);
 }
 
-void add_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
-		  const mp_limb_t * op2_l, const mp_limb_t * n_l,
-		  const size_t n_s)
+void add_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, const mp_limb_t * op2_l, const mp_limb_t * n_l, const size_t n_s)
 {
 	mp_limb_t cy;
 	cy = mpn_add_n(rop_l, op1_l, op2_l, n_s);
@@ -149,9 +134,7 @@ void add_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
 	assert(cy == 0);
 }
 
-void sub_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
-		  const mp_limb_t * op2_l, const mp_limb_t * n_l,
-		  const size_t n_s)
+void sub_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, const mp_limb_t * op2_l, const mp_limb_t * n_l, const size_t n_s)
 {
 	mp_limb_t bw;
 	bw = mpn_sub_n(rop_l, op1_l, op2_l, n_s);	// res = op1 + n - op2
@@ -161,9 +144,7 @@ void sub_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l,
 	assert(bw == 0);
 }
 
-static inline void mred_l(mp_limb_t * res_l, mp_limb_t * t_l,
-			  const mp_limb_t * n_l, mp_limb_t n_first,
-			  const size_t n_s)
+static inline void mred_l(mp_limb_t * res_l, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
 {
 	mp_limb_t d;
 	for (size_t i = n_s; i != 0; i--) {
@@ -197,8 +178,7 @@ void mred_destroy(mpz_t res, mpz_t op, const mp_limb_t * n_l, const mp_limb_t n_
 	mpz_limbs_finish(res, n_s);
 }
 
-void mred(mpz_t res, const mpz_t op, const mp_limb_t * n_l,
-	  const mp_limb_t n_first, const size_t n_s, mpz_temp * temp)
+void mred(mpz_t res, const mpz_t op, const mp_limb_t * n_l, const mp_limb_t n_first, const size_t n_s, mpz_temp * temp)
 {
 	mpz_t *t;
 	mp_limb_t *t_l, *res_l;

@@ -1,7 +1,6 @@
 #include "m_ellcurv_struct.h"
 
-static inline void m_ell_setrand_uv(gmp_randstate_t state, mpz_t sigma, mpz_t u,
-				    mpz_t v, const mpz_t n)
+static inline void m_ell_setrand_uv(gmp_randstate_t state, mpz_t sigma, mpz_t u, mpz_t v, const mpz_t n)
 {
 	mpz_sub_ui(u, n, 6);	//t_u = n-6
 	mpz_urandomm(sigma, state, u);	// σ [6, n-1]

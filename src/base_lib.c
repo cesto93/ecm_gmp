@@ -11,4 +11,3 @@ void get_current_time(struct timespec *curr_t)
 	if (clock_gettime(CLOCK_REALTIME, curr_t) == -1)
 		error_msg("error in gettime");
 }
-
