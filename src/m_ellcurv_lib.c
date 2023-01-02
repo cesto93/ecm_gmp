@@ -359,5 +359,14 @@ int m_ell_fact_param_init(m_fact_param *param, const mpz_t n, unsigned long b1, 
 
 	mpz_init(param->n);
 	mpz_set(param->n, n);
+	mpz_temp_clear(&temp);
+
 	return 0;
+}
+
+void m_ell_fact_param_clear(m_fact_param *param)
+{
+	mpz_clears(param->k, NULL);
+	free(param->vdiff);
+	mpz_clear(param->n);
 }

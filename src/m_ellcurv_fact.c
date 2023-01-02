@@ -1,17 +1,5 @@
 #include "m_ellcurv_fact.h"
 
-static void fact_param_clear(fact_param * param)
-{
-	mpz_clears(param->k, NULL);
-	free(param->vdiff);
-
-#ifdef MM_ENABLE
-	mform_data_clear(&(param->mdata));
-#else
-	mpz_clear(param->n);
-#endif
-}
-
 long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;

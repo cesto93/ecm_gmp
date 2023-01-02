@@ -48,5 +48,6 @@ void mm_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t e_C2,
 void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param *param, unsigned long *iter, int *fase_found);
 
 int mm_ell_fact_param_init(mm_fact_param *param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
+void mm_ell_fact_param_clear(mm_fact_param *param);
 
 #endif //MM_ELLCURV_LIB_H

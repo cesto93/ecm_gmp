@@ -589,3 +589,10 @@ int mm_ell_fact_param_init(mm_fact_param *param, const mpz_t n, unsigned long b1
 		return 1;
 	return 0;
 }
+
+void mm_ell_fact_param_clear(mm_fact_param *param)
+{
+	mpz_clears(param->k, NULL);
+	free(param->vdiff);
+	mform_data_clear(&(param->mdata));
+}

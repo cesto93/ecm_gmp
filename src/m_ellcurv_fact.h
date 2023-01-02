@@ -2,7 +2,7 @@
 #define M_ELLCURV_FACT_H_
 
 #define MM_ENABLE
-#define THREAD_NUM 4
+
 #define NDEBUG
 
 #include <pthread.h>
@@ -26,6 +26,7 @@
 	typedef mm_fact_param fact_param;
 	#define ell_fact(fact, state, param, res, fase_found) mm_ell_fact(fact, state, param, res, fase_found)
 	#define fact_param_init(param, n, b1, b2, max_iter) mm_ell_fact_param_init(param, n, b1, b2, max_iter)
+	#define fact_param_clear(param) mm_ell_fact_param_clear(param)
 #else
 	typedef m_fact_param fact_param;
 	#define ell_fact(fact, state, param, res, fase_found) m_ell_fact(fact, state, param, res, fase_found)
