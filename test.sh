@@ -12,11 +12,11 @@ echo -e "n\tf1\tf2\tfase\titer" > $fn1_f
 ./test.o fact 8 18 5000:1000:8 $fn1_t $fn1_f
 ./test.o fact 8 19 6000:1000:8 $fn1_t $fn1_f
 ./test.o fact 8 20 7000:1000:7 $fn1_t $fn1_f
-./test.o fact 8 21 15000:5000:8 $fn1_t $fn1_f
-./test.o fact 8 22 20000:5000:8 $fn1_t $fn1_f
-./test.o fact 8 23 30000:5000:7 $fn1_t $fn1_f
-./test.o fact 8 24 40000:5000:5 $fn1_t $fn1_f
-./test.o fact 8 25 45000:5000:4 $fn1_t $fn1_f
+#./test.o fact 8 21 15000:5000:8 $fn1_t $fn1_f
+#./test.o fact 8 22 20000:5000:8 $fn1_t $fn1_f
+#./test.o fact 8 23 30000:5000:7 $fn1_t $fn1_f
+#./test.o fact 8 24 40000:5000:5 $fn1_t $fn1_f
+#./test.o fact 8 25 45000:5000:4 $fn1_t $fn1_f
 #./test.o fact 8 26 100000:25000:5 $fn1_t $fn1_f
 #./test.o fact 8 27 125000:25000:5 $fn1_t $fn1_f
 #./test.o fact 8 28 150000:25000:5 $fn1_t $fn1_f

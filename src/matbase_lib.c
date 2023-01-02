@@ -112,7 +112,7 @@ int get_vdiff_size(const unsigned long b2)
 	stupid_log10_inf(size, b2);
 	size++;
 	size = size - 3;
-	STAMP("cifer %d vdiff_size = %d\n", size, v_size[size]);
+	STAMP("digits %d vdiff_size = %d\n", size, v_size[size]);
 	if (size < 6)
 		return v_size[size];
 	return -1;

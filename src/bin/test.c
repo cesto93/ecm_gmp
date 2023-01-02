@@ -14,8 +14,8 @@
 
 #define FACT_IS_CORRECT(p, q, f1, f2) ((mpz_equal(p, f1) && mpz_equal(q, f2)) || ((mpz_equal(q, f1) && mpz_equal(p, f2))))
 
-static void test_fact_times(const char *tent_s, const char *cifer_s, const char *b_s, const char *path_t, const char *path_f);
-static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent, unsigned long cifer, unsigned long b1,
+static void test_fact_times(const char *tent_s, const char *digits_s, const char *b_s, const char *path_t, const char *path_f);
+static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent, unsigned long digits, unsigned long b1,
 		      unsigned long b2, gmp_randstate_t state);
 			  
 void testpoint(const char *n);
@@ -63,9 +63,9 @@ int main(int argc, char *argv[])
 	}
 }
 
-static void test_fact_times(const char *tent_s, const char *cifer_s, const char *b_s, const char *path_t, const char *path_f)
+static void test_fact_times(const char *tent_s, const char *digits_s, const char *b_s, const char *path_t, const char *path_f)
 {
-	unsigned long b1_inc, b2_inc, b_start, b1, b2, cifer;
+	unsigned long b1_inc, b2_inc, b_start, b1, b2, digits;
 	unsigned int b_size;
 	unsigned long tent;
 	FILE *log_t, *log_f;
@@ -74,7 +74,7 @@ static void test_fact_times(const char *tent_s, const char *cifer_s, const char 
 	gmp_randinit_default(state);
 	gmp_randseed_ui(state, time(NULL));
 	tent = str2l(tent_s);
-	cifer = str2l(cifer_s);
+	digits = str2l(digits_s);
 
 	get_arg(b_s, &b_start, &b1_inc, &b_size);
 	b2_inc = b1_inc * DEFAULT_COEFF;
@@ -95,7 +95,7 @@ static void test_fact_times(const char *tent_s, const char *cifer_s, const char 
 	b1 = b_start;
 	b2 = b1 * DEFAULT_COEFF;
 	for (unsigned int i = 0; i < b_size; i++) {
-		test_fact(log_t, log_f, tent, cifer, b1, b2, state);
+		test_fact(log_t, log_f, tent, digits, b1, b2, state);
 		fputs("\n", log_f);
 		fflush(log_t);
 		fflush(log_f);
@@ -194,7 +194,7 @@ void testmul(const char *n, const char *k_s)
 }
 
 static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
-		      unsigned long cifer, unsigned long b1, unsigned long b2,
+		      unsigned long digits, unsigned long b1, unsigned long b2,
 		      gmp_randstate_t state)
 {
 	struct timespec start, end, diff, mean = {.tv_sec = 0,.tv_nsec = 0 };
@@ -206,8 +206,8 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 		return;
 
 	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, fact[0], fact[1], NULL);
-	mpz_ui_pow_ui(rnd_rng1, 10, cifer);
-	mpz_ui_pow_ui(rnd_rng2, 10, cifer + 10);
+	mpz_ui_pow_ui(rnd_rng1, 10, digits);
+	mpz_ui_pow_ui(rnd_rng2, 10, digits + 10);
 	mpz_mul_ui(rnd_rng1, rnd_rng1, 4);	// rand_range = 4*10^c
 	mpz_mul_ui(rnd_rng2, rnd_rng2, 4);	// rand_range = 4*10^c
 
@@ -243,7 +243,7 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 	}
 	timespec_div(&mean, &mean, tent);
 	tot_iter = tot_iter / tent;
-	gmp_fprintf(log_t, "%lu,%lu,%lu,%lu,%lu.%lu\n", cifer, b1, b2, tot_iter,
+	gmp_fprintf(log_t, "%lu,%lu,%lu,%lu,%lu.%lu\n", digits, b1, b2, tot_iter,
 		    diff.tv_sec, diff.tv_nsec / 1000000);
 	mpz_clears(p, q, rnd_rng1, rnd_rng2, n, fact[0], fact[1], NULL);
 }

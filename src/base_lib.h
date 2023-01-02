@@ -62,7 +62,7 @@ static inline void timespec_diff(const struct timespec *start, const struct time
 
 #define CHECK_ARGC(param_n) if (argc < (param_n + 1)) \
 do { \
-	perror("usage: ./test.o  mod \ntentative cifer_start:inc:size b_start:inc:size\n"); \
+	perror("usage: ./test.o  mod \ntentative digits_start:inc:size b_start:inc:size\n"); \
 	exit(EXIT_FAILURE); \
 } while (0)
 
