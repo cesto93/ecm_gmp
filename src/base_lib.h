@@ -60,12 +60,6 @@ static inline void timespec_diff(const struct timespec *start, const struct time
 	}
 }
 
-#define CHECK_ARGC(param_n) if (argc < (param_n + 1)) \
-do { \
-	perror("usage: ./test.o  mod \ntentative digits_start:inc:size b_start:inc:size\n"); \
-	exit(EXIT_FAILURE); \
-} while (0)
-
 #define printf_timespec(s, ts) printf("%s\t %lu [s]\t %lu[ns]\n", s, (ts)->tv_sec, (ts)->tv_nsec)
 
 #ifdef MINIMAL

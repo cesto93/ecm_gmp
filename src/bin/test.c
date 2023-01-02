@@ -9,6 +9,12 @@
 #include "../m_ellcurv_lib.h"
 #include "../mm_ellcurv_lib.h"
 
+#define CHECK_ARGC(param_n) if (argc < (param_n + 1)) \
+do { \
+	perror("usage: ./test.o  mod \ntentative digits_start:inc:size b_start:inc:size\n"); \
+	exit(EXIT_FAILURE); \
+} while (0)
+
 #define DEFAULT_COEFF 100	// b2 = b1 * coeff
 #define MAX_ITER 2000ul
 
