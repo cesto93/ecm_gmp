@@ -308,7 +308,7 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param *param, un
 	m_ellp_temp_get(p, &p_temp);
 	m_ellp_temp_get(r, &p_temp);
 
-	for (*iter = 0; *iter < param->max_iter; (*iter)++)
+	for (*iter = 0; *iter < param->max_iter; (*iter)++) {
 		if (m_ell_setrand2(param->n, e_C2, p, state, &temp)) { //TODO inversion can be avoided
 			if (find_div_by_gcd(*gcd, p->X, param->n)) {
 				mpz_set(fact, *gcd);
@@ -331,6 +331,7 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param *param, un
 				break;
 			}
 		}
+	}
 	mpz_temp_free(&temp, 1);
 	m_ellp_temp_free(&p_temp, 2);
 }

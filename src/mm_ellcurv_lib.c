@@ -408,11 +408,8 @@ static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s,
 	mmul_l_n(rx_l, t2_l, t3_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	// RX = [(x1+z1)^2] * [(x1-z1)^2]
 
 	sub_modR_l_n(t1_l, t2_l, t3_l, mdata->n_l, mdata->n_s);	//T1 = 4x1z1 = [(x1+z1)^2] - [(x1-z1)^2]
-	//                              T2                              T3
 	mmul_l(t2_l, e_C2_l, e_C2_s, t1_l, mdata->n_s, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T2 = [c+2/4] * [4x1z1]
-	//              EC_2            T1
 	add_modR_l_n(t3_l, t3_l, t2_l, mdata->n_l, mdata->n_s);	//T3 = [(x1-z1)^2] + [((c+2)/4) * 4x1z1]
-	//                      T3                              T2
 	mmul_l_n(rz_l, t3_l, t1_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//RZ = 4x1z1 * [(x1-z1)^2 + ((c+2)/4) * 4x1z1]
 }
 
