@@ -286,7 +286,7 @@ end:
 	m_ellp_temp_free(p_temp, 2);
 }
 
-void m_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const m_fact_param * param, unsigned int *iter, int *fase_found)
+void m_ell_fact(mpz_t fact, gmp_randstate_t state, const m_fact_param * param, unsigned int *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *gcd;
@@ -294,6 +294,7 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const m_fact_para
 	m_ellp_temp p_temp;
 	m_ellp_rep rep;
 	mpz_rep beta;
+	mpz_t e_C2;
 
 	unsigned long n_size = mpz_size(param->n) * mp_bits_per_limb;
 	mpz_temp_init2(&temp, n_temp_fact, n_size);
@@ -301,6 +302,7 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const m_fact_para
 
 	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
+	mpz_init2(e_C2, n_size);
 
 	mpz_temp_get(gcd, &temp);
 	m_ellp_temp_get(p, &p_temp);

@@ -498,7 +498,7 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
 }
 
 
-void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_param *param, unsigned long *iter, int *fase_found)
+void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param *param, unsigned long *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *g, *g_r;
@@ -506,6 +506,7 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_pa
 	m_ellp_temp p_temp;
 	m_ellp_rep rep;
 	mpz_rep beta;
+	mpz_t e_C2;
 
 	const int FACT_REP_SIZE = 950;
 	const unsigned long n_size = mpz_size(param->mdata.n) * mp_bits_per_limb;
@@ -515,6 +516,8 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_pa
 
 	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
+
+	mpz_init2(e_C2, n_size);
 
 	mpz_temp_get(g, &temp);
 	mpz_temp_get(g_r, &temp);

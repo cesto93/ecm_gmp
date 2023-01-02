@@ -33,13 +33,13 @@
 
 #ifdef MM_ENABLE
 typedef mm_fact_param fact_param;
-#define ell_fact(fact, state, e_C2, param, res, fase_found) \
-			mm_ell_fact(fact, state, e_C2, param, res, fase_found)
+#define ell_fact(fact, state, param, res, fase_found) \
+			mm_ell_fact(fact, state, param, res, fase_found)
 #else
 typedef m_fact_param fact_param;
 
-#define ell_fact(fact, state, e_C2, param, res, fase_found) \
-			m_ell_fact(fact, state, e_C2, param, res, fase_found)
+#define ell_fact(fact, state, param, res, fase_found) \
+			m_ell_fact(fact, state, param, res, fase_found)
 #endif
 
 typedef struct fact_tddata {
@@ -50,7 +50,6 @@ typedef struct fact_tddata {
 	unsigned long iter_done;
 	int fase_found;
 	gmp_randstate_t state;
-	mpz_t e_C2;
 	const fact_param *const_param;
 } fact_tddata;
 

@@ -16,13 +16,11 @@ static void td_data_init(fact_tddata * td, const unsigned long n_size)
 {
 	gmp_randinit_default(td->state);
 	mpz_init2(td->fact, n_size);
-	mpz_init2(td->e_C2, n_size);
 }
 
 static void td_data_clear(fact_tddata * td)
 {
 	gmp_randclear(td->state);
-	mpz_clears(td->fact, td->e_C2, NULL);
 }
 
 static int fact_param_init(fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
@@ -72,7 +70,7 @@ void *fact_tjob(void *arg)
 {
 	fact_tddata *const td = (fact_tddata *) arg;
 
-	ell_fact(td->fact, td->state, td->e_C2, td->const_param, &(td->iter_done), &(td->fase_found));
+	ell_fact(td->fact, td->state, td->const_param, &(td->iter_done), &(td->fase_found));
 	lock(td->mtx);
 	if (td->fase_found != -1) {
 		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
@@ -147,7 +145,7 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 		}
 	}
 #else
-	ell_fact(factors[0], td[0].state, td[0].e_C2, &param, &iter_done, &fase_found);
+	ell_fact(factors[0], td[0].state, &param, &iter_done, &fase_found);
 #endif
 
 	for (int i = 0; i < THREAD_NUM; i++)
