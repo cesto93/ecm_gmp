@@ -498,7 +498,7 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r,
 }
 
 
-void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_param * param, unsigned long *iter, int *fase_found)
+void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_param *param, unsigned long *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *g, *g_r;
@@ -524,7 +524,7 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_pa
 	mpz_set_ui(*g, 1);
 	to_mform(*g_r, *g, &(param->mdata), &temp);
 
-	for (*iter = 0; *iter < param->max_iter; (*iter)++)
+	for (*iter = 0; *iter < param->max_iter; (*iter)++) {
 		if (m_ell_setrand2(param->mdata.n, e_C2, p, state, &temp))	//TODO invertion can be avoited
 		{
 			if (find_div_by_gcd(*g, p->X, param->mdata.n)) {
@@ -559,6 +559,7 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, mpz_t e_C2, const mm_fact_pa
 				break;
 			}
 		}
+	}
 
 	mpz_temp_free(&temp, 2);
 	m_ellp_temp_free(&p_temp, 2);

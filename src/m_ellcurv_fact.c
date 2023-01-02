@@ -154,10 +154,9 @@ long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b
 		td_data_clear(&td[i]);
 	fact_param_clear(&param);
 
-	if (iter_done == max_iter)
+	if (iter_done == max_iter) {
 		return ELL_FACT_NOT_FOUND;
-	else			//FACT_FOUND
-	{
+	} else { //FACT FOUND
 		mpz_divexact(factors[1], n, factors[0]);
 		return iter_done + max_iter * fase_found;
 	}
