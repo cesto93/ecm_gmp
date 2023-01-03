@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 	gmp_printf("n = %Zd b1 = %lu b2 = %lu\n", n, b1, b2);
 
 	get_current_time(&start);
-	int res = factorize(factors, n, b1, b2, max_iter);
+	long res = factorize(factors, n, b1, b2, max_iter);
 	get_current_time(&end);
 	timespec_diff(&start, &end, &diff);
 
