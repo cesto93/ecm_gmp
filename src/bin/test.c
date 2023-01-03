@@ -66,6 +66,9 @@ int main(int argc, char *argv[])
 	}
 }
 
+/**
+ * b_s = b_start:b_inc:b_size
+ */ 
 static void test_fact_times(const char *tent_s, const char *digits_s, const char *b_s, const char *path_t, const char *path_f)
 {
 	unsigned long b1_inc, b2_inc, b_start, b1, b2, digits;
