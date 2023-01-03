@@ -280,7 +280,7 @@ end:
 	m_ellp_temp_free(p_temp, 2);
 }
 
-mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter,  int *fase_found)
+mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *gcd;
@@ -288,7 +288,7 @@ mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsign
 	m_ellp_temp p_temp;
 	mpz_rep beta;
 	m_ellp_rep rep;
-	
+
 	m_fact_param param;
 	mpz_t *fact = NULL;
 	unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
@@ -298,7 +298,7 @@ mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsign
 	if (vdiff_size == -1) {
 		perror("b2 to big\n");
 		return NULL;
-	}	
+	}
 
 	param.vdiff = malloc(vdiff_size);
 	if (param.vdiff == NULL) {
@@ -306,7 +306,7 @@ mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsign
 		return NULL;
 	}
 
-	mpz_temp_init2(&temp, n_temp_fact, mpz_size(n) * mp_bits_per_limb);	
+	mpz_temp_init2(&temp, n_temp_fact, mpz_size(n) * mp_bits_per_limb);
 	m_ellp_temp_init2(&p_temp, n_p_temp_fact, n_size);
 	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);

@@ -49,7 +49,7 @@ static inline void mpz_temp_init2(mpz_temp * temp, unsigned int lenght, unsigned
 		mpz_init2(temp->t[i], size);
 }
 
-static inline void mpz_temp_clear(mpz_temp *temp)
+static inline void mpz_temp_clear(mpz_temp * temp)
 {
 	for (unsigned int i = 0; i < temp->lenght; i++)
 		mpz_clear(temp->t[i]);
@@ -91,7 +91,7 @@ static inline void mpz_rep_clear(mpz_rep * rep)
 void get_randprime(mpz_t prime, const mpz_t offset, const mpz_t range, gmp_randstate_t state);
 
 //create k the number product of all b-smooth numbers
-void create_bigk(mpz_t k, const unsigned long b, mpz_temp * temp);	
+void create_bigk(mpz_t k, const unsigned long b, mpz_temp * temp);
 
 void get_prime_diff(const unsigned long start, int sub_offs, const unsigned long end, unsigned char v[], mpz_temp * temp);
 

@@ -73,7 +73,7 @@ static inline void m_ellp_clear(m_ellp * p)
 	mpz_clear(p->Z);
 }
 
-static inline void m_ellp_set(m_ellp *rop, const m_ellp *op)
+static inline void m_ellp_set(m_ellp * rop, const m_ellp * op)
 {
 	mpz_set(rop->X, op->X);
 	mpz_set(rop->Z, op->Z);

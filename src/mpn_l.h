@@ -78,76 +78,76 @@ void sub_modR_l_n(mp_limb_t * rop_l, const mp_limb_t * op1_l, const mp_limb_t * 
 #define from_mform_d(rop, op, m_data) mred_destroy(rop, op, (m_data)->n_l, (m_data)->n_inv, (m_data)->n_s)
 #define to_mform(rop, op, m_data, temp) mmul_t((rop), (op), (m_data)->R2, (m_data)->n_l, (m_data)->n_inv, (m_data)->n_s, (temp))
 
-static inline void add_modR(mpz_t rop, const mpz_t op1, const mpz_t op2, const mp_limb_t *n_l, size_t n_s)						
-{																			
-	mp_limb_t *rop_l;															
-	const mp_limb_t *op1_l, *op2_l;												
-																				
-	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);						
-	op1_l = mpz_limbs_read(op1);												
-	op2_l = mpz_limbs_read(op2);												
-	add_modR_l(rop_l, op1_l, mpz_size(op1), op2_l, mpz_size(op2), n_l, n_s);	
-	mpz_limbs_finish(rop, n_s);													
-																				
-}
-
-static inline void sub_modR(mpz_t rop, const mpz_t op1, const mpz_t op2, const mp_limb_t *n_l, size_t n_s)		
-{																			
-	mp_limb_t *rop_l;															
-	const mp_limb_t *op1_l, *op2_l;												
-																				
-	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);						
-	op1_l = mpz_limbs_read(op1);												
-	op2_l = mpz_limbs_read(op2);												
-	sub_modR_l(rop_l, op1_l, mpz_size(op1), op2_l, mpz_size(op2), n_l, n_s);	
-	mpz_limbs_finish(rop, n_s);													
-																				
-} 
-
-static inline void mmul(mpz_t rop, const mpz_t op1, const mpz_t op2, mp_limb_t *t_l, const mp_limb_t *n_l, const mp_limb_t n_inv, size_t n_s)
-{																					
-	mp_limb_t *rop_l; 																	
-	const mp_limb_t *op1_l, *op2_l;														
-																						
-	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);								
-	op1_l = mpz_limbs_read(op1);														
-	op2_l = mpz_limbs_read(op2);														
-																						
-	mmul_l(rop_l, op1_l, mpz_size(op1), op2_l, mpz_size(op2), t_l, n_l, n_inv, n_s);	
-	mpz_limbs_finish(rop, n_s);															
-																						
-}
-
-static inline void mmul_t(mpz_t rop, const mpz_t op1, const mpz_t op2, const mp_limb_t *n_l, mp_limb_t n_inv, size_t n_s, mpz_temp *temp)
-{																					
-	mpz_t *t;																			
-	mp_limb_t *t_l;	
-
-	mpz_temp_get(t, temp);																
-	t_l = mpz_limbs_write(*t, 2 * n_s * mp_bits_per_limb);								
-	mmul(rop, op1, op2, t_l, n_l, n_inv, n_s);											
-	mpz_temp_free(temp, 1);																
-}
-
-static inline void msqr(mpz_t rop, const mpz_t op1, mp_limb_t *t_l, mp_limb_t *n_l, mp_limb_t n_inv, size_t n_s)
+static inline void add_modR(mpz_t rop, const mpz_t op1, const mpz_t op2, const mp_limb_t * n_l, size_t n_s)
 {
-	mp_limb_t *rop_l; 																	
-	const mp_limb_t *op1_l;																
-																						
-	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);								
-	op1_l = mpz_limbs_read(op1);														
-																						
-	msqr_l(rop_l, op1_l, mpz_size(op1), t_l, n_l, n_inv, n_s);							
-	mpz_limbs_finish(rop, n_s);															
+	mp_limb_t *rop_l;
+	const mp_limb_t *op1_l, *op2_l;
+
+	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);
+	op1_l = mpz_limbs_read(op1);
+	op2_l = mpz_limbs_read(op2);
+	add_modR_l(rop_l, op1_l, mpz_size(op1), op2_l, mpz_size(op2), n_l, n_s);
+	mpz_limbs_finish(rop, n_s);
+
 }
 
-static inline void m_ellp_to_mform(m_ellp *rop, const m_ellp *op, const mform_data *mdata, mpz_temp *temp)
+static inline void sub_modR(mpz_t rop, const mpz_t op1, const mpz_t op2, const mp_limb_t * n_l, size_t n_s)
+{
+	mp_limb_t *rop_l;
+	const mp_limb_t *op1_l, *op2_l;
+
+	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);
+	op1_l = mpz_limbs_read(op1);
+	op2_l = mpz_limbs_read(op2);
+	sub_modR_l(rop_l, op1_l, mpz_size(op1), op2_l, mpz_size(op2), n_l, n_s);
+	mpz_limbs_finish(rop, n_s);
+
+}
+
+static inline void mmul(mpz_t rop, const mpz_t op1, const mpz_t op2, mp_limb_t * t_l, const mp_limb_t * n_l, const mp_limb_t n_inv, size_t n_s)
+{
+	mp_limb_t *rop_l;
+	const mp_limb_t *op1_l, *op2_l;
+
+	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);
+	op1_l = mpz_limbs_read(op1);
+	op2_l = mpz_limbs_read(op2);
+
+	mmul_l(rop_l, op1_l, mpz_size(op1), op2_l, mpz_size(op2), t_l, n_l, n_inv, n_s);
+	mpz_limbs_finish(rop, n_s);
+
+}
+
+static inline void mmul_t(mpz_t rop, const mpz_t op1, const mpz_t op2, const mp_limb_t * n_l, mp_limb_t n_inv, size_t n_s, mpz_temp * temp)
+{
+	mpz_t *t;
+	mp_limb_t *t_l;
+
+	mpz_temp_get(t, temp);
+	t_l = mpz_limbs_write(*t, 2 * n_s * mp_bits_per_limb);
+	mmul(rop, op1, op2, t_l, n_l, n_inv, n_s);
+	mpz_temp_free(temp, 1);
+}
+
+static inline void msqr(mpz_t rop, const mpz_t op1, mp_limb_t * t_l, mp_limb_t * n_l, mp_limb_t n_inv, size_t n_s)
+{
+	mp_limb_t *rop_l;
+	const mp_limb_t *op1_l;
+
+	rop_l = mpz_limbs_write(rop, n_s * mp_bits_per_limb);
+	op1_l = mpz_limbs_read(op1);
+
+	msqr_l(rop_l, op1_l, mpz_size(op1), t_l, n_l, n_inv, n_s);
+	mpz_limbs_finish(rop, n_s);
+}
+
+static inline void m_ellp_to_mform(m_ellp * rop, const m_ellp * op, const mform_data * mdata, mpz_temp * temp)
 {
 	to_mform(rop->X, op->X, mdata, temp);
 	to_mform(rop->Z, op->Z, mdata, temp);
 }
 
-static inline void m_ellp_from_mform(m_ellp *rop, const m_ellp *op, const mform_data *mdata, mpz_temp *temp) 
+static inline void m_ellp_from_mform(m_ellp * rop, const m_ellp * op, const mform_data * mdata, mpz_temp * temp)
 {
 	from_mform(rop->X, op->X, mdata, temp);
 	from_mform(rop->Z, op->Z, mdata, temp);

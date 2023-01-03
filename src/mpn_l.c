@@ -45,8 +45,8 @@ void msqr_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, const size_t op1_s, mp_l
 	mred_l(rop_l, t_l, n_l, n_first, n_s);
 }
 
-void mmul_l(mp_limb_t * rop_l, const mp_limb_t *op1_l, size_t op1_s,
-	    const mp_limb_t * op2_l, size_t op2_s, mp_limb_t *t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
+void mmul_l(mp_limb_t * rop_l, const mp_limb_t * op1_l, size_t op1_s,
+	    const mp_limb_t * op2_l, size_t op2_s, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_first, const size_t n_s)
 {
 	//FIX_ME crash if tested on fase2 with prime n becouse we do mul g * 0
 	if (op1_s < op2_s) {

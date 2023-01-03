@@ -24,3 +24,4 @@ lint:
 format:
 	./Cindent src/*.c
 	./Cindent src/*.h
+	rm src/*~

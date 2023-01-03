@@ -13,32 +13,21 @@ typedef struct mm_fact_param {
 	mpz_t e_C2;
 } mm_fact_param;
 
-static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
-				 const mp_limb_t * px_l, size_t px_s,
-				 const mp_limb_t * pz_l, size_t pz_s,
-				 const mp_limb_t * qx_l, size_t qx_s,
-				 const mp_limb_t * qz_l, size_t qz_s,
-				 const mp_limb_t * dx_l, size_t dx_s,
-				 const mp_limb_t * dz_l, size_t dz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
+static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l, size_t px_s, const mp_limb_t * pz_l, size_t pz_s,
+				 const mp_limb_t * qx_l, size_t qx_s, const mp_limb_t * qz_l, size_t qz_s, const mp_limb_t * dx_l, size_t dx_s,
+				 const mp_limb_t * dz_l, size_t dz_s, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l,
+				 mp_limb_t * tmul_l);
 
-static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s,
-				 mp_limb_t * rx_l, mp_limb_t * rz_l,
-				 const mp_limb_t * px_l, size_t px_s,
-				 const mp_limb_t * pz_l, size_t pz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
+static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s, mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l, size_t px_s,
+				 const mp_limb_t * pz_l, size_t pz_s, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l,
+				 mp_limb_t * tmul_l);
 
-static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
-				   const mp_limb_t * px_l,
-				   const mp_limb_t * pz_l,
-				   const mp_limb_t * qx_l,
-				   const mp_limb_t * qz_l,
-				   const mp_limb_t * dx_l,
-				   const mp_limb_t * dz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
+static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l, const mp_limb_t * pz_l, const mp_limb_t * qx_l,
+				   const mp_limb_t * qz_l, const mp_limb_t * dx_l, const mp_limb_t * dz_l, const mform_data * mdata, mp_limb_t * t1_l,
+				   mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
 
-static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l,
-				   mp_limb_t * rz_l, const mp_limb_t * px_l,
-				   const mp_limb_t * pz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
+static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l, const mp_limb_t * pz_l,
+				   const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l);
 
 static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r, const m_ellp * p, const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp);
 
@@ -323,16 +312,11 @@ end:
 	m_ellp_temp_free(p_temp, 2);
 }
 
-//LOW LEVEL FUNCTION / CALLED MANYYYYYYYYY TIMES
-
-static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
-				 const mp_limb_t * px_l, size_t px_s,
-				 const mp_limb_t * pz_l, size_t pz_s,
-				 const mp_limb_t * qx_l, size_t qx_s,
-				 const mp_limb_t * qz_l, size_t qz_s,
-				 const mp_limb_t * dx_l, size_t dx_s,
-				 const mp_limb_t * dz_l, size_t dz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
+//LOW LEVEL FUNCTION / CALLED MANY TIMES
+static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l, size_t px_s, const mp_limb_t * pz_l, size_t pz_s,
+				 const mp_limb_t * qx_l, size_t qx_s, const mp_limb_t * qz_l, size_t qz_s, const mp_limb_t * dx_l, size_t dx_s,
+				 const mp_limb_t * dz_l, size_t dz_s, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l,
+				 mp_limb_t * tmul_l)
 {
 	sub_modR_l(t1_l, px_l, px_s, pz_l, pz_s, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2)                                                                                                                                                                   
 	add_modR_l(t2_l, qx_l, qx_s, qz_l, qz_s, mdata->n_l, mdata->n_s);	//              T1              T2
@@ -353,11 +337,9 @@ static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
 	mpn_copyi(rx_l, t1_l, mdata->n_s);	//RX = t1 
 }
 
-static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s,
-				 mp_limb_t * rx_l, mp_limb_t * rz_l,
-				 const mp_limb_t * px_l, size_t px_s,
-				 const mp_limb_t * pz_l, size_t pz_s,
-				 const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
+static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s, mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l, size_t px_s,
+				 const mp_limb_t * pz_l, size_t pz_s, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l,
+				 mp_limb_t * tmul_l)
 {
 	add_modR_l(t1_l, px_l, px_s, pz_l, pz_s, mdata->n_l, mdata->n_s);	// T2 = (x1+z1)^2                                                                                                                                                               
 	msqr_l_n(t2_l, t1_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//                      T1
@@ -373,11 +355,9 @@ static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s,
 	mmul_l_n(rz_l, t3_l, t1_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//RZ = 4x1z1 * [(x1-z1)^2 + ((c+2)/4) * 4x1z1]
 }
 
-static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
-				   const mp_limb_t * px_l, const mp_limb_t * pz_l,
-				   const mp_limb_t * qx_l, const mp_limb_t * qz_l,
-				   const mp_limb_t * dx_l, const mp_limb_t * dz_l, 
-				   const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
+static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l, const mp_limb_t * pz_l, const mp_limb_t * qx_l,
+				   const mp_limb_t * qz_l, const mp_limb_t * dx_l, const mp_limb_t * dz_l, const mform_data * mdata, mp_limb_t * t1_l,
+				   mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
 {
 	sub_modR_l_n(t1_l, px_l, pz_l, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2)                                                                                                                                                                   
 	add_modR_l_n(t2_l, qx_l, qz_l, mdata->n_l, mdata->n_s);	//              T1              T2
@@ -459,7 +439,7 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
 	mpz_init2(param.k, bigk_size_bits(b1));
 	mpz_init2(param.e_C2, n_size);
-	
+
 	mpz_temp_get(g, &temp);
 	mpz_temp_get(g_r, &temp);
 	m_ellp_temp_get(p, &p_temp);
@@ -491,7 +471,7 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	param.b2 = b2;
 	param.max_iter = max_iter;
 
-	if (mform_data_init(&(param.mdata), n, &temp)){	// FOUND IN INVERTION OF R
+	if (mform_data_init(&(param.mdata), n, &temp)) {	// FOUND IN INVERTION OF R
 		mpz_set(*fact, param.mdata.R2);
 		*fase_found = 0;	//FASE 0
 		goto found;
@@ -501,7 +481,7 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	to_mform(*g_r, *g, &(param.mdata), &temp);
 
 	for (*iter = 0; *iter < param.max_iter; (*iter)++) {
-		if (m_ell_setrand2(param.mdata.n, param.e_C2, p, state, &temp))	{ // TODO invertion can be avoited
+		if (m_ell_setrand2(param.mdata.n, param.e_C2, p, state, &temp)) {	// TODO invertion can be avoited
 			if (find_div_by_gcd(*g, p->X, param.mdata.n)) {
 				mpz_set(*fact, *g);
 				*fase_found = 0;
@@ -514,7 +494,7 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 			mm_ell_mul(param.k, param.e_C2, r, p, &(param.mdata), &p_temp, &temp);	// FASE1
 
 			m_ellp_from_mform(p, r, &(param.mdata), &temp);	// p = r from_mfrom
-			if (find_div_by_gcd(*g, p->Z, param.mdata.n)) { 	// check on p
+			if (find_div_by_gcd(*g, p->Z, param.mdata.n)) {	// check on p
 				mpz_set(*fact, *g);
 				*fase_found = 1;
 				break;
@@ -546,4 +526,3 @@ found:
 
 	return fact;
 }
-
