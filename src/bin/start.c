@@ -5,7 +5,7 @@
 #include "ellcurv_fact.h"
 
 #define DEFAULT_COEFF 100	// b2 = b1 * coeff
-#define DEFAULT_MAX_ITER 2000
+#define DEFAULT_MAX_ITER 5000
 
 int main(int argc, char *argv[])
 {
