@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <gmp.h>
 
-#include "matbase_lib.h"
-#include "base_lib.h"
 #include "m_ellcurv_struct.h"
 #include "mpn_l.h"
 

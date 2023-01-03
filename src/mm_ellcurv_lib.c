@@ -1,6 +1,7 @@
 #include "mm_ellcurv_lib.h"
 
-#include <pthread.h>
+#include "matbase_lib.h"
+#include "base_lib.h"
 
 typedef struct mm_fact_param {
 	unsigned long b1;
@@ -511,7 +512,6 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 			to_mform(param.e_C2, param.e_C2, &(param.mdata), &temp);
 
 			mm_ell_mul(param.k, param.e_C2, r, p, &(param.mdata), &p_temp, &temp);	// FASE1
-			pthread_testcancel();
 
 			m_ellp_from_mform(p, r, &(param.mdata), &temp);	// p = r from_mfrom
 			if (find_div_by_gcd(*g, p->Z, param.mdata.n)) { 	// check on p
@@ -522,7 +522,6 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 			mpz_set(*g, *g_r);
 			mm_ell_diff(rep.p, beta.v, rep.lenght, param.e_C2, r, &(param.mdata), &temp);
 			mm_ell_fase2(*g, param.b1, param.b2, param.e_C2, r, rep.p, beta.v, rep.lenght, param.vdiff, &(param.mdata), &p_temp, &temp);
-			pthread_testcancel();
 
 			from_mform(*g, *g, &(param.mdata), &temp);
 			if (find_div_by_gcd(*g, *g, param.mdata.n)) {
