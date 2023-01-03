@@ -1,6 +1,6 @@
 libdir  := src/lib
 bindir := src/bin
-lib := $(addprefix $(libdir)/,m_ellcurv.c mm_ellcurv.c m_ellcurv_struct.c base_lib.c matbase_lib.c mpn_l.c multiproc.c)
+lib := $(wildcard $(libdir)/*.c)
 
 .PHONY: test
 .PHONY: prof
