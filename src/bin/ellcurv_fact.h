@@ -46,6 +46,6 @@ static inline m_ellfact_res *mfactorize(const mpz_t n, unsigned long b1, unsigne
 	return res;
 }
 
-long tfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
+m_ellfact_res *tfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long thread_num);
 
 #endif //ELLCURV_FACT_H
