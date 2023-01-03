@@ -141,6 +141,18 @@ static inline void msqr(mpz_t rop, const mpz_t op1, mp_limb_t *t_l, mp_limb_t *n
 	mpz_limbs_finish(rop, n_s);															
 }
 
+static inline void m_ellp_to_mform(m_ellp *rop, const m_ellp *op, const mform_data *mdata, mpz_temp *temp)
+{
+	to_mform(rop->X, op->X, mdata, temp);
+	to_mform(rop->Z, op->Z, mdata, temp);
+}
+
+static inline void m_ellp_from_mform(m_ellp *rop, const m_ellp *op, const mform_data *mdata, mpz_temp *temp) 
+{
+	from_mform(rop->X, op->X, mdata, temp);
+	from_mform(rop->Z, op->Z, mdata, temp);
+}
+
 #define MPZ_MODIFY_NSIZE(rop, op, n_s)							\
 do {															\
 	rop = mpz_limbs_modify(op, n_s * mp_bits_per_limb);			\

@@ -75,24 +75,11 @@ static inline void m_ellp_clear(m_ellp * p)
 	mpz_clear(p->Z);
 }
 
-
 static inline void m_ellp_set(m_ellp *rop, const m_ellp *op)
 {
 	mpz_set(rop->X, op->X);
 	mpz_set(rop->Z, op->Z);
 }
-
-#define m_ellp_to_mform(rop, op, mdata, temp) \
-do { \
-	to_mform((rop)->X, (op)->X, mdata, temp); \
-	to_mform((rop)->Z, (op)->Z, mdata, temp); \
-} while (0)
-
-#define m_ellp_from_mform(rop, op, mdata, temp) \
-do { \
-	from_mform((rop)->X, (op)->X, mdata, temp); \
-	from_mform((rop)->Z, (op)->Z, mdata, temp); \
-} while (0)
 
 static inline void m_ellp_temp_init(m_ellp_temp * temp, unsigned long lenght)
 {
