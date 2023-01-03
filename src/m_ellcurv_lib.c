@@ -1,5 +1,8 @@
 #include "m_ellcurv_lib.h"
 
+#include "matbase_lib.h"
+#include "base_lib.h"
+
 #define FACT_REP_SIZE 950
 
 typedef struct m_fact_param {

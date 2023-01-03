@@ -5,13 +5,7 @@
 
 #define NDEBUG
 
-#include <unistd.h>
-#include <sys/syscall.h>
-#include <linux/random.h>
-
 #include "m_ellcurv_struct.h"
-#include "m_ellcurv_lib.h"
-#include "mm_ellcurv_lib.h"
 
 #define _GNU_SOURCE
 

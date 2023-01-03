@@ -1,8 +1,6 @@
 #ifndef M_ELLCURV_STRUCT_H_	/* Include guard */
 #define M_ELLCURV_STRUCT_H_
 
-#include <stdlib.h>
-#include <stdio.h>
 #include <gmp.h>
 
 #include "matbase_lib.h"
