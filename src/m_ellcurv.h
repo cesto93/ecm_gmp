@@ -1,5 +1,5 @@
-#ifndef M_ELLCURV_LIB_H_	/* Include guard */
-#define M_ELLCURV_LIB_H_
+#ifndef M_ELLCURV_H_	/* Include guard */
+#define M_ELLCURV_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,4 +34,4 @@ void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r, const m_ellp * 
 
 m_ellfact_res *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
 
-#endif //M_ELLCURV_LIB_H
+#endif //M_ELLCURV_H

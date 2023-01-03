@@ -1,4 +1,4 @@
-#include "mm_ellcurv_lib.h"
+#include "mm_ellcurv.h"
 
 #include "matbase_lib.h"
 #include "base_lib.h"

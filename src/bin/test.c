@@ -6,8 +6,8 @@
 #include "ellcurv_fact.h"
 #include "../base_lib.h"
 #include "../m_ellcurv_struct.h"
-#include "../m_ellcurv_lib.h"
-#include "../mm_ellcurv_lib.h"
+#include "../m_ellcurv.h"
+#include "../mm_ellcurv.h"
 
 #define CHECK_ARGC(param_n) if (argc < (param_n + 1)) \
 do { \

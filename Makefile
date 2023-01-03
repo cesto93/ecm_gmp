@@ -1,18 +1,18 @@
-objdir  := src
+libdir  := src
 bindir := src/bin
-objects := $(addprefix $(objdir)/,m_ellcurv_lib.c mm_ellcurv_lib.c m_ellcurv_struct.c base_lib.c matbase_lib.c mpn_l.c)
+lib := $(addprefix $(libdir)/,m_ellcurv.c mm_ellcurv.c m_ellcurv_struct.c base_lib.c matbase_lib.c mpn_l.c)
 
 .PHONY: test
 .PHONY: prof
 .PHONY: prof_s
 .PHONY: prof_t
 
-build: $(objects)
-	 gcc -Wall -Wextra -O3 $(bindir)/start.c -o start.o $(objects) -lgmp -pthread
-	 gcc -Wall -Wextra -O3 -static $(bindir)/test.c -o test.o $(objects) -lgmp -pthread
-prof: $(objects)
-	gcc -pg -Wall -Wextra -O2 $(bindir)/start.c -o prof.o $(objects) -lgmp -pthread
-	gcc -pg -Wall -Wextra -O2 $(bindir)/test.c -o prof_t.o $(objects) -lgmp -pthread
+build: $(lib)
+	 gcc -Wall -Wextra -O3 $(bindir)/start.c -o start.o $(lib) -lgmp -pthread
+	 gcc -Wall -Wextra -O3 -static $(bindir)/test.c -o test.o $(lib) -lgmp -pthread
+prof: $(lib)
+	gcc -pg -Wall -Wextra -O2 $(bindir)/start.c -o prof.o $(lib) -lgmp -pthread
+	gcc -pg -Wall -Wextra -O2 $(bindir)/test.c -o prof_t.o $(lib) -lgmp -pthread
 test:
 	./test.sh
 bench:

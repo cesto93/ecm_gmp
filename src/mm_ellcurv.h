@@ -1,5 +1,5 @@
-#ifndef MM_ELLCURV_LIB_H_	/* Include guard */
-#define MM_ELLCURV_LIB_H_
+#ifndef MM_ELLCURV_H_	/* Include guard */
+#define MM_ELLCURV_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,4 +31,4 @@ void mm_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t e_C2,
 
 m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
 
-#endif //MM_ELLCURV_LIB_H
+#endif //MM_ELLCURV_H
