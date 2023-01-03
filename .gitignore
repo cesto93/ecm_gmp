@@ -1,6 +1,7 @@
 #ignore executable files
 *.o
-test/
+*.so
 *.gch
-Lindent
+*.wasm
 .vscode
+test/
