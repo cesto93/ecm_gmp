@@ -2,6 +2,15 @@
 
 #define FACT_REP_SIZE 950
 
+typedef struct m_fact_param {
+	unsigned long b1;
+	unsigned long b2;
+	unsigned long max_iter;
+	mpz_t n;
+	mpz_t k;
+	unsigned char *vdiff;
+} m_fact_param;
+
 //when used first check temp space
 static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff, mpz_temp * temp);
 static inline void m_ell_duph2(const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, mpz_temp * temp);
@@ -269,8 +278,7 @@ end:
 	m_ellp_temp_free(p_temp, 2);
 }
 
-void m_ell_fact(mpz_t fact, gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter, 
-		int *fase_found)
+mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter,  int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *gcd;
@@ -280,14 +288,22 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const mpz_t n, unsigned long 
 	mpz_rep beta;
 	mpz_t e_C2;
 	m_fact_param param;
+	mpz_t *fact = NULL;
 	unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
 	int vdiff_size = get_vdiff_size(b2);
 
-	if (vdiff_size == -1)
-		error_msg("b2 to big\n");
+	if (vdiff_size == -1) {
+		perror("b2 to big\n");
+		return NULL;
+	}	
 
-	if ((param.vdiff = malloc(vdiff_size)) == NULL)
-		error_msg("error in malloc at m_ell_fact\n");
+	param.vdiff = malloc(vdiff_size);
+	if (param.vdiff == NULL) {
+		perror("error in m_ell_fact malloc()");
+		return NULL;
+	}
+
+
 
 	mpz_temp_init2(&temp, n_temp_fact, mpz_size(n) * mp_bits_per_limb);	
 	m_ellp_temp_init2(&p_temp, n_p_temp_fact, n_size);
@@ -308,18 +324,17 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const mpz_t n, unsigned long 
 	mpz_temp_get(gcd, &temp);
 	m_ellp_temp_get(p, &p_temp);
 	m_ellp_temp_get(r, &p_temp);
+	*fase_found = -1;
 
 	for (*iter = 0; *iter < param.max_iter; (*iter)++) {
 		if (m_ell_setrand2(param.n, e_C2, p, state, &temp)) {	//TODO inversion can be avoided
 			if (find_div_by_gcd(*gcd, p->X, param.n)) {
-				mpz_set(fact, *gcd);
 				*fase_found = 0;
 				break;
 			}
 		} else {
 			m_ell_mul(param.k, param.n, e_C2, r, p, &p_temp, &temp);	//FASE1
 			if (find_div_by_gcd(*gcd, r->Z, param.n)) {
-				mpz_set(fact, *gcd);
 				*fase_found = 1;
 				break;
 			}
@@ -327,10 +342,19 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const mpz_t n, unsigned long 
 			m_ell_diff(&rep, &beta, param.n, e_C2, r, &temp);
 			m_ell_fase2(*gcd, param.b1, param.b2, param.n, e_C2, r, rep, beta, param.vdiff, &p_temp, &temp);
 			if (find_div_by_gcd(*gcd, *gcd, param.n)) {
-				mpz_set(fact, *gcd);
 				*fase_found = 2;
 				break;
 			}
+		}
+	}
+
+	if (*fase_found != -1) {
+		fact = malloc(sizeof(mpz_t));
+		if (fact == NULL) {
+			perror("error in m_ell_fact malloc()");
+		} else {
+			mpz_init(*fact);
+			mpz_set(*fact, *gcd);
 		}
 	}
 
@@ -339,4 +363,5 @@ void m_ell_fact(mpz_t fact, gmp_randstate_t state, const mpz_t n, unsigned long 
 	mpz_clears(param.k, NULL);
 	free(param.vdiff);
 	mpz_clear(param.n);
+	return fact;
 }

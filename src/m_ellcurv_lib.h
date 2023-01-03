@@ -21,15 +21,6 @@
 #define n_temp_fact n_temp_fase2 + 1	//gcd
 #define n_p_temp_fact n_p_temp_fase2 + 2	//p q
 
-typedef struct m_fact_param {
-	unsigned long b1;
-	unsigned long b2;
-	unsigned long max_iter;
-	mpz_t n;
-	mpz_t k;
-	unsigned char *vdiff;
-} m_fact_param;
-
 void m_ell_addh_t(const m_ellc * e, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff);	// calculate p + q
 void m_ell_duph_t(const m_ellc * e, m_ellp * r, const m_ellp * p);	// calculate 2p
 void m_ell_mul_t(const mpz_t k, const m_ellc * e, m_ellp * r, const m_ellp * p);
@@ -43,7 +34,6 @@ void m_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t n,
 
 void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp);
 
-void m_ell_fact(mpz_t fact, gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter, 
-		int *fase_found);
+mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter, int *fase_found);
 
 #endif //M_ELLCURV_LIB_H
