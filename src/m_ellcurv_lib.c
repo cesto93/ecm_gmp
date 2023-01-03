@@ -3,8 +3,6 @@
 #include "matbase_lib.h"
 #include "base_lib.h"
 
-#define FACT_REP_SIZE 950
-
 typedef struct m_fact_param {
 	unsigned long b1;
 	unsigned long b2;
@@ -295,6 +293,7 @@ mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsign
 	mpz_t *fact = NULL;
 	unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
 	int vdiff_size = get_vdiff_size(b2);
+	const int FACT_REP_SIZE = 950;
 
 	if (vdiff_size == -1) {
 		perror("b2 to big\n");
