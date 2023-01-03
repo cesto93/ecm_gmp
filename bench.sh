@@ -1,29 +1,36 @@
 #!/bin/bash
 
 path="./test/"
-ext_t=".csv"
-ext_f="_log.txt"
-n1="t_16:20"
-fn1_t=${path}${n1}${ext_t}
-fn1_f=${path}${n1}${ext_f}
-bin="./test.o"
-wasm="./test.wasm"
+n1="bench_16_20"
+ext_csv=".csv"
+ext_log="_time.csv"
 
-echo "c,b1,b2,iter,time" > ${fn1_t}
-echo -e "n\tf1\tf2\tfase\titer" > ${fn1_f}
+declare -A log csv bin
 
-${bin} fact 8 16 3000:1000:9 ${fn1_t} ${fn1_f}
-${bin} fact 8 17 4000:1000:9 ${fn1_t} ${fn1_f}
-${bin} fact 8 18 5000:1000:8 ${fn1_t} ${fn1_f}
-${bin} fact 8 19 6000:1000:8 ${fn1_t} ${fn1_f}
-${bin} fact 8 20 7000:1000:7 ${fn1_t} ${fn1_f}
+log[c]=${path}${n1}${ext_csv}
+csv[c]=${path}${n1}${ext_log}
+bin[c]="./test.o"
 
+log[wasm]=${path}${n1}_wasm${ext_csv}
+csv[wasm]=${path}${n1}_wasm${ext_log}
+bin[wasm]="./test.wasm"
 
-${wasm} fact 8 16 3000:1000:9 ${fn1_t} ${fn1_f}
-${wasm} fact 8 17 4000:1000:9 ${fn1_t} ${fn1_f}
-${wasm} fact 8 18 5000:1000:8 ${fn1_t} ${fn1_f}
-${wasm} fact 8 19 6000:1000:8 ${fn1_t} ${fn1_f}
-${wasm} fact 8 20 7000:1000:7 ${fn1_t} ${fn1_f}
+run_bench() {
+	label=${1}
+
+	echo "c,b1,b2,iter,time" > ${csv["${label}"]}
+	echo -e "n\tf1\tf2\tfase\titer" > ${log["${label}"]}
+
+	${bin["${label}"]} fact 8 16 3000:1000:9 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact 8 17 4000:1000:9 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact 8 18 5000:1000:8 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact 8 19 6000:1000:8 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact 8 20 7000:1000:7 ${csv["${label}"]} ${log["${label}"]}
+}
+
+run_bench c
+run_bench wasm
+
 
 #${bin} fact 8 21 15000:5000:8 ${fn1_t} ${fn1_f}
 #${bin} fact 8 22 20000:5000:8 ${fn1_t} ${fn1_f}
