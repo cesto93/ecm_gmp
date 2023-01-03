@@ -458,14 +458,12 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
 	mpz_init2(param.k, bigk_size_bits(b1));
 	mpz_init2(param.e_C2, n_size);
-
 	
 	mpz_temp_get(g, &temp);
 	mpz_temp_get(g_r, &temp);
 	m_ellp_temp_get(p, &p_temp);
 	m_ellp_temp_get(r, &p_temp);
 	*fase_found = -1;
-	
 
 	if (vdiff_size == -1) {
 		perror("b2 to big\n");
@@ -502,8 +500,7 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	to_mform(*g_r, *g, &(param.mdata), &temp);
 
 	for (*iter = 0; *iter < param.max_iter; (*iter)++) {
-		if (m_ell_setrand2(param.mdata.n, param.e_C2, p, state, &temp))	//TODO invertion can be avoited
-		{
+		if (m_ell_setrand2(param.mdata.n, param.e_C2, p, state, &temp))	{ // TODO invertion can be avoited
 			if (find_div_by_gcd(*g, p->X, param.mdata.n)) {
 				mpz_set(*fact, *g);
 				*fase_found = 0;
@@ -513,12 +510,11 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 			m_ellp_to_mform(p, p, &(param.mdata), &temp);
 			to_mform(param.e_C2, param.e_C2, &(param.mdata), &temp);
 
-			mm_ell_mul(param.k, param.e_C2, r, p, &(param.mdata), &p_temp, &temp);	//FASE1
+			mm_ell_mul(param.k, param.e_C2, r, p, &(param.mdata), &p_temp, &temp);	// FASE1
 			pthread_testcancel();
 
 			m_ellp_from_mform(p, r, &(param.mdata), &temp);	// p = r from_mfrom
-			if (find_div_by_gcd(*g, p->Z, param.mdata.n))	//check on p
-			{
+			if (find_div_by_gcd(*g, p->Z, param.mdata.n)) { 	// check on p
 				mpz_set(*fact, *g);
 				*fase_found = 1;
 				break;
