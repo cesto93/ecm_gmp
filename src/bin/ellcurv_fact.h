@@ -3,9 +3,7 @@
 
 #define NDEBUG
 
-#include "../m_ellcurv_struct.h"
 #include "../m_ellcurv.h"
-#include "../mm_ellcurv.h"
 
 #include <linux/random.h>
 #include <sys/syscall.h>
