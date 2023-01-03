@@ -31,51 +31,48 @@ static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l, m
 
 static void mm_ell_mul_ui(unsigned long k, const mpz_t e_C2, m_ellp * r, const m_ellp * p, const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp);
 
-//LOW_LEVEL_MACRO
+static void mm_ell_addh_t(m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * d, const mform_data * mdata, mp_limb_t * t1_l,
+			  mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
+{
+	mp_limb_t *rz_l, *rx_l;
+	const mp_limb_t *px_l, *pz_l, *qx_l, *qz_l, *dx_l, *dz_l;
+	size_t px_s, pz_s, qx_s, qz_s, dx_s, dz_s;
 
-#define mm_ell_addh_t(r, p, q, d, mdata, t1_l, t2_l, t3_l, tmul_l)										\
-do {																									\
-	mp_limb_t *rz_l, *rx_l;																				\
-	const mp_limb_t *px_l, *pz_l, *qx_l, *qz_l, *dx_l, *dz_l;											\
-	size_t px_s, pz_s, qx_s, qz_s, dx_s, dz_s;															\
-																										\
-	rz_l = mpz_limbs_write((r)->Z, (mdata->n_s) * mp_bits_per_limb);									\
-	rx_l = mpz_limbs_write((r)->X, (mdata->n_s) * mp_bits_per_limb);									\
-																										\
-	MPZ_READ_WITH_SIZE(px_l, px_s, (p)->X);																\
-	MPZ_READ_WITH_SIZE(pz_l, pz_s, (p)->Z);																\
-	MPZ_READ_WITH_SIZE(qx_l, qx_s, (q)->X);																\
-	MPZ_READ_WITH_SIZE(qz_l, qz_s, (q)->Z);																\
-	MPZ_READ_WITH_SIZE(dx_l, dx_s, (d)->X);																\
-	MPZ_READ_WITH_SIZE(dz_l, dz_s, (d)->Z);																\
-																										\
-	mm_ell_addh_l(rx_l, rz_l, px_l, px_s, pz_l, pz_s, qx_l, qx_s, qz_l, qz_s, dx_l, dx_s, dz_l, dz_s, 	\
-	mdata, t1_l, t2_l, t3_l, tmul_l);																	\
-																										\
-	mpz_limbs_finish((r)->X, mdata->n_s);																\
-	mpz_limbs_finish((r)->Z, mdata->n_s);																\
-} while (0)
+	rz_l = mpz_limbs_write(r->Z, (mdata->n_s) * mp_bits_per_limb);
+	rx_l = mpz_limbs_write(r->X, (mdata->n_s) * mp_bits_per_limb);
 
-#define mm_ell_duph_t(e_C2, r, p, mdata, t1, t2, t3, tmul)												\
-do {																									\
-	mp_limb_t *rx_l, *rz_l;																				\
-	const mp_limb_t *px_l, *pz_l, *e_C2_l;																\
-	size_t px_s, pz_s, e_C2_s;																			\
-																										\
-	rz_l = mpz_limbs_write((r)->Z, (mdata->n_s) * mp_bits_per_limb);									\
-	rx_l = mpz_limbs_write((r)->X, (mdata->n_s) * mp_bits_per_limb);									\
-																										\
-	MPZ_READ_WITH_SIZE(px_l, px_s, (p)->X);																\
-	MPZ_READ_WITH_SIZE(pz_l, pz_s, (p)->Z);																\
-	MPZ_READ_WITH_SIZE(e_C2_l, e_C2_s, e_C2);															\
-																										\
-	mm_ell_duph_l(e_C2_l, e_C2_s, rx_l, rz_l, px_l, px_s, pz_l, pz_s, mdata, t1, t2, t3, tmul);			\
-																										\
-	mpz_limbs_finish((r)->X, mdata->n_s);																\
-	mpz_limbs_finish((r)->Z, mdata->n_s);																\
-} while (0)
+	MPZ_READ_WITH_SIZE(px_l, px_s, (p)->X);
+	MPZ_READ_WITH_SIZE(pz_l, pz_s, (p)->Z);
+	MPZ_READ_WITH_SIZE(qx_l, qx_s, (q)->X);
+	MPZ_READ_WITH_SIZE(qz_l, qz_s, (q)->Z);
+	MPZ_READ_WITH_SIZE(dx_l, dx_s, (d)->X);
+	MPZ_READ_WITH_SIZE(dz_l, dz_s, (d)->Z);
 
-//HIGH LEVEL FUNCTION
+	mm_ell_addh_l(rx_l, rz_l, px_l, px_s, pz_l, pz_s, qx_l, qx_s, qz_l, qz_s, dx_l, dx_s, dz_l, dz_s, mdata, t1_l, t2_l, t3_l, tmul_l);
+
+	mpz_limbs_finish(r->X, mdata->n_s);
+	mpz_limbs_finish(r->Z, mdata->n_s);
+}
+
+static void mm_ell_duph_t(const mpz_t e_C2, m_ellp * r, const m_ellp * p, const mform_data * mdata, mp_limb_t * t1, mp_limb_t * t2, mp_limb_t * t3,
+			  mp_limb_t * tmul)
+{
+	mp_limb_t *rx_l, *rz_l;
+	const mp_limb_t *px_l, *pz_l, *e_C2_l;
+	size_t px_s, pz_s, e_C2_s;
+
+	rz_l = mpz_limbs_write(r->Z, (mdata->n_s) * mp_bits_per_limb);
+	rx_l = mpz_limbs_write(r->X, (mdata->n_s) * mp_bits_per_limb);
+
+	MPZ_READ_WITH_SIZE(px_l, px_s, p->X);
+	MPZ_READ_WITH_SIZE(pz_l, pz_s, p->Z);
+	MPZ_READ_WITH_SIZE(e_C2_l, e_C2_s, e_C2);
+
+	mm_ell_duph_l(e_C2_l, e_C2_s, rx_l, rz_l, px_l, px_s, pz_l, pz_s, mdata, t1, t2, t3, tmul);
+
+	mpz_limbs_finish(r->X, mdata->n_s);
+	mpz_limbs_finish(r->Z, mdata->n_s);
+}
 
 //USED ONCE FOR ITER
 void mm_ell_mul(const mpz_t k, mpz_t e_C2, m_ellp * r, m_ellp * p, const mform_data * mdata, m_ellp_temp * p_temp, mpz_temp * temp)
