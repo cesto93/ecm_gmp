@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <gmp.h>
 
-#include "../base_lib.h"
 #include "ellcurv_fact.h"
 
 #define DEFAULT_COEFF 100	// b2 = b1 * coeff

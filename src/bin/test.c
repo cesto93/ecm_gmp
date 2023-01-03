@@ -4,8 +4,7 @@
 #include <time.h>
 
 #include "ellcurv_fact.h"
-#include "../base_lib.h"
-#include "../m_ellcurv.h"
+#include "../lib/m_ellcurv.h"
 
 #define CHECK_ARGC(param_n) if (argc < (param_n + 1)) \
 do { \
