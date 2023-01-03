@@ -1,6 +1,6 @@
 objdir  := src
 bindir := src/bin
-objects := $(addprefix $(objdir)/,m_ellcurv_fact.c m_ellcurv_lib.c mm_ellcurv_lib.c m_ellcurv_struct.c base_lib.c matbase_lib.c mpn_l.c)
+objects := $(addprefix $(objdir)/,m_ellcurv_lib.c mm_ellcurv_lib.c m_ellcurv_struct.c base_lib.c matbase_lib.c mpn_l.c)
 
 .PHONY: test
 .PHONY: prof

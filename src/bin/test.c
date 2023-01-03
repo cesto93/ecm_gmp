@@ -3,9 +3,9 @@
 #include <gmp.h>
 #include <time.h>
 
+#include "ellcurv_fact.h"
 #include "../base_lib.h"
 #include "../m_ellcurv_struct.h"
-#include "../m_ellcurv_fact.h"
 #include "../m_ellcurv_lib.h"
 #include "../mm_ellcurv_lib.h"
 

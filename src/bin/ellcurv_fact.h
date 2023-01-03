@@ -1,13 +1,20 @@
-#include "m_ellcurv_fact.h"
+#ifndef ELLCURV_FACT_H_	/* Include guard */
+#define ELLCURV_FACT_H_
+
+#define NDEBUG
+
+#include "../m_ellcurv_struct.h"
+#include "../m_ellcurv_lib.h"
+#include "../mm_ellcurv_lib.h"
 
 #include <linux/random.h>
 #include <sys/syscall.h>
 #include <unistd.h>
 
-#include "m_ellcurv_lib.h"
-#include "mm_ellcurv_lib.h"
+#define _GNU_SOURCE
+#define FACT_REP_SIZE 950
 
-m_ellfact_res *factorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+static inline m_ellfact_res *factorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	unsigned long seed;
 	gmp_randstate_t state;
@@ -24,7 +31,7 @@ m_ellfact_res *factorize(const mpz_t n, unsigned long b1, unsigned long b2, unsi
 	return res;
 }
 
-m_ellfact_res *mfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+static inline m_ellfact_res *mfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	unsigned long seed;
 	gmp_randstate_t state;
@@ -40,3 +47,5 @@ m_ellfact_res *mfactorize(const mpz_t n, unsigned long b1, unsigned long b2, uns
 
 	return res;
 }
+
+#endif //ELLCURV_FACT_H
