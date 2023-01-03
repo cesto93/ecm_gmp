@@ -8,6 +8,7 @@ typedef struct m_fact_param {
 	unsigned long max_iter;
 	mpz_t n;
 	mpz_t k;
+	mpz_t e_C2;
 	unsigned char *vdiff;
 } m_fact_param;
 
@@ -284,9 +285,9 @@ mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsign
 	mpz_t *gcd;
 	mpz_temp temp;
 	m_ellp_temp p_temp;
-	m_ellp_rep rep;
 	mpz_rep beta;
-	mpz_t e_C2;
+	m_ellp_rep rep;
+	
 	m_fact_param param;
 	mpz_t *fact = NULL;
 	unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
@@ -303,15 +304,13 @@ mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsign
 		return NULL;
 	}
 
-
-
 	mpz_temp_init2(&temp, n_temp_fact, mpz_size(n) * mp_bits_per_limb);	
 	m_ellp_temp_init2(&p_temp, n_p_temp_fact, n_size);
 	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
 	mpz_init2(param.k, bigk_size_bits(b1));
 	mpz_init(param.n);
-	mpz_init2(e_C2, n_size);
+	mpz_init2(param.e_C2, n_size);
 
 	create_bigk(param.k, b1, &temp);
 	get_prime_diff(b1, 1, b2, param.vdiff, &temp);
@@ -327,20 +326,20 @@ mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsign
 	*fase_found = -1;
 
 	for (*iter = 0; *iter < param.max_iter; (*iter)++) {
-		if (m_ell_setrand2(param.n, e_C2, p, state, &temp)) {	//TODO inversion can be avoided
+		if (m_ell_setrand2(param.n, param.e_C2, p, state, &temp)) {	//TODO inversion can be avoided
 			if (find_div_by_gcd(*gcd, p->X, param.n)) {
 				*fase_found = 0;
 				break;
 			}
 		} else {
-			m_ell_mul(param.k, param.n, e_C2, r, p, &p_temp, &temp);	//FASE1
+			m_ell_mul(param.k, param.n, param.e_C2, r, p, &p_temp, &temp);	//FASE1
 			if (find_div_by_gcd(*gcd, r->Z, param.n)) {
 				*fase_found = 1;
 				break;
 			}
 			mpz_set_ui(*gcd, 1);
-			m_ell_diff(&rep, &beta, param.n, e_C2, r, &temp);
-			m_ell_fase2(*gcd, param.b1, param.b2, param.n, e_C2, r, rep, beta, param.vdiff, &p_temp, &temp);
+			m_ell_diff(&rep, &beta, param.n, param.e_C2, r, &temp);
+			m_ell_fase2(*gcd, param.b1, param.b2, param.n, param.e_C2, r, rep, beta, param.vdiff, &p_temp, &temp);
 			if (find_div_by_gcd(*gcd, *gcd, param.n)) {
 				*fase_found = 2;
 				break;
