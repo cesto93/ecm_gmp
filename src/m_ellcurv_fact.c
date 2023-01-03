@@ -1,5 +1,12 @@
 #include "m_ellcurv_fact.h"
 
+#include <linux/random.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+#include "m_ellcurv_lib.h"
+#include "mm_ellcurv_lib.h"
+
 long factorize(mpz_t factors[], const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	int fase_found = -1;

@@ -5,7 +5,6 @@
 
 #define NDEBUG
 
-#include <pthread.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <linux/random.h>
