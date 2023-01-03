@@ -415,7 +415,7 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r, m_ellp *
 	m_ellp_temp_clear(&p_temp);
 }
 
-mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter, int *fase_found)
+m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	m_ellp *p, *r;
 	mpz_t *g, *g_r;
@@ -425,7 +425,7 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	mpz_rep beta;
 
 	mm_fact_param param;
-	mpz_t *fact = NULL;
+	m_ellfact_res *res = NULL;
 	const int FACT_REP_SIZE = 950;
 	const unsigned long n_size = mpz_size(param.mdata.n) * mp_bits_per_limb;
 	int vdiff_size = get_vdiff_size(b2);
@@ -436,12 +436,13 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
 	mpz_init2(param.k, bigk_size_bits(b1));
 	mpz_init2(param.e_C2, n_size);
+	mpz_inits(res->fact[0], res->fact[1], NULL);
 
 	mpz_temp_get(g, &temp);
 	mpz_temp_get(g_r, &temp);
 	m_ellp_temp_get(p, &p_temp);
 	m_ellp_temp_get(r, &p_temp);
-	*fase_found = -1;
+	res->fase_found = -1;
 
 	if (vdiff_size == -1) {
 		perror("b2 to big\n");
@@ -454,9 +455,9 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 		return NULL;
 	}
 
-	fact = malloc(sizeof(mpz_t));
-	if (fact == NULL) {
-		perror("error in m_ell_fact malloc()");
+	res = malloc(sizeof(*res));
+	if (res == NULL) {
+		perror("error in mm_ell_fact malloc()");
 		free(param.vdiff);
 		return NULL;
 	}
@@ -469,19 +470,19 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 	param.max_iter = max_iter;
 
 	if (mform_data_init(&(param.mdata), n, &temp)) {	// FOUND IN INVERTION OF R
-		mpz_set(*fact, param.mdata.R2);
-		*fase_found = 0;	//FASE 0
+		mpz_set(res->fact[0], param.mdata.R2);
+		res->fase_found = 0;	//FASE 0
 		goto found;
 	}
 
 	mpz_set_ui(*g, 1);
 	to_mform(*g_r, *g, &(param.mdata), &temp);
 
-	for (*iter = 0; *iter < param.max_iter; (*iter)++) {
+	for (res->iter = 0; res->iter < param.max_iter; (res->iter)++) {
 		if (m_ell_setrand2(param.mdata.n, param.e_C2, p, state, &temp)) {	// TODO invertion can be avoited
 			if (find_div_by_gcd(*g, p->X, param.mdata.n)) {
-				mpz_set(*fact, *g);
-				*fase_found = 0;
+				mpz_set(res->fact[0], *g);
+				res->fase_found = 0;
 				break;
 			}
 		} else {
@@ -492,8 +493,8 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 
 			m_ellp_from_mform(p, r, &(param.mdata), &temp);	// p = r from_mfrom
 			if (find_div_by_gcd(*g, p->Z, param.mdata.n)) {	// check on p
-				mpz_set(*fact, *g);
-				*fase_found = 1;
+				mpz_set(res->fact[0], *g);
+				res->fase_found = 1;
 				break;
 			}
 			mpz_set(*g, *g_r);
@@ -502,16 +503,17 @@ mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsig
 
 			from_mform(*g, *g, &(param.mdata), &temp);
 			if (find_div_by_gcd(*g, *g, param.mdata.n)) {
-				mpz_set(*fact, *g);
-				*fase_found = 2;
+				mpz_set(res->fact[0], *g);
+				res->fase_found = 2;
 				break;
 			}
 		}
 	}
 
-	if (*fase_found == -1) {
-		mpz_clear(*fact);
-		fact = NULL;
+	if (res->fase_found == -1) {
+		mpz_clears(res->fact[0], res->fact[1], NULL);
+	} else {
+		mpz_divexact(res->fact[1], n, res->fact[0]);
 	}
 
 found:
@@ -521,5 +523,5 @@ found:
 	free(param.vdiff);
 	mform_data_clear(&(param.mdata));
 
-	return fact;
+	return res;
 }
