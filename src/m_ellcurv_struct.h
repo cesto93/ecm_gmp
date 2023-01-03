@@ -29,6 +29,14 @@ typedef struct m_ellp_rep {
 	unsigned long lenght;
 } m_ellp_rep;
 
+typedef struct m_ellfact_res {
+	mpz_t fact[2];
+	unsigned long iter;
+	int fase_found;
+} m_ellfact_res;
+
+#define ELL_FACT_NOT_FOUND -1
+
 #define n_temp_setrand2 4
 //return 1 on error and not invertible in p->X
 int m_ell_setrand2_t(const mpz_t n, mpz_t e_C2, m_ellp * p, gmp_randstate_t state);

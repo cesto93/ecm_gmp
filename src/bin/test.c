@@ -204,14 +204,14 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 		      gmp_randstate_t state)
 {
 	struct timespec start, end, diff, mean = {.tv_sec = 0,.tv_nsec = 0 };
-	mpz_t p, q, n, rnd_rng1, rnd_rng2, fact[2];
+	mpz_t p, q, n, rnd_rng1, rnd_rng2;
 	unsigned long tot_iter = 0;
-	long res;
+	m_ellfact_res *res;
 
 	if (tent == 0)
 		return;
 
-	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, fact[0], fact[1], NULL);
+	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, NULL);
 	mpz_ui_pow_ui(rnd_rng1, 10, digits);
 	mpz_ui_pow_ui(rnd_rng2, 10, digits + 10);
 	mpz_mul_ui(rnd_rng1, rnd_rng1, 4);	// rand_range = 4*10^c
@@ -224,21 +224,16 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 		mpz_mul(n, p, q);
 
 		get_current_time(&start);
-		res = factorize(fact, n, b1, b2, MAX_ITER);
+		res = factorize(n, b1, b2, MAX_ITER);
 		get_current_time(&end);
 		timespec_diff(&start, &end, &diff);
 		timespec_sum(&mean, &mean, &diff);
 
-		if (res != ELL_FACT_NOT_FOUND) {
-			gmp_fprintf(log_f,
-				    "n = %Zd\tf1 = %Zd\tf2 = %Zd\tFASE = %d\t ITER = %d\n",
-				    n, fact[0], fact[1], ell_fact_FASE(res,
-								       DEFAULT_COEFF),
-				    ell_fact_ITER(res, MAX_ITER));
-			tot_iter += ell_fact_ITER(res, MAX_ITER);
-			if (!FACT_IS_CORRECT(p, q, fact[0], fact[1])) {
-				fputs("FACTORIZATION NOT CORRECT!!\n\n\n",
-				      log_f);
+		if (res->fase_found != ELL_FACT_NOT_FOUND) {
+			gmp_fprintf(log_f, "n = %Zd\tf1 = %Zd\tf2 = %Zd\tFASE = %d\t ITER = %d\n", n, res->fact[0], res->fact[1], res->fase_found, res->iter);
+			tot_iter += res->iter;
+			if (!FACT_IS_CORRECT(p, q, res->fact[0], res->fact[1])) {
+				fputs("FACTORIZATION NOT CORRECT!!\n\n\n", log_f);
 				error_msg("FACTORIZATION NOT CORRECT!!\n");
 			}
 		} else {
@@ -251,7 +246,7 @@ static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
 	tot_iter = tot_iter / tent;
 	gmp_fprintf(log_t, "%lu,%lu,%lu,%lu,%lu.%lu\n", digits, b1, b2, tot_iter,
 		    diff.tv_sec, diff.tv_nsec / 1000000);
-	mpz_clears(p, q, rnd_rng1, rnd_rng2, n, fact[0], fact[1], NULL);
+	mpz_clears(p, q, rnd_rng1, rnd_rng2, n, NULL);
 }
 
 void test_diff(const char *n_s)

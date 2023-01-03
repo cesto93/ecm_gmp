@@ -32,6 +32,6 @@ void m_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t n,
 
 void check_mul_ui(unsigned long k, const m_ellc * e, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp);
 
-mpz_t *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter, int *fase_found);
+m_ellfact_res *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter);
 
 #endif //M_ELLCURV_LIB_H
