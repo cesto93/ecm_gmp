@@ -1,53 +1,5 @@
 #include "matbase_lib.h"
 
-void mpz_temp_init(mpz_temp * temp, unsigned int lenght)
-{
-	temp->index = 0;
-	temp->lenght = lenght;
-	temp->t = allocate(sizeof(mpz_t) * lenght);
-	for (unsigned int i = 0; i < lenght; i++)
-		mpz_init(temp->t[i]);
-}
-
-void mpz_temp_init2(mpz_temp * temp, unsigned int lenght, unsigned long size)
-{
-	temp->index = 0;
-	temp->lenght = lenght;
-	temp->t = allocate(sizeof(mpz_t) * lenght);
-	for (unsigned int i = 0; i < lenght; i++)
-		mpz_init2(temp->t[i], size);
-}
-
-void mpz_temp_clear(mpz_temp * temp)
-{
-	for (unsigned int i = 0; i < temp->lenght; i++)
-		mpz_clear(temp->t[i]);
-	free(temp->t);
-}
-
-void mpz_rep_init(mpz_rep * rep, unsigned long lenght)
-{
-	rep->lenght = lenght;
-	rep->v = allocate(sizeof(mpz_t) * lenght);
-	for (unsigned long i = 0; i < lenght; i++)
-		mpz_init(rep->v[i]);
-}
-
-void mpz_rep_init2(mpz_rep * rep, unsigned long lenght, unsigned long size)
-{
-	rep->lenght = lenght;
-	rep->v = allocate(sizeof(mpz_t) * lenght);
-	for (unsigned long i = 0; i < lenght; i++)
-		mpz_init2(rep->v[i], size);
-}
-
-void mpz_rep_clear(mpz_rep * rep)
-{
-	for (unsigned long i = 0; i < rep->lenght; i++)
-		mpz_clear(rep->v[i]);
-	free(rep->v);
-}
-
 void get_randprime(mpz_t prime, const mpz_t offset, const mpz_t range, gmp_randstate_t state)
 {
 	mpz_urandomm(prime, state, range);
