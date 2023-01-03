@@ -2,6 +2,16 @@
 
 #include <pthread.h>
 
+typedef struct mm_fact_param {
+	unsigned long b1;
+	unsigned long b2;
+	unsigned long max_iter;
+	mform_data mdata;
+	mpz_t k;
+	unsigned char *vdiff;
+	mpz_t e_C2;
+} mm_fact_param;
+
 static inline void mm_ell_addh_l(mp_limb_t * rx_l, mp_limb_t * rz_l,
 				 const mp_limb_t * px_l, size_t px_s,
 				 const mp_limb_t * pz_l, size_t pz_s,
@@ -363,12 +373,10 @@ static inline void mm_ell_duph_l(const mp_limb_t * e_C2_l, size_t e_C2_s,
 }
 
 static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
-				   const mp_limb_t * px_l,
-				   const mp_limb_t * pz_l,
-				   const mp_limb_t * qx_l,
-				   const mp_limb_t * qz_l,
-				   const mp_limb_t * dx_l,
-				   const mp_limb_t * dz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
+				   const mp_limb_t * px_l, const mp_limb_t * pz_l,
+				   const mp_limb_t * qx_l, const mp_limb_t * qz_l,
+				   const mp_limb_t * dx_l, const mp_limb_t * dz_l, 
+				   const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
 {
 	sub_modR_l_n(t1_l, px_l, pz_l, mdata->n_l, mdata->n_s);	//T3 = (x1-z1)(x2+z2)                                                                                                                                                                   
 	add_modR_l_n(t2_l, qx_l, qz_l, mdata->n_l, mdata->n_s);	//              T1              T2
@@ -389,8 +397,7 @@ static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l,
 	mpn_copyi(rx_l, t1_l, mdata->n_s);	//RX = t1 
 }
 
-static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l,
-				   mp_limb_t * rz_l, const mp_limb_t * px_l,
+static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_limb_t * px_l,
 				   const mp_limb_t * pz_l, const mform_data * mdata, mp_limb_t * t1_l, mp_limb_t * t2_l, mp_limb_t * t3_l, mp_limb_t * tmul_l)
 {
 	add_modR_l_n(t1_l, px_l, pz_l, mdata->n_l, mdata->n_s);	// T2 = (x1+z1)^2                                                                                                                                                               
@@ -402,16 +409,12 @@ static inline void mm_ell_duph_l_n(const mp_limb_t * e_C2_l, mp_limb_t * rx_l,
 	mmul_l_n(rx_l, t2_l, t3_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	// RX = [(x1+z1)^2] * [(x1-z1)^2]
 
 	sub_modR_l_n(t1_l, t2_l, t3_l, mdata->n_l, mdata->n_s);	//T1 = 4x1z1 = [(x1+z1)^2] - [(x1-z1)^2]
-	//                              T2                              T3
 	mmul_l_n(t2_l, e_C2_l, t1_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T2 = [c+2/4] * [4x1z1]
-	//              EC_2            T1
 	add_modR_l_n(t3_l, t3_l, t2_l, mdata->n_l, mdata->n_s);	//T3 = [(x1-z1)^2] + [((c+2)/4) * 4x1z1]
-	//                      T3                              T2
 	mmul_l_n(rz_l, t3_l, t1_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//RZ = 4x1z1 * [(x1-z1)^2 + ((c+2)/4) * 4x1z1]
 }
 
-//WRAPPER FUNCTION FOR TESTING / DON'T USE TEMP
-
+// WRAPPER FUNCTION FOR TESTING / DON'T USE TEMP
 void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r, m_ellp * p)
 {
 	mform_data mdata;
@@ -434,7 +437,7 @@ void mm_ell_mul_t(const mpz_t k, const mpz_t n, mpz_t e_C2, m_ellp * r, m_ellp *
 	m_ellp_temp_clear(&p_temp);
 }
 
-void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param * param, unsigned long *iter, int *fase_found)
+mpz_t *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter, unsigned long *iter, int *fase_found)
 {
 	m_ellp *p, *r;
 	mpz_t *g, *g_r;
@@ -442,95 +445,110 @@ void mm_ell_fact(mpz_t fact, gmp_randstate_t state, const mm_fact_param * param,
 	m_ellp_temp p_temp;
 	m_ellp_rep rep;
 	mpz_rep beta;
-	mpz_t e_C2;
 
+	mm_fact_param param;
+	mpz_t *fact = NULL;
 	const int FACT_REP_SIZE = 950;
-	const unsigned long n_size = mpz_size(param->mdata.n) * mp_bits_per_limb;
+	const unsigned long n_size = mpz_size(param.mdata.n) * mp_bits_per_limb;
+	int vdiff_size = get_vdiff_size(b2);
 
 	mpz_temp_init2(&temp, n_temp_mfact, n_size);
 	m_ellp_temp_init2(&p_temp, n_p_temp_mfact, n_size);
-
 	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
 	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
+	mpz_init2(param.k, bigk_size_bits(b1));
+	mpz_init2(param.e_C2, n_size);
 
-	mpz_init2(e_C2, n_size);
-
+	
 	mpz_temp_get(g, &temp);
 	mpz_temp_get(g_r, &temp);
 	m_ellp_temp_get(p, &p_temp);
 	m_ellp_temp_get(r, &p_temp);
+	*fase_found = -1;
+	
+
+	if (vdiff_size == -1) {
+		perror("b2 to big\n");
+		return NULL;
+	}
+
+	param.vdiff = malloc(vdiff_size);
+	if (param.vdiff == NULL) {
+		perror("error in mm_ell_fact malloc()");
+		return NULL;
+	}
+
+	fact = malloc(sizeof(mpz_t));
+	if (fact == NULL) {
+		perror("error in m_ell_fact malloc()");
+		free(param.vdiff);
+		return NULL;
+	}
+
+	create_bigk(param.k, b1, &temp);
+	get_prime_diff(b1, 1, b2, param.vdiff, &temp);
+	mpz_realloc2(param.k, mpz_size(param.k) * mp_bits_per_limb);
+	param.b1 = b1;
+	param.b2 = b2;
+	param.max_iter = max_iter;
+
+	if (mform_data_init(&(param.mdata), n, &temp)){	// FOUND IN INVERTION OF R
+		mpz_set(*fact, param.mdata.R2);
+		*fase_found = 0;	//FASE 0
+		goto found;
+	}
 
 	mpz_set_ui(*g, 1);
-	to_mform(*g_r, *g, &(param->mdata), &temp);
+	to_mform(*g_r, *g, &(param.mdata), &temp);
 
-	for (*iter = 0; *iter < param->max_iter; (*iter)++) {
-		if (m_ell_setrand2(param->mdata.n, e_C2, p, state, &temp))	//TODO invertion can be avoited
+	for (*iter = 0; *iter < param.max_iter; (*iter)++) {
+		if (m_ell_setrand2(param.mdata.n, param.e_C2, p, state, &temp))	//TODO invertion can be avoited
 		{
-			if (find_div_by_gcd(*g, p->X, param->mdata.n)) {
-				mpz_set(fact, *g);
+			if (find_div_by_gcd(*g, p->X, param.mdata.n)) {
+				mpz_set(*fact, *g);
 				*fase_found = 0;
 				break;
 			}
 		} else {
-			m_ellp_to_mform(p, p, &(param->mdata), &temp);
-			to_mform(e_C2, e_C2, &(param->mdata), &temp);
+			m_ellp_to_mform(p, p, &(param.mdata), &temp);
+			to_mform(param.e_C2, param.e_C2, &(param.mdata), &temp);
 
-			mm_ell_mul(param->k, e_C2, r, p, &(param->mdata), &p_temp, &temp);	//FASE1
+			mm_ell_mul(param.k, param.e_C2, r, p, &(param.mdata), &p_temp, &temp);	//FASE1
 			pthread_testcancel();
 
-			m_ellp_from_mform(p, r, &(param->mdata), &temp);	// p = r from_mfrom
-			if (find_div_by_gcd(*g, p->Z, param->mdata.n))	//check on p
+			m_ellp_from_mform(p, r, &(param.mdata), &temp);	// p = r from_mfrom
+			if (find_div_by_gcd(*g, p->Z, param.mdata.n))	//check on p
 			{
-				mpz_set(fact, *g);
+				mpz_set(*fact, *g);
 				*fase_found = 1;
 				break;
 			}
 			mpz_set(*g, *g_r);
-			mm_ell_diff(rep.p, beta.v, rep.lenght, e_C2, r, &(param->mdata), &temp);
-			mm_ell_fase2(*g, param->b1, param->b2, e_C2, r, rep.p, beta.v, rep.lenght, param->vdiff, &(param->mdata), &p_temp, &temp);
+			mm_ell_diff(rep.p, beta.v, rep.lenght, param.e_C2, r, &(param.mdata), &temp);
+			mm_ell_fase2(*g, param.b1, param.b2, param.e_C2, r, rep.p, beta.v, rep.lenght, param.vdiff, &(param.mdata), &p_temp, &temp);
 			pthread_testcancel();
 
-			from_mform(*g, *g, &(param->mdata), &temp);
-			if (find_div_by_gcd(*g, *g, param->mdata.n)) {
-				mpz_set(fact, *g);
+			from_mform(*g, *g, &(param.mdata), &temp);
+			if (find_div_by_gcd(*g, *g, param.mdata.n)) {
+				mpz_set(*fact, *g);
 				*fase_found = 2;
 				break;
 			}
 		}
 	}
 
+	if (*fase_found == -1) {
+		mpz_clear(*fact);
+		fact = NULL;
+	}
+
+found:
 	mpz_temp_free(&temp, 2);
 	m_ellp_temp_free(&p_temp, 2);
+	mpz_clears(param.k, NULL);
+	free(param.vdiff);
+	mform_data_clear(&(param.mdata));
+
+	return fact;
 }
 
-int mm_ell_fact_param_init(mm_fact_param * param, const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
-{
-	mpz_temp temp;
-	int vdiff_size = get_vdiff_size(b2);
-
-	mpz_temp_init2(&temp, n_temp_mfact, mpz_size(n) * mp_bits_per_limb);
-
-	if (vdiff_size == -1)
-		error_msg("b2 to big\n");
-	if ((param->vdiff = malloc(vdiff_size)) == NULL)
-		error_msg("error in malloc at m_ell_fact\n");
-	mpz_init2(param->k, bigk_size_bits(b1));
-
-	create_bigk(param->k, b1, &temp);
-	get_prime_diff(b1, 1, b2, param->vdiff, &temp);
-	mpz_realloc2(param->k, mpz_size(param->k) * mp_bits_per_limb);
-	param->b1 = b1;
-	param->b2 = b2;
-	param->max_iter = max_iter;
-
-	if (mform_data_init(&(param->mdata), n, &temp))	//CAN'T INVERT R TO MOD N
-		return 1;
-	return 0;
-}
-
-void mm_ell_fact_param_clear(mm_fact_param * param)
-{
-	mpz_clears(param->k, NULL);
-	free(param->vdiff);
-	mform_data_clear(&(param->mdata));
-}
