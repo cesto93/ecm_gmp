@@ -110,6 +110,54 @@ static void test_fact_times(const char *tent_s, const char *digits_s, const char
 	fclose(log_f);
 }
 
+static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent, unsigned long digits, unsigned long b1, unsigned long b2, gmp_randstate_t state)
+{
+	struct timespec start, end, diff, mean = {.tv_sec = 0,.tv_nsec = 0 };
+	mpz_t p, q, n, rnd_rng1, rnd_rng2;
+	unsigned long tot_iter = 0;
+	m_ellfact_res *res;
+
+	if (tent == 0)
+		return;
+
+	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, NULL);
+	mpz_ui_pow_ui(rnd_rng1, 10, digits);
+	mpz_ui_pow_ui(rnd_rng2, 10, digits + 10);
+	mpz_mul_ui(rnd_rng1, rnd_rng1, 4);	// rand_range = 4*10^c
+	mpz_mul_ui(rnd_rng2, rnd_rng2, 4);	// rand_range = 4*10^c
+
+	
+	for (unsigned int i = 0; i < tent; i++) {
+		get_randprime(p, rnd_rng1, rnd_rng1, state);
+		get_randprime(q, rnd_rng2, rnd_rng2, state);
+		mpz_mul(n, p, q);
+
+		get_current_time(&start);
+		res = factorize(n, b1, b2, MAX_ITER);
+		get_current_time(&end);
+		timespec_diff(&start, &end, &diff);
+		timespec_sum(&mean, &mean, &diff);
+
+		if (res->fase_found != ELL_FACT_NOT_FOUND) {
+			gmp_fprintf(log_f, "n = %Zd\tf1 = %Zd\tf2 = %Zd\tFASE = %d\t ITER = %d\n", n, res->fact[0], res->fact[1], res->fase_found, res->iter);
+			tot_iter += res->iter;
+			if (!FACT_IS_CORRECT(p, q, res->fact[0], res->fact[1])) {
+				fputs("FACTORIZATION NOT CORRECT!!\n\n\n", log_f);
+				error_msg("FACTORIZATION NOT CORRECT!!\n");
+			}
+		} else {
+			tot_iter += MAX_ITER;
+			fputs("FACT NOT FOUND\n", log_f);
+			puts("FACT NOT FOUND\n");
+		}
+	}
+	timespec_div(&mean, &mean, tent);
+	tot_iter = tot_iter / tent;
+	gmp_fprintf(log_t, "%lu,%lu,%lu,%lu,%lu.%lu\n", digits, b1, b2, tot_iter,
+		    diff.tv_sec, diff.tv_nsec / 1000000);
+	mpz_clears(p, q, rnd_rng1, rnd_rng2, n, NULL);
+}
+
 void testpoint(const char *n)
 {
 	m_ellc e;
@@ -194,56 +242,6 @@ void testmul(const char *n, const char *k_s)
 	timespec_diff(&start, &end, &diff);
 	gmp_printf("Xk = %Zd\t Zk = %Zd\n", pk.X, pk.Z);
 	printf("mul time: %lu[s]\t%lu[ns]\n", diff.tv_sec, diff.tv_nsec);
-}
-
-static void test_fact(FILE * log_t, FILE * log_f, unsigned long tent,
-		      unsigned long digits, unsigned long b1, unsigned long b2,
-		      gmp_randstate_t state)
-{
-	struct timespec start, end, diff, mean = {.tv_sec = 0,.tv_nsec = 0 };
-	mpz_t p, q, n, rnd_rng1, rnd_rng2;
-	unsigned long tot_iter = 0;
-	m_ellfact_res *res;
-
-	if (tent == 0)
-		return;
-
-	mpz_inits(p, q, n, rnd_rng1, rnd_rng2, NULL);
-	mpz_ui_pow_ui(rnd_rng1, 10, digits);
-	mpz_ui_pow_ui(rnd_rng2, 10, digits + 10);
-	mpz_mul_ui(rnd_rng1, rnd_rng1, 4);	// rand_range = 4*10^c
-	mpz_mul_ui(rnd_rng2, rnd_rng2, 4);	// rand_range = 4*10^c
-
-	
-	for (unsigned int i = 0; i < tent; i++) {
-		get_randprime(p, rnd_rng1, rnd_rng1, state);
-		get_randprime(q, rnd_rng2, rnd_rng2, state);
-		mpz_mul(n, p, q);
-
-		get_current_time(&start);
-		res = factorize(n, b1, b2, MAX_ITER);
-		get_current_time(&end);
-		timespec_diff(&start, &end, &diff);
-		timespec_sum(&mean, &mean, &diff);
-
-		if (res->fase_found != ELL_FACT_NOT_FOUND) {
-			gmp_fprintf(log_f, "n = %Zd\tf1 = %Zd\tf2 = %Zd\tFASE = %d\t ITER = %d\n", n, res->fact[0], res->fact[1], res->fase_found, res->iter);
-			tot_iter += res->iter;
-			if (!FACT_IS_CORRECT(p, q, res->fact[0], res->fact[1])) {
-				fputs("FACTORIZATION NOT CORRECT!!\n\n\n", log_f);
-				error_msg("FACTORIZATION NOT CORRECT!!\n");
-			}
-		} else {
-			tot_iter += MAX_ITER;
-			fputs("FACT NOT FOUND\n", log_f);
-			puts("FACT NOT FOUND\n");
-		}
-	}
-	timespec_div(&mean, &mean, tent);
-	tot_iter = tot_iter / tent;
-	gmp_fprintf(log_t, "%lu,%lu,%lu,%lu,%lu.%lu\n", digits, b1, b2, tot_iter,
-		    diff.tv_sec, diff.tv_nsec / 1000000);
-	mpz_clears(p, q, rnd_rng1, rnd_rng2, n, NULL);
 }
 
 void test_diff(const char *n_s)
