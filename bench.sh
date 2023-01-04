@@ -1,7 +1,7 @@
 #!/bin/bash
 
 path="./test/"
-n1="bench_20_25"
+n1="bench_20_24"
 ext_csv=".csv"
 ext_log="_time.csv"
 
@@ -22,17 +22,30 @@ run_bench() {
 	echo "c,b1,b2,iter,time" > ${csv["${label}"]}
 	echo -e "n\tf1\tf2\tfase\titer" > ${log["${label}"]}
 
-	${bin["${label}"]} fact ${rep} 20 8000:2000:4 ${csv["${label}"]} ${log["${label}"]}
-	${bin["${label}"]} fact ${rep} 21 15000:5000:4 ${csv["${label}"]} ${log["${label}"]}
-	${bin["${label}"]} fact ${rep} 22 20000:5000:4 ${csv["${label}"]} ${log["${label}"]}
-	${bin["${label}"]} fact ${rep} 23 25000:5000:4 ${csv["${label}"]} ${log["${label}"]}
-	${bin["${label}"]} fact ${rep} 24 30000:5000:4 ${csv["${label}"]} ${log["${label}"]}
-	${bin["${label}"]} fact ${rep} 25 35000:5000:4 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 20 8000:2000:3 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 21 15000:5000:3 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 22 20000:5000:3 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 23 30000:5000:3 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 24 45000:5000:3 ${csv["${label}"]} ${log["${label}"]}
+}
+
+run_bench_single() {
+	label=${1}
+	rep=10
+
+	echo "c,b1,b2,iter,time" > ${csv["${label}"]}
+	echo -e "n\tf1\tf2\tfase\titer" > ${log["${label}"]}
+
+	${bin["${label}"]} fact ${rep} 20 8000:2000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 21 15000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 22 20000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 23 30000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 24 45000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 25 50000:5000:1 ${csv["${label}"]} ${log["${label}"]}
 }
 
 run_bench c
 run_bench wasm
-
 
 #${bin} fact 8 21 15000:5000:8 ${fn1_t} ${fn1_f}
 #${bin} fact 8 22 20000:5000:8 ${fn1_t} ${fn1_f}
