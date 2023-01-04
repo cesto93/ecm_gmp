@@ -12,7 +12,9 @@
 #define _GNU_SOURCE
 #define FACT_REP_SIZE 950
 
-static inline m_ellfact_res *factorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+#define factorize(n, b1, b2, max_iter) mfactorize(n, b1, b2, max_iter)
+
+static inline m_ellfact_res *mfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	unsigned long seed;
 	gmp_randstate_t state;
@@ -29,7 +31,7 @@ static inline m_ellfact_res *factorize(const mpz_t n, unsigned long b1, unsigned
 	return res;
 }
 
-static inline m_ellfact_res *mfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
+static inline m_ellfact_res *mmfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
 	unsigned long seed;
 	gmp_randstate_t state;
