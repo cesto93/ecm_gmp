@@ -1,6 +1,7 @@
 libdir  := src/lib
 bindir := src/bin
 lib := $(wildcard $(libdir)/*.c)
+CFLAGS := -Wall -Wextra -O3
 
 .PHONY: test
 .PHONY: prof
@@ -8,10 +9,10 @@ lib := $(wildcard $(libdir)/*.c)
 .PHONY: prof_t
 
 build: $(lib)
-	gcc -Wall -Wextra -O3 $(bindir)/start.c -o start.o $(lib) -lgmp -pthread
-	gcc -Wall -Wextra -O3 -static $(bindir)/test.c -o test.o $(lib) -lgmp -pthread
-	clang $(bindir)/start.c -o start.wasm $(lib) -lgmp -pthread
-	clang $(bindir)/test.c -o test.wasm $(lib) -lgmp -pthread
+	gcc $(CFLAGS) $(bindir)/start.c -o start.o $(lib) -lgmp -pthread
+	gcc $(CFLAGS) $(bindir)/test.c -o test.o $(lib) -lgmp -pthread
+	clang $(CFLAGS) $(bindir)/start.c -o start.wasm $(lib) -lgmp -pthread
+	clang $(CFLAGS) $(bindir)/test.c -o test.wasm $(lib) -lgmp -pthread
 prof: $(lib)
 	gcc -pg -Wall -Wextra -O2 $(bindir)/start.c -o prof.o $(lib) -lgmp -pthread
 	gcc -pg -Wall -Wextra -O2 $(bindir)/test.c -o prof_t.o $(lib) -lgmp -pthread
