@@ -12,7 +12,11 @@
 #define _GNU_SOURCE
 #define FACT_REP_SIZE 950
 
+#ifndef MM_ENABLE
 #define factorize(n, b1, b2, max_iter) mfactorize(n, b1, b2, max_iter)
+#else
+#define factorize(n, b1, b2, max_iter) mmfactorize(n, b1, b2, max_iter)
+#endif
 
 static inline m_ellfact_res *mfactorize(const mpz_t n, unsigned long b1, unsigned long b2, unsigned long max_iter)
 {
