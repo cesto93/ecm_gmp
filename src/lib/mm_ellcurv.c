@@ -426,7 +426,7 @@ m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b
 	mm_fact_param param;
 	m_ellfact_res *res = NULL;
 	const int FACT_REP_SIZE = 950;
-	const unsigned long n_size = mpz_size(param.mdata.n) * mp_bits_per_limb;
+	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
 	int vdiff_size = get_vdiff_size(b2);
 
 	mpz_temp_init2(&temp, n_temp_mfact, n_size);
@@ -441,7 +441,7 @@ m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b
 	mpz_temp_get(g_r, &temp);
 	m_ellp_temp_get(p, &p_temp);
 	m_ellp_temp_get(r, &p_temp);
-	res->fase_found = -1;
+	
 
 	if (vdiff_size == -1) {
 		perror("b2 to big\n");
@@ -460,6 +460,7 @@ m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b
 		free(param.vdiff);
 		return NULL;
 	}
+	res->fase_found = -1;
 
 	create_bigk(param.k, b1, &temp);
 	get_prime_diff(b1, 1, b2, param.vdiff, &temp);
