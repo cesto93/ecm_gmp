@@ -289,14 +289,17 @@ void test_prime_diff(const char *start_s, const char *end_s)
 	unsigned char *v;
 	unsigned long start, end;
 	mpz_temp temp;
+	int i;
 
 	start = str2l(start_s);
 	end = str2l(end_s);
 	mpz_temp_init(&temp, 3);
-	v = allocate(sizeof(unsigned char) * bo);
+	v = calloc(bo, sizeof(unsigned char));
+	if (v == NULL)
+		return;
 
 	get_prime_diff(start, 0, end, v, &temp);
-	int i;
+	
 	for (i = 0; i < bo; i++) {
 		if (!v[i])
 			break;
