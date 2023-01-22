@@ -291,9 +291,10 @@ m_ellfact_res *m_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b1
 	m_fact_param param;
 	m_ellfact_res *res = NULL;
 	unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
-	int vdiff_size = get_vdiff_size(b2);
+	int vdiff_size;
 	const int FACT_REP_SIZE = 950;
 
+	vdiff_size = get_vdiff_size(b2);
 	if (vdiff_size == -1) {
 		perror("b2 to big\n");
 		return NULL;
