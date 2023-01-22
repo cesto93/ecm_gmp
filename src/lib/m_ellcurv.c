@@ -13,7 +13,7 @@ typedef struct m_fact_param {
 } m_fact_param;
 
 //when used first check temp space
-static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff, mpz_temp * temp);
+static inline void m_ell_addh(const mpz_t n, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff, mpz_temp * temp);
 static inline void m_ell_duph2(const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, mpz_temp * temp);
 static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2, m_ellp * r, const m_ellp * p, m_ellp_temp * p_temp, mpz_temp * temp);
 
@@ -21,7 +21,7 @@ void m_ell_addh_t(const m_ellc * e, m_ellp * r, const m_ellp * p, const m_ellp *
 {
 	mpz_temp temp;
 	mpz_temp_init(&temp, n_temp_addh2);
-	m_ell_addh2(e->n, r, p, q, diff, &temp);
+	m_ell_addh(e->n, r, p, q, diff, &temp);
 	mpz_temp_clear(&temp);
 }
 
@@ -52,7 +52,7 @@ void m_ell_diff_t(m_ellp_rep * rep, mpz_rep * beta, const m_ellc * e, const m_el
 	mpz_temp_clear(&temp);
 }
 
-static inline void m_ell_addh2(const mpz_t n, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff, mpz_temp * temp)
+static inline void m_ell_addh(const mpz_t n, m_ellp * r, const m_ellp * p, const m_ellp * q, const m_ellp * diff, mpz_temp * temp)
 {
 	mpz_t *t1, *t2, *t3;
 	mpz_temp_get(t1, temp);
@@ -118,14 +118,14 @@ void m_ell_mul(const mpz_t k, const mpz_t n, const mpz_t e_C2, m_ellp * r, const
 	if (mpz_cmp_ui(k, 2) > 0) {
 		for (unsigned long i = high - 1; i > 0; i--)
 			if (mpz_tstbit(k, i)) {
-				m_ell_addh2(n, u, t, u, p, temp);
+				m_ell_addh(n, u, t, u, p, temp);
 				m_ell_duph2(n, e_C2, t, t, temp);
 			} else {
-				m_ell_addh2(n, t, u, t, p, temp);
+				m_ell_addh(n, t, u, t, p, temp);
 				m_ell_duph2(n, e_C2, u, u, temp);
 			}
 		if (mpz_tstbit(k, 0))
-			m_ell_addh2(n, r, u, t, p, temp);
+			m_ell_addh(n, r, u, t, p, temp);
 		else
 			m_ell_duph2(n, e_C2, r, u, temp);
 	} else {
@@ -156,14 +156,14 @@ static void m_ell_mul_ui(unsigned long k, const mpz_t n, const mpz_t e_C2, m_ell
 		for (unsigned long i = high - 1; i > 0; i--)
 			if (k & (1 << i))	//k[i] bit
 			{
-				m_ell_addh2(n, u, t, u, p, temp);
+				m_ell_addh(n, u, t, u, p, temp);
 				m_ell_duph2(n, e_C2, t, t, temp);
 			} else {
-				m_ell_addh2(n, t, u, t, p, temp);
+				m_ell_addh(n, t, u, t, p, temp);
 				m_ell_duph2(n, e_C2, u, u, temp);
 			}
 		if (k & 1)	//k[0]
-			m_ell_addh2(n, r, u, t, p, temp);
+			m_ell_addh(n, r, u, t, p, temp);
 		else
 			m_ell_duph2(n, e_C2, r, u, temp);
 	} else {
@@ -220,7 +220,7 @@ void m_ell_diff(m_ellp_rep * rep, mpz_rep * beta, const mpz_t n, const mpz_t e_C
 	mpz_mod(beta->v[1], *t1, n);
 
 	for (unsigned long i = 2; i < rep->lenght; i++) {
-		m_ell_addh2(n, &(rep->p[i]), &(rep->p[i - 1]), &(rep->p[0]), &(rep->p[i - 2]), temp);
+		m_ell_addh(n, &(rep->p[i]), &(rep->p[i - 1]), &(rep->p[0]), &(rep->p[i - 2]), temp);
 		mpz_mul(*t1, rep->p[i].X, rep->p[i].Z);	//beta[i] = rep[i].X * rep[i].Z
 		mpz_mod(beta->v[i], *t1, n);
 	}
@@ -270,7 +270,7 @@ void m_ell_fase2(mpz_t g, unsigned long b1, unsigned long b2, const mpz_t n,
 				goto end;
 		}
 		diff = diff - max_diff;
-		m_ell_addh2(n, T, R, &(rep.p[rep.lenght - 1]), T, temp);	// T = R + s[D]
+		m_ell_addh(n, T, R, &(rep.p[rep.lenght - 1]), T, temp);	// T = R + s[D]
 		mpz_swap(T->X, R->X);	// T = R
 		mpz_swap(T->Z, R->Z);	// R = R + s[d]
 	}
