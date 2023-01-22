@@ -10,7 +10,7 @@ CFLAGS := -Wall -Wextra -O3
 
 build: $(lib)
 	gcc $(CFLAGS) -fanalyzer $(bindir)/start.c -o start.o $(lib) -lgmp 
-	gcc $(CFLAGS) -fanalyzer $(bindir)/test.c -o test.o $(lib) -lgmp -pthread
+	gcc $(CFLAGS) -fanalyzer $(bindir)/test.c -o test.o $(lib) -lgmp
 	clang $(CFLAGS) $(bindir)/start.c -o start.wasm $(lib) -lgmp 
 	clang $(CFLAGS) $(bindir)/test.c -o test.wasm $(lib) -lgmp 
 mm: $(lib)
