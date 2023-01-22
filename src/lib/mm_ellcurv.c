@@ -425,24 +425,11 @@ m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b
 
 	mm_fact_param param;
 	m_ellfact_res *res = NULL;
+	int vdiff_size;
 	const int FACT_REP_SIZE = 950;
 	const unsigned long n_size = mpz_size(n) * mp_bits_per_limb;
-	int vdiff_size = get_vdiff_size(b2);
-
-	mpz_temp_init2(&temp, n_temp_mfact, n_size);
-	m_ellp_temp_init2(&p_temp, n_p_temp_mfact, n_size);
-	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
-	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
-	mpz_init2(param.k, bigk_size_bits(b1));
-	mpz_init2(param.e_C2, n_size);
-	mpz_inits(res->fact[0], res->fact[1], NULL);
-
-	mpz_temp_get(g, &temp);
-	mpz_temp_get(g_r, &temp);
-	m_ellp_temp_get(p, &p_temp);
-	m_ellp_temp_get(r, &p_temp);
 	
-
+	vdiff_size = get_vdiff_size(b2);
 	if (vdiff_size == -1) {
 		perror("b2 to big\n");
 		return NULL;
@@ -462,6 +449,19 @@ m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b
 	}
 	res->fase_found = -1;
 
+	mpz_temp_init2(&temp, n_temp_mfact, n_size);
+	m_ellp_temp_init2(&p_temp, n_p_temp_mfact, n_size);
+	m_ellp_rep_init2(&rep, FACT_REP_SIZE, n_size);
+	mpz_rep_init2(&beta, FACT_REP_SIZE, n_size);
+	mpz_init2(param.k, bigk_size_bits(b1));
+	mpz_init2(param.e_C2, n_size);
+	mpz_inits(res->fact[0], res->fact[1], NULL);
+
+	mpz_temp_get(g, &temp);
+	mpz_temp_get(g_r, &temp);
+	m_ellp_temp_get(p, &p_temp);
+	m_ellp_temp_get(r, &p_temp);
+
 	create_bigk(param.k, b1, &temp);
 	get_prime_diff(b1, 1, b2, param.vdiff, &temp);
 	mpz_realloc2(param.k, mpz_size(param.k) * mp_bits_per_limb);
@@ -477,7 +477,7 @@ m_ellfact_res *mm_ell_fact(gmp_randstate_t state, const mpz_t n, unsigned long b
 
 	mpz_set_ui(*g, 1);
 	to_mform(*g_r, *g, &(param.mdata), &temp);
-
+	
 	for (res->iter = 0; res->iter < param.max_iter; (res->iter)++) {
 		if (m_ell_setrand2(param.mdata.n, param.e_C2, p, state, &temp)) {	// TODO invertion can be avoited
 			if (find_div_by_gcd(*g, p->X, param.mdata.n)) {
