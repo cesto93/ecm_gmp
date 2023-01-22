@@ -1,7 +1,7 @@
 #!/bin/bash
 
 path="./test/"
-n1="bench_20_24"
+n1="bench_20_29"
 ext_csv=".csv"
 ext_log="_time.csv"
 
@@ -14,6 +14,10 @@ bin[c]="./test.o"
 log[wasm]=${path}${n1}_wasm${ext_csv}
 csv[wasm]=${path}${n1}_wasm${ext_log}
 bin[wasm]="./test.wasm"
+
+log[mm]=${path}${n1}_mm${ext_csv}
+csv[mm]=${path}${n1}_mm${ext_log}
+bin[mm]="./mmtest"
 
 run_bench() {
 	label=${1}
@@ -29,7 +33,7 @@ run_bench() {
 	${bin["${label}"]} fact ${rep} 24 45000:5000:3 ${csv["${label}"]} ${log["${label}"]}
 }
 
-run_bench_single() {
+run_benchs() {
 	label=${1}
 	rep=10
 
@@ -42,6 +46,10 @@ run_bench_single() {
 	${bin["${label}"]} fact ${rep} 23 30000:5000:1 ${csv["${label}"]} ${log["${label}"]}
 	${bin["${label}"]} fact ${rep} 24 45000:5000:1 ${csv["${label}"]} ${log["${label}"]}
 	${bin["${label}"]} fact ${rep} 25 50000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 26 100000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 27 150000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 28 200000:5000:1 ${csv["${label}"]} ${log["${label}"]}
+	${bin["${label}"]} fact ${rep} 29 250000:5000:1 ${csv["${label}"]} ${log["${label}"]}
 }
 
 run_bench c

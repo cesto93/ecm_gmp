@@ -14,10 +14,10 @@ build: $(lib)
 	clang $(CFLAGS) $(bindir)/start.c -o start.wasm $(lib) -lgmp 
 	clang $(CFLAGS) $(bindir)/test.c -o test.wasm $(lib) -lgmp 
 mm: $(lib)
-	gcc $(CFLAGS) -fanalyzer -DMM_ENABLE $(bindir)/start.c -o start.o $(lib) -lgmp 
-	gcc $(CFLAGS) -fanalyzer -DMM_ENABLE $(bindir)/test.c -o test.o $(lib) -lgmp 
-	clang $(CFLAGS) -DMM_ENABLE $(bindir)/start.c -o start.wasm $(lib) -lgmp 
-	clang $(CFLAGS) -DMM_ENABLE  $(bindir)/test.c -o test.wasm $(lib) -lgmp 
+	gcc $(CFLAGS) -fanalyzer -DMM_ENABLE $(bindir)/start.c -o mmstart.o $(lib) -lgmp 
+	gcc $(CFLAGS) -fanalyzer -DMM_ENABLE $(bindir)/test.c -o mmtest.o $(lib) -lgmp 
+	clang $(CFLAGS) -DMM_ENABLE $(bindir)/start.c -o mmstart.wasm $(lib) -lgmp 
+	clang $(CFLAGS) -DMM_ENABLE  $(bindir)/test.c -o mmtest.wasm $(lib) -lgmp 
 prof: $(lib)
 	gcc -pg -Wall -Wextra -O2 $(bindir)/start.c -o prof.o $(lib) -lgmp 
 	gcc -pg -Wall -Wextra -O2 $(bindir)/test.c -o prof_t.o $(lib) -lgmp 
@@ -26,7 +26,7 @@ test:
 bench:
 	./bench.sh
 clean:
-	rm -f start.o test.o
+	rm -f start.o test.o mmstart.o mmtest.o
 	rm -f *.wasm
 lint:
 	bear -- make
