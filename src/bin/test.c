@@ -13,7 +13,7 @@ do { \
 } while (0)
 
 #define DEFAULT_COEFF 100	// b2 = b1 * coeff
-#define MAX_ITER 5000
+#define MAX_ITER 50000
 
 #define FACT_IS_CORRECT(p, q, f1, f2) ((mpz_equal(p, f1) && mpz_equal(q, f2)) || ((mpz_equal(q, f1) && mpz_equal(p, f2))))
 
