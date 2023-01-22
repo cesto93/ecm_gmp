@@ -129,7 +129,7 @@ static inline void mmul_t(mpz_t rop, const mpz_t op1, const mpz_t op2, const mp_
 	mpz_temp_free(temp, 1);
 }
 
-static inline void msqr(mpz_t rop, const mpz_t op1, mp_limb_t * t_l, mp_limb_t * n_l, mp_limb_t n_inv, size_t n_s)
+static inline void msqr(mpz_t rop, const mpz_t op1, mp_limb_t * t_l, const mp_limb_t * n_l, mp_limb_t n_inv, size_t n_s)
 {
 	mp_limb_t *rop_l;
 	const mp_limb_t *op1_l;

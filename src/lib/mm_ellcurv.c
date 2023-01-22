@@ -369,7 +369,7 @@ static inline void mm_ell_addh_l_n(mp_limb_t * rx_l, mp_limb_t * rz_l, const mp_
 	msqr_l_n(t2_l, t3_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T2 = [(x1-z1)(x2+z2) - (x1+z1)(x2-z2)]^2
 	mmul_l_n(t1_l, t1_l, dz_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//T1 = [((x1-z1)(x2+z2) + (x1+z1)(x2-z2))^2] * Z- = RX
 
-	mmul_l_n(rz_l, t2_l, dx_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	//RZ = [((x1-z1)(x2+z2) - (x1+z1)(x2-z2))^2] * X-
+	mmul_l_n(rz_l, t2_l, dx_l, tmul_l, mdata->n_l, mdata->n_inv, mdata->n_s);	// RZ = [((x1-z1)(x2+z2) - (x1+z1)(x2-z2))^2] * X-
 
 	mpn_copyi(rx_l, t1_l, mdata->n_s);	//RX = t1 
 }
